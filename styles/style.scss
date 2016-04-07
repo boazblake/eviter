@@ -127,3 +127,20 @@ body {
 /**
  * App code
  */
+
+ .header{
+    background-image: url('http://www.spokanevalleyeventcenter.com/wp-content/uploads/2014/03/social-events-hd.jpg');
+    background-size: 100%;
+ }
+
+ .event {
+    border: 1px solid grey;
+ }
+ 
+.event *{
+    padding:5px;
+ }
+
+ .footer{
+    background-color: rgba(44, 62, 80,1.0);
+ }
