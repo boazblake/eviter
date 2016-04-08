@@ -68,12 +68,12 @@ var SplashPage = React.createClass({
 					<input type='passWord' placeholder='password' onChange={this._upDatePass}/><br/>
 					<input type='text' placeholder='First name' onChange={this._firstName}/><br/>
 					<input type='text' placeholder='Last Name' onChange={this._lastName}/><br/>
-					<button onClick={this._handleSubmit}>SUBMIT</button>
+					<button onClick={this._handleSubmit}>SIGN UP!</button>
 				</div><br/><br/>
 				<div className='logIn'>
 					<input type='text' placeholder='email@host.com' onChange={this._upDateEmail}/><br/>
 					<input type='passWord' placeholder='password' onChange={this._upDatePass}/><br/>
-					<button onClick={this._handleLogin}>SUBMIT</button>
+					<button onClick={this._handleLogin}>LOG IN</button>
 				</div>
 				<Footer/>	
 			</div>
@@ -196,9 +196,9 @@ var CreateEvent = React.createClass({
 		this.eventObj.location = evt.target.value
 	},
 
-	// _upDateGuestName:function(evt){
-	// 	this.eventObj.guestName = evt.target.value
-	// },
+	_upDateGuestName:function(evt){
+		this.eventObj.guestName = evt.target.value
+	},
 
 	_upDateEventName:function(evt){
 		this.eventObj.name = evt.target.value
@@ -218,7 +218,6 @@ var CreateEvent = React.createClass({
 		this.props.eventCreator(this.eventObj)
 	},
 
-	// <input type='text' placeholder='Guest' onChange={this._upDateGuestName}/><br/>
 	render:function(){
 		return(
 			<div className='createEventView'>
@@ -228,9 +227,10 @@ var CreateEvent = React.createClass({
 				<input type='text' placeholder='Event Title' onChange={this._upDateEventTitle}/><br/>
 				<input type='text' placeholder='Event Date' onChange={this._upDateEventDate}/><br/>
 				<input type='text' placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
+				<input type='text' placeholder='Guest' onChange={this._upDateGuestName}/><br/>
 				<input type='text' placeholder='Bring This!' onChange={this._upDateBringItems}/><br/>
 				<input type='text' placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
-                <button onClick={this._submitMessage} >Sign Up!</button>
+                <button onClick={this._submitMessage}>Submit!</button>
 				<Footer/>
 			</div>
 		)

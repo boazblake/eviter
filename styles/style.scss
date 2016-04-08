@@ -129,8 +129,16 @@ body {
  */
 
 html {
-    background: url('/dist/img/background.jpeg');
+    background-color: rgba(127, 140, 141,0.4);
+    background: url('./img/background.jpeg');
     background-size: cover;
+}
+
+body {
+}
+
+.container {
+    background-color: rgba(127, 140, 141,0.4);
 }
 
  .header{
@@ -139,14 +147,17 @@ html {
     color:rgba(236, 240, 241,0.5);
     font-size: 80px;
     font-weight: bold;
-    background-image: url('http://www.spokanevalleyeventcenter.com/wp-content/uploads/2014/03/social-events-hd.jpg');
     background-size: 100%;
  }
 
 .signUp {
-    background: rgba(230, 126, 34,1.0)
+    background: rgba(230, 126, 34,0.4)
 }
 
+
+.logIn {
+    background: rgba(211, 84, 0, 0.4);
+}
 
  .event {
     border: 1px solid grey;
