@@ -128,10 +128,25 @@ body {
  * App code
  */
 
+html {
+    background: url('/dist/img/background.jpeg');
+    background-size: cover;
+}
+
  .header{
+    text-shadow: 1px 1px 1px #A1A1A1;
+    text-align: center;
+    color:rgba(236, 240, 241,0.5);
+    font-size: 80px;
+    font-weight: bold;
     background-image: url('http://www.spokanevalleyeventcenter.com/wp-content/uploads/2014/03/social-events-hd.jpg');
     background-size: 100%;
  }
+
+.signUp {
+    background: rgba(230, 126, 34,1.0)
+}
+
 
  .event {
     border: 1px solid grey;

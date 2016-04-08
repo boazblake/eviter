@@ -25,7 +25,6 @@ var Footer = React.createClass({
 	render: function(){return(<div className='footer'>FOOTER</div>)}
 })
 
-
 //Views
 var SplashPage = React.createClass({
 
@@ -197,9 +196,9 @@ var CreateEvent = React.createClass({
 		this.eventObj.location = evt.target.value
 	},
 
-	_upDateGuestName:function(evt){
-		this.eventObj.guestName = evt.target.value
-	},
+	// _upDateGuestName:function(evt){
+	// 	this.eventObj.guestName = evt.target.value
+	// },
 
 	_upDateEventName:function(evt){
 		this.eventObj.name = evt.target.value
@@ -217,9 +216,9 @@ var CreateEvent = React.createClass({
 		var self = this
 		console.log('eventObj', self.eventObj)
 		this.props.eventCreator(this.eventObj)
-	// Sending guest Invite
 	},
 
+	// <input type='text' placeholder='Guest' onChange={this._upDateGuestName}/><br/>
 	render:function(){
 		return(
 			<div className='createEventView'>
@@ -229,10 +228,9 @@ var CreateEvent = React.createClass({
 				<input type='text' placeholder='Event Title' onChange={this._upDateEventTitle}/><br/>
 				<input type='text' placeholder='Event Date' onChange={this._upDateEventDate}/><br/>
 				<input type='text' placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
-				<input type='text' placeholder='Guest' onChange={this._upDateGuestName}/><br/>
 				<input type='text' placeholder='Bring This!' onChange={this._upDateBringItems}/><br/>
 				<input type='text' placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
-                <button onClick={this._submitMessage} >submit!</button>
+                <button onClick={this._submitMessage} >Sign Up!</button>
 				<Footer/>
 			</div>
 		)

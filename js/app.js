@@ -47,6 +47,7 @@ import {DashPage,SplashPage,CreateEvent,EventPage} from './views'
 // 		event_id: 'F98787',
 // 		confirmed: false
 // 	},
+
 // FireBase Refs Models and Collections
 var fbRef = new Firebase('https://eviter.firebaseio.com/')
 
@@ -70,7 +71,6 @@ var GuestSearch = BackboneFire.Firebase.Collection.extend({
 		return 
 	}
 })
-
 
 var EventInvite = BackboneFire.Firebase.Collection.extend({
 	initialize:function(uid){
