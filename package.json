@@ -73,6 +73,8 @@
     "csswring": "^4.0",
     "envify": "^3.4",
     "exorcist": "^0.4",
+    "react": "0.14.8",
+    "react-dom": "0.14.8",
     "firebase": "^2.4.2",
     "jquery": "^2.2.3",
     "koa": "^2.0.0-alpha.3",

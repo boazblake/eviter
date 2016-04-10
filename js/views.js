@@ -1,5 +1,8 @@
 import DOM from 'react-dom'
+import fbRef from './fbref'
 import React, {Component} from 'react'
+import {createEvent, createUser, logUserIn, handleEvent} from './actions'
+import {User, Users, Event, Events, Attendances, UserSearch} from './data'
 
 //Modules
 var Header = React.createClass({
@@ -22,7 +25,14 @@ var NavBar = React.createClass({
 })
 
 var Footer = React.createClass({
-	render: function(){return(<div className='footer'>FOOTER</div>)}
+	render: function(){
+		return (
+			<div className='footer'>
+			<img className='logo' src='http://landing.theironyard.com/images/home/tiy-logo.png'/>
+			FOOTER
+			</div>
+		)
+	}
 })
 
 //Views
@@ -33,6 +43,7 @@ var SplashPage = React.createClass({
 		firstName:'',
 		lastName:'',
 		passWord:'',
+		eventsAttending:{}
 	},
 
 	_upDateEmail:function(evt){
@@ -52,11 +63,11 @@ var SplashPage = React.createClass({
 	},
 
 	_handleSubmit:function(){
-		this.props.createUser(this.userObj)
+		createUser(this.userObj)
 	},
 
 	_handleLogin:function(){
-		this.props.logUserIn(this.userObj)
+		logUserIn(this.userObj)
 	},
 
 	render:function(){
@@ -83,26 +94,14 @@ var SplashPage = React.createClass({
 })
 
 var DashPage = React.createClass({
-	
-	componentWillMount:function(){
-		var self = this
-		self.props.eventColl.on('sync update', function(){
-			self.forceUpdate()
-		})
-	},
-
-	_creatEvent:function(){
-		location.hash = 'createvent'
-	},
-
 	render:function(){
 		return(
 			<div className='dashPageView'>
 				<Header/>
 				<NavBar/>
 				<div className='invites'>
-				<button onClick={this._creatEvent}>Create Event!</button>
-					<EviteBox eventColl={this.props.eventColl} viewEvent={this.props.viewEvent}/>
+					<a href="#createevent">Create Event!</a>
+					<MyEvents />
 				</div>
 				<Footer/>
 			</div>
@@ -110,17 +109,45 @@ var DashPage = React.createClass({
 	}
 })
 
-var EviteBox = React.createClass({
+var MyEvents = React.createClass({
+	getInitialState:function(){
+		return{
+			events:[]
+		}
+	},
+
 	_eventInvite:function(model, i){
 		console.log('model:>>>>',model)
 		if (model.id)
 		return <EventItem eventInfo={model} key={i} viewEvent={this.props.viewEvent}/>
 	},
+
+	componentDidMount(){
+		var component = this
+		let events = new Attendances(fbRef.getAuth().uid)
+		events.fetch()
+		events.once('sync', function() {
+			component.setState({
+				events: events.toJSON()
+			})
+		})
+	},
 	 
 	 render:function(){
+	 	console.log('this.state.events>>>>:',this.state.events)
 	 	return(
-	 		<div className='EviteBox'>
-	 			{this.props.eventColl.map(this._eventInvite)}
+	 		<div className='myEvents'>
+	 			{
+	 				this.state.events.map( function(event, i ){
+	 					return (
+	 						<div key={i} className='event' id={event.event_id} onClick={handleEvent}>
+	 						<p>{event.title}</p>
+	 						<p>{event.date}</p>
+	 						<p>{event.event_id}</p>
+	 						</div>
+	 					)
+	 				})
+	 			}
 	 		</div>
 	 	)
 	 }
@@ -178,10 +205,8 @@ var CreateEvent = React.createClass({
 		'title':'',
 		'date':'',
 		'location':'',
-		'guestName':'',
 		'doBringThis':'',
 		'doNotBringThis':'',
-
 	},
 
 	_upDateEventTitle:function(evt){
@@ -194,10 +219,6 @@ var CreateEvent = React.createClass({
 
 	_upDateEventLocation:function(evt){
 		this.eventObj.location = evt.target.value
-	},
-
-	_upDateGuestName:function(evt){
-		this.eventObj.guestName = evt.target.value
 	},
 
 	_upDateEventName:function(evt){
@@ -213,26 +234,24 @@ var CreateEvent = React.createClass({
 	},
 
 	_submitMessage:function(evt){
-		var self = this
-		console.log('eventObj', self.eventObj)
-		this.props.eventCreator(this.eventObj)
+		evt.preventDefault()
+		createEvent(this.eventObj)
 	},
 
 	render:function(){
 		return(
-			<div className='createEventView'>
+			<form className='createEventView' onSubmit={this._submitMessage}>
 				<Header/>
 				<NavBar/>
 				<a href='#dash'>back to dashboard!</a><br/>
 				<input type='text' placeholder='Event Title' onChange={this._upDateEventTitle}/><br/>
 				<input type='text' placeholder='Event Date' onChange={this._upDateEventDate}/><br/>
 				<input type='text' placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
-				<input type='text' placeholder='Guest' onChange={this._upDateGuestName}/><br/>
 				<input type='text' placeholder='Bring This!' onChange={this._upDateBringItems}/><br/>
 				<input type='text' placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
-                <button onClick={this._submitMessage}>Submit!</button>
+                <button>Submit!</button>
 				<Footer/>
-			</div>
+			</form>
 		)
 	}
 })
