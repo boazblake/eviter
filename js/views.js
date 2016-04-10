@@ -180,40 +180,69 @@ var EventItem = React.createClass({
 })
 
 var EventPage = React.createClass({
-	componentDidMount:function(){
-	var eventArr = []
-	var event
-		var eventColl = new EventFinder(this.props.eventId)
-
-		eventColl.on('sync', function(){
-			eventArr = eventColl.models
-			eventArr.filter(function(model, i){
-				if (model.id !== undefined) {
-					return event =  model
-				}
-			})
-			console.log('event>>>',event)
-			// 1. parse event
-			//  2. render jsx
-			// 
-
-		})
+	getInitialState:function() {
+		return {
+			event:[]
+		}
 	},
 
 
+componentDidMount:function(){
+	var component = this
+	let event = new EventFinder(this.props.eventId)
+	event.fetch()
+	event.on('sync', function(){
+		component.setState({
+			event:event.toJSON()
+		})
+	})
+},
 
 	render:function(){
 		return(
 			<div className='eventView'>
-			<Header/>
-			<NavBar/>
+				<Header/>
+				<NavBar/>
 				<a href='#dash'>back to dashboard!</a><br/>
-			<div className='eventContent'>
-			</div>
-			<Footer/>
+				<div className='eventContent'>
+					{
+						this.state.event.map( function(info, i) {
+							console.log('info',info)
+							return (
+								<div key={i} className='currentEvent'>
+									<p>{info.date}</p>
+									<p>{info.doBringThis}</p>
+									<p>{info.doNotBringThis}</p>
+									<p>{info.id}</p>
+									<p>{info.location}</p>
+									<p>{info.sender_id}</p>
+									<p>{info.title}</p>
+								</div>
+							)
+						})
+					}
+				</div>
+				<Footer/>
 			</div>
 			)
 	}
+
+
+		// THIS GETS THE EVENT DETAILS TOO 
+	// componentDidMount:function(){
+	// var eventArr = []
+	// 	var eventColl = new EventFinder(this.props.eventId)
+
+	// 	eventColl.on('sync', function(){
+	// 		eventArr = eventColl.models
+	// 		eventArr.filter(function(model, i){
+	// 			if(eventArr.model === undefined) {
+	// 				 eventArr.pop(eventArr.model)
+	// 			}
+	// 		})
+	// 		console.log('eventArr>>>',eventArr)
+	// 	})
+	// },
 })
 
 var CreateEvent = React.createClass({
