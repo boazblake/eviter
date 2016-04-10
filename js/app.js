@@ -40,7 +40,7 @@ import _ from 'underscore'
 
 import BackboneFire from 'bbfire'
 import {DashPage,SplashPage,CreateEvent,EventPage} from './views'
-import {User, Users, Event, Events, UserSearch} from './data'
+import {User, Users, Event, Events, EventFinder} from './data'
 import fbRef from './fbref'
 import {createEvent, createUser, addGuestMaker, LogUserIn, handleEvent} from './actions'
 
@@ -95,12 +95,7 @@ function app() {
 			checkAuth()
 			var hash = window.location.hash.split('/')
 			var event_id = hash[1]
-			console.log('event_id?>>>',event_id)
-			// find event with this id
-			// then render that event to the screen
-			// var eventContent = eventID.get('content')
-
-    		DOM.render(<EventPage eventContent={eventContent}/>, document.querySelector('.container'))
+    		DOM.render(<EventPage eventId={event_id}/>, document.querySelector('.container'))
 		}
 	})
 

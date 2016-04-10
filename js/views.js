@@ -2,7 +2,7 @@ import DOM from 'react-dom'
 import fbRef from './fbref'
 import React, {Component} from 'react'
 import {createEvent, createUser, logUserIn, handleEvent} from './actions'
-import {User, Users, Event, Events, Attendances, UserSearch} from './data'
+import {User, Users, Event, Events, Attendances, EventFinder} from './data'
 
 //Modules
 var Header = React.createClass({
@@ -180,6 +180,28 @@ var EventItem = React.createClass({
 })
 
 var EventPage = React.createClass({
+	componentDidMount:function(){
+	var eventArr = []
+	var event
+		var eventColl = new EventFinder(this.props.eventId)
+
+		eventColl.on('sync', function(){
+			eventArr = eventColl.models
+			eventArr.filter(function(model, i){
+				if (model.id !== undefined) {
+					return event =  model
+				}
+			})
+			console.log('event>>>',event)
+			// 1. parse event
+			//  2. render jsx
+			// 
+
+		})
+	},
+
+
+
 	render:function(){
 		return(
 			<div className='eventView'>
@@ -187,11 +209,6 @@ var EventPage = React.createClass({
 			<NavBar/>
 				<a href='#dash'>back to dashboard!</a><br/>
 			<div className='eventContent'>
-				<p>{this.props.eventContent.title}</p>
-				<p>{this.props.eventContent.date}</p>
-				<p>{this.props.eventContent.location}</p>
-				<p>{this.props.eventContent.doBringThis}</p>
-				<p>{this.props.eventContent.doNotBringThis}</p>
 			</div>
 			<Footer/>
 			</div>

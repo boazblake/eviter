@@ -1,5 +1,5 @@
 import fbRef from './fbref'
-import {User, Users, Event, Events, Attendances, Attendance, UserSearch} from './data'
+import {User, Users, Event, Events, Attendances, Attendance, EventFinder} from './data'
 
 export function createEvent(eventObj) {
 

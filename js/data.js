@@ -1,3 +1,5 @@
+import fbRef from './fbref'
+
 import BackboneFire from 'bbfire'
 
 BackboneFire.Model.prototype.fetchWithPromise = 
@@ -54,22 +56,11 @@ var Attendances = BackboneFire.Firebase.Collection.extend({
 	}
 })
 
-
-
-/**
- * TODO might not need
- */
-var UserSearch = BackboneFire.Firebase.Collection.extend({
-	initialize:function(targetEmail){
-		this.url = fbRef.child('users').orderByChild('email').equalTo(targetEmail)
+var EventFinder = BackboneFire.Firebase.Collection.extend({
+	initialize:function(eventID){
+		this.url = fbRef.child('events').orderByChild('id').equalTo(eventID)
 	},
-	autoSync: false
 })
 
-var EventsAttending = BackboneFire.Firebase.Collection.extend({
-	initialize:function(uid){
-		this.url = `https://eviter.firebaseio.com/${uid}/eventsAttending/`
-	}
-})
 
-export {User, Users, Event, Events, Attendance, Attendances, UserSearch, EventsAttending}
+export {User, Users, Event, Events, Attendance, Attendances, EventFinder}
