@@ -1,7 +1,7 @@
 import DOM from 'react-dom'
 import fbRef from './fbref'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder} from './data'
 
 //Modules
@@ -127,6 +127,14 @@ var MyEvents = React.createClass({
 		let events = new Attendances(fbRef.getAuth().uid)
 		events.fetch()
 		events.once('sync', function() {
+			var eventColl = events.models
+			console.log('eventColl', eventColl)
+			eventColl.filter(function(model, i){
+				if (model.id === undefined) {
+					return eventColl.pop(eventColl.model)
+				}
+			})
+
 			component.setState({
 				events: events.toJSON()
 			})
@@ -141,9 +149,9 @@ var MyEvents = React.createClass({
 	 				this.state.events.map( function(event, i ){
 	 					return (
 	 						<div key={i} className='event' id={event.event_id} onClick={handleEvent}>
-	 						<p>{event.title}</p>
-	 						<p>{event.date}</p>
-	 						<p>{event.event_id}</p>
+	 						<p>Title:{event.title}</p>
+	 						<p>Date:{event.date}</p>
+	 						<p>Host:{event.event_id}</p>
 	 						</div>
 	 					)
 	 				})
@@ -180,23 +188,32 @@ var EventItem = React.createClass({
 })
 
 var EventPage = React.createClass({
+	
 	getInitialState:function() {
 		return {
-			event:[]
+			eventArr:[],
 		}
 	},
 
+	componentDidMount:function(){
+		var component = this
 
-componentDidMount:function(){
-	var component = this
-	let event = new EventFinder(this.props.eventId)
-	event.fetch()
-	event.on('sync', function(){
-		component.setState({
-			event:event.toJSON()
+		let currentEvent = new EventFinder(this.props.eventId)
+		currentEvent.fetch()
+		currentEvent.on('sync', function(){
+			console.log('currentEvent>>>>>',currentEvent)
+			var currentEvtArr = currentEvent.models
+			currentEvtArr.filter(function(model, i){
+				if (model.id === undefined) {
+					return currentEvtArr.pop(currentEvtArr.model)
+				}
+			})
+
+			component.setState({
+				eventArr:currentEvtArr
+			})
 		})
-	})
-},
+	},
 
 	render:function(){
 		return(
@@ -206,17 +223,17 @@ componentDidMount:function(){
 				<a href='#dash'>back to dashboard!</a><br/>
 				<div className='eventContent'>
 					{
-						this.state.event.map( function(info, i) {
-							console.log('info',info)
+						this.state.eventArr.map( function(info, i) {
+
+							console.log('event id>>>',info.id)
+							console.log('info>>>',info)
 							return (
 								<div key={i} className='currentEvent'>
-									<p>{info.date}</p>
-									<p>{info.doBringThis}</p>
-									<p>{info.doNotBringThis}</p>
-									<p>{info.id}</p>
-									<p>{info.location}</p>
-									<p>{info.sender_id}</p>
-									<p>{info.title}</p>
+									<p>TITLE: {info.get('title')}</p>
+									<p>DATE: {info.get('date')}</p>
+									<p>BRING THIS: {info.get('doBringThis')}</p>
+									<p>DONT BRING THIS: {info.get('doNotBringThis')}</p>
+									<p>LOCATION: {info.get('location')}</p>
 								</div>
 							)
 						})
@@ -224,25 +241,8 @@ componentDidMount:function(){
 				</div>
 				<Footer/>
 			</div>
-			)
+		)
 	}
-
-
-		// THIS GETS THE EVENT DETAILS TOO 
-	// componentDidMount:function(){
-	// var eventArr = []
-	// 	var eventColl = new EventFinder(this.props.eventId)
-
-	// 	eventColl.on('sync', function(){
-	// 		eventArr = eventColl.models
-	// 		eventArr.filter(function(model, i){
-	// 			if(eventArr.model === undefined) {
-	// 				 eventArr.pop(eventArr.model)
-	// 			}
-	// 		})
-	// 		console.log('eventArr>>>',eventArr)
-	// 	})
-	// },
 })
 
 var CreateEvent = React.createClass({
@@ -284,20 +284,46 @@ var CreateEvent = React.createClass({
 		createEvent(this.eventObj)
 	},
 
+	_addInput:function(evt){
+		console.log(evt.target.bringFood)
+		var i = 1
+		var newDiv = document.createElement('div')
+		newDiv.innerHTML = 'Entry' + (i + 1) + `<input type='text' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/><i className="fa fa-plus-circle" onClick={this._addInput('bringFood')}></i><br/>`
+		document.getElementById(divName)
+		i++
+
+	},
+
 	render:function(){
 		return(
-			<form className='createEventView' onSubmit={this._submitMessage}>
+			<div className='createEventView'>
 				<Header/>
 				<NavBar/>
-				<a href='#dash'>back to dashboard!</a><br/>
-				<input type='text' placeholder='Event Title' onChange={this._upDateEventTitle}/><br/>
-				<input type='text' placeholder='Event Date' onChange={this._upDateEventDate}/><br/>
-				<input type='text' placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
-				<input type='text' placeholder='Bring This!' onChange={this._upDateBringItems}/><br/>
-				<input type='text' placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
-                <button>Submit!</button>
+					<a href='#dash'>back to dashboard!</a><br/>
+
+				<form onSubmit={this._submitMessage}>
+					<div className='row'>
+						<div clasName='six columns'>
+							<label>Name Your Event</label><input type='text' required="required" placeholder='Event Title' onChange={this._upDateEventTitle}/><br/>
+						</div>
+						<div clasName='six columns'>
+							<label>Date</label><input type='date' required="required" placeholder='Event Date' onChange={this._upDateEventDate}/><br/>
+						</div>
+						<div clasName='six columns'>
+							<label>Event Location</label><input type='text' required="required" placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
+						</div>
+						<div clasName='six columns'>
+							<label>Food To Bring</label><input id='bringFood' type='text' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/>
+							<i className="fa fa-plus-circle" onClick={this._addInput}></i><br/>
+						</div>
+						<div clasName='six columns'>
+						<label>Foods to Not Bring</label><input type='text' required="required" placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
+						</div>
+		                <button>Submit!</button>
+	                </div>
+				</form>
 				<Footer/>
-			</form>
+			</div>
 		)
 	}
 })

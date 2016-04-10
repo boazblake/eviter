@@ -14,14 +14,13 @@ export function createEvent(eventObj) {
 	let {id:event_id} = events.create(data)
 
 	events.once('sync', function() {
-		let {id:attendance_id} = a.create({ user_id: data.sender_id, event_id, title:eventObj.title, date:eventObj.date })
+		let {id:attendance_id} = a.create({user_id: data.sender_id, event_id, title:eventObj.title, date:eventObj.date })
 		a.once('sync', () => {
 			location.hash = 'dash'
 		})
 	})
 }
 
-// Helper Functions
 export function createUser(userObj) {
     fbRef.createUser({
         email: userObj.email,
