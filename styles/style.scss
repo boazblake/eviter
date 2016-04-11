@@ -160,6 +160,16 @@ html {
     background-size: 100%;
  }
 
+.navBar {
+    display: flex;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:baseline;
+    background-color:rgba(236, 240, 241,0.5);
+}
+
+
+
 .signUp {
     background: rgba(230, 126, 34,0.4)
 }

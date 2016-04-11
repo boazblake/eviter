@@ -15,11 +15,20 @@ var Header = React.createClass({
 })
 
 var NavBar = React.createClass({
+	showDashButton:function(){
+		if (location.hash === 'dash') {
+			return ''
+		} else {
+			return (<a href='#dash'><i className='fa fa-reply pure-menu-heading pure-menu-link'>back to dashboard</i></a>)
+		}
+	},
+
+
 	render: function(){
 		return(
-			<div className='pure-menu pure-menu-horizontal'>
-				<a href='#logout'><i className='fa fa-sign-out pure-menu-heading pure-menu-link'> Sign Out</i></a>
+			<div className='pure-menu pure-menu-horizontal navBar'>
 				<a href='#dash'><i className='fa fa-reply pure-menu-heading pure-menu-link'>back to dashboard</i></a>
+				<a href='#logout'><i className='fa fa-sign-out pure-menu-heading pure-menu-link'> Sign Out</i></a>
 			</div>
 		)
 	}
