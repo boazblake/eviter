@@ -1,7 +1,7 @@
 import DOM from 'react-dom'
 import fbRef from './fbref'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEvent} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder} from './data'
 
 //Modules
@@ -17,8 +17,9 @@ var Header = React.createClass({
 var NavBar = React.createClass({
 	render: function(){
 		return(
-			<div>NAVBAR
-				<a href='#logout'>LOGOUT</a>
+			<div className='pure-menu pure-menu-horizontal'>
+				<a href='#logout'><i className='fa fa-sign-out pure-menu-heading pure-menu-link'> Sign Out</i></a>
+				<a href='#dash'><i className='fa fa-reply pure-menu-heading pure-menu-link'>back to dashboard</i></a>
 			</div>
 		)
 	}
@@ -74,18 +75,20 @@ var SplashPage = React.createClass({
 		return(
 			<div className='splashPageView'>
 				<Header/>
-				<div className='signUp'>
-					<input type='text' placeholder='email@host.com' onChange={this._upDateEmail}/><br/>
+				<form className='signUp pure-form'>
+					<h3>SIGN UP HERE</h3>
+					<input type='text' placeholder='email@host.com' onChange={this._upDateEmail}/>
 					<input type='passWord' placeholder='password' onChange={this._upDatePass}/><br/>
-					<input type='text' placeholder='First name' onChange={this._firstName}/><br/>
+					<input type='text' placeholder='First name' onChange={this._firstName}/>
 					<input type='text' placeholder='Last Name' onChange={this._lastName}/><br/>
-					<button onClick={this._handleSubmit}>SIGN UP!</button>
-				</div><br/><br/>
-				<div className='logIn'>
-					<input type='text' placeholder='email@host.com' onChange={this._upDateEmail}/><br/>
-					<input type='passWord' placeholder='password' onChange={this._upDatePass}/><br/>
-					<button onClick={this._handleLogin}>LOG IN</button>
-				</div>
+					<button className='pure-button pure-button-primary' onClick={this._handleSubmit}>SIGN UP!</button>
+				</form><br/><br/>
+				<form className='logIn pure-form'>
+					<h3>LOG IN HERE</h3>
+					<input type='text' placeholder='email@host.com' onChange={this._upDateEmail}/>
+					<input type='passWord' placeholder='password' onChange={this._upDatePass}/>
+					<button className='pure-button pure-button-primary' onClick={this._handleLogin}>LOG IN</button>
+				</form>
 				<Footer/>	
 			</div>
 
@@ -100,7 +103,7 @@ var DashPage = React.createClass({
 				<Header/>
 				<NavBar/>
 				<div className='invites'>
-					<a href="#createevent">Create Event!</a>
+					<a className='pure-button pure-button-primary' href="#createevent">Create New Event!</a>
 					<MyEvents />
 				</div>
 				<Footer/>
@@ -143,15 +146,19 @@ var MyEvents = React.createClass({
 	 
 	 render:function(){
 	 	console.log('this.state.events>>>>:',this.state.events)
+	 	console.log('fbref>>>>:',fbRef.getAuth.uid)
 	 	return(
-	 		<div className='myEvents'>
+	 		<div className='myEvents pure-g'>
 	 			{
 	 				this.state.events.map( function(event, i ){
 	 					return (
-	 						<div key={i} className='event' id={event.event_id} onClick={handleEvent}>
-	 						<p>Title:{event.title}</p>
-	 						<p>Date:{event.date}</p>
-	 						<p>Host:{event.event_id}</p>
+	 						<div key={i} className='event pure-u-1-3 button-secondary'>
+								<button id={event.event_id} onClick={removeEvent} className='button-error'><i className="fa fa-times"></i></button>
+		 						<div className='eventInfo' onClick={handleEvent} id={event.event_id}>
+			 						<p>Title:{event.title}</p>
+			 						<p>Date:{event.date}</p>
+			 						<p>Host:{event.event_id}</p>
+	 							</div>
 	 						</div>
 	 					)
 	 				})
@@ -181,7 +188,7 @@ var EventItem = React.createClass({
 				<p>from:{self.props.eventInfo.get('sender_email')}</p>
 				<p>for:{self.props.eventInfo.get('content').title}</p>
 				<p>when:{self.props.eventInfo.get('content').date}</p>
-				<button onClick={self._handleRsvp}>click to rsvp</button>
+				<button className='pure-button pure-button-primary' onClick={self._handleRsvp}>click to rsvp</button>
 			</div>
 		)
 	}
@@ -220,7 +227,7 @@ var EventPage = React.createClass({
 			<div className='eventView'>
 				<Header/>
 				<NavBar/>
-				<a href='#dash'>back to dashboard!</a><br/>
+				<br/>
 				<div className='eventContent'>
 					{
 						this.state.eventArr.map( function(info, i) {
@@ -299,27 +306,28 @@ var CreateEvent = React.createClass({
 			<div className='createEventView'>
 				<Header/>
 				<NavBar/>
-					<a href='#dash'>back to dashboard!</a><br/>
-
-				<form onSubmit={this._submitMessage}>
+				<form className='pure-form' onSubmit={this._submitMessage}>
 					<div className='row createEvent'>
-						<div className='six columns'>
-							<label>Name Your Event</label><input type='text' required="required" placeholder='Event Title' onChange={this._upDateEventTitle}/>
-						</div>
-						<div className='six columns'>
-							<label>Date</label><input type='date' required="required" placeholder='Event Date' onChange={this._upDateEventDate}/>
-						</div>
-						<div className='six columns'>
-							<label>Event Location</label><input type='text' required="required" placeholder='Event Location' onChange={this._upDateEventLocation}/>
-						</div>
-						<div className='six columns'>
-							<label>Food To Bring</label><input id='bringFood' type='textarea' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/>
-						</div>
-						<div className='six columns'>
-						<label>Foods to Not Bring</label><input type='textarea'  placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
-						</div><br/><br/>
-		                <button>Submit!</button>
-	                </div>
+							<label>Name Your Event</label>
+							<input type='text' required="required" placeholder='Event Title' onChange={this._upDateEventTitle}/>
+							
+							<label>Date</label>
+							<input type='date' required="required" placeholder='Event Date' onChange={this._upDateEventDate}/>
+							<br/>
+							<label>Event Location</label>
+							<input type='text' required="required" placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
+							
+							<div className='bringThis'>
+								<label>Food To Bring</label>
+								<input type='text' id='itemName' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/>
+								<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
+								<i className="fa fa-plus-square-o pure-button pure-button-primary"></i>
+							</div>
+							<br/>
+							<label>Foods to Not Bring</label>
+							<input type='textarea'  placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
+					</div><br/>
+		            <button className='pure-button pure-button-primary'>Submit!</button>
 				</form>
 				<Footer/>
 			</div>

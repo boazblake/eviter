@@ -1,5 +1,5 @@
 import fbRef from './fbref'
-import {User, Users, Event, Events, Attendances, Attendance, EventFinder} from './data'
+import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl} from './data'
 
 export function createEvent(eventObj) {
 
@@ -38,7 +38,6 @@ export function createUser(userObj) {
                 firstName: userObj.firstName,
                 lastName: userObj.lastName,
                 email: userObj.email,
-                id: authData.uid,
             })
             logUserIn(userObj)
         }
@@ -99,4 +98,12 @@ export function getMyEvents(){
 export function handleEvent(evt){
 		var event_id = evt.currentTarget.id
 		location.hash = 'event/' + event_id
-	}
+}
+
+
+export function removeEvent(evt){
+	console.log('xbutton>>>>', evt.currentTarget.id)
+	var eventID = evt.currentTarget.id
+	console.log(`https://eviter.firebaseio.com${eventID}`)
+	// var removeEvent = new Firebase(`fbUrl$(eventID)'`)
+}
