@@ -100,10 +100,27 @@ export function handleEvent(evt){
 		location.hash = 'event/' + event_id
 }
 
+export function removeEventAttendance(evt){
+	console.log(evt.currentTarget)
+	console.log('eventID>>>>', evt.currentTarget.getAttribute('data-id'))
+	console.log('userID>>>>', fbRef.getAuth().uid)
 
-export function removeEvent(evt){
-	console.log('xbutton>>>>', evt.currentTarget.id)
-	var eventID = evt.currentTarget.id
-	console.log(`https://eviter.firebaseio.com${eventID}`)
-	// var removeEvent = new Firebase(`fbUrl$(eventID)'`)
+	var eventID = evt.currentTarget.getAttribute('data-id')
+	var userId = fbRef.getAuth().uid
+
+
+	var removeUrl = `https://eviter.firebaseio.com/attendance/${eventID}/`
+
+	console.log(removeUrl)
+	var removeEvent = new Firebase(removeUrl)
+
+	var onComplete = function(error) {
+	  if (error) {
+	    console.log('Synchronization failed');
+	  } else {
+	    console.log('Synchronization succeeded');
+	  }
+	};
+	removeEvent.remove(onComplete);
 }
+

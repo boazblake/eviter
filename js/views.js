@@ -1,25 +1,27 @@
 import DOM from 'react-dom'
 import fbRef from './fbref'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEvent} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder} from './data'
 
 //Modules
 var Header = React.createClass({
 	render: function(){
 		return(
-			<div className='header'>HEADER
+			<div className='header'>
+				<p className='heading'>EVITER</p>
+				<p className='subHeading'> Your goto Event Organizer</p>
 			</div>
 		)
 	}
 })
 
 var NavBar = React.createClass({
-	showDashButton:function(){
-		if (location.hash === 'dash') {
-			return ''
+	_showDashButton:function(){
+		if (location.hash !=='#dash') {
+			return (<i className='fa fa-reply pure-menu-heading pure-menu-link'>back to dashboard</i>)
 		} else {
-			return (<a href='#dash'><i className='fa fa-reply pure-menu-heading pure-menu-link'>back to dashboard</i></a>)
+			return ''
 		}
 	},
 
@@ -27,7 +29,7 @@ var NavBar = React.createClass({
 	render: function(){
 		return(
 			<div className='pure-menu pure-menu-horizontal navBar'>
-				<a href='#dash'><i className='fa fa-reply pure-menu-heading pure-menu-link'>back to dashboard</i></a>
+				<a href='#dash'>{this._showDashButton()}</a>
 				<a href='#logout'><i className='fa fa-sign-out pure-menu-heading pure-menu-link'> Sign Out</i></a>
 			</div>
 		)
@@ -39,7 +41,7 @@ var Footer = React.createClass({
 		return (
 			<div className='footer'>
 			<img className='logo' src='http://landing.theironyard.com/images/home/tiy-logo.png'/>
-			FOOTER
+			<p>Boaz Blake, 2016</p>
 			</div>
 		)
 	}
@@ -154,51 +156,42 @@ var MyEvents = React.createClass({
 	},
 	 
 	 render:function(){
-	 	console.log('this.state.events>>>>:',this.state.events)
-	 	console.log('fbref>>>>:',fbRef.getAuth.uid)
+
 	 	return(
 	 		<div className='myEvents pure-g'>
 	 			{
 	 				this.state.events.map( function(event, i ){
+	 					
 	 					return (
-	 						<div key={i} className='event pure-u-1-3 button-secondary'>
-								<button id={event.event_id} onClick={removeEvent} className='button-error'><i className="fa fa-times"></i></button>
-		 						<div className='eventInfo' onClick={handleEvent} id={event.event_id}>
-			 						<p>Title:{event.title}</p>
-			 						<p>Date:{event.date}</p>
-			 						<p>Host:{event.event_id}</p>
-	 							</div>
-	 						</div>
+	 						<EventItem event={event} key={i} />
 	 					)
+
 	 				})
 	 			}
 	 		</div>
 	 	)
 	 }
 })
-//WHAT IS THIS?
+
 var EventItem = React.createClass({
 	
 
-	_handleRsvp:function(evt){
-		var eventID = evt.currentTarget.value
-		console.log(evt.currentTarget)
-		this.props.viewEvent(this.props.eventInfo)
+	_removeEvent: function(evt) {
+		this.props.event.destroy()
 	},
 
 	render:function(){
-		self = this
-		var displayType = 'inline-block'
-		if (self.props.eventInfo.id === undefined) displayType = 'none'
-		console.log('eventInfo>>>>', self.props.eventInfo)
+		var event = this.props.event
+		console.log('event>>>>',event)
 		return(
-			<div style={{display:displayType}} className='event'>
-				<p>Event</p><br/>
-				<p>from:{self.props.eventInfo.get('sender_email')}</p>
-				<p>for:{self.props.eventInfo.get('content').title}</p>
-				<p>when:{self.props.eventInfo.get('content').date}</p>
-				<button className='pure-button pure-button-primary' onClick={self._handleRsvp}>click to rsvp</button>
-			</div>
+			<div className='event pure-u-1-3 button-secondary'>
+				<button data-id={event.id} onClick={removeEventAttendance} className='removeEventButton button-error'><i className="fa fa-times"></i></button>
+				<div className='eventInfo' onClick={handleEvent} id={event.event_id}>
+					<p>Title:{event.title}</p>
+					<p>Date:{event.date}</p>
+					<p>Host:{event.event_id}</p>
+				</div>
+			</div>		
 		)
 	}
 })
