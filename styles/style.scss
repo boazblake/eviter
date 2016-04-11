@@ -178,6 +178,10 @@ body {
      }
 }
 
+.row.createEvent *{
+    display: inline-block;
+}
+
 .currentEvent{
     color: aliceblue;
 }

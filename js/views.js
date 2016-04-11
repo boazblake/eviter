@@ -160,7 +160,7 @@ var MyEvents = React.createClass({
 	 	)
 	 }
 })
-
+//WHAT IS THIS?
 var EventItem = React.createClass({
 	
 
@@ -302,23 +302,22 @@ var CreateEvent = React.createClass({
 					<a href='#dash'>back to dashboard!</a><br/>
 
 				<form onSubmit={this._submitMessage}>
-					<div className='row'>
-						<div clasName='six columns'>
-							<label>Name Your Event</label><input type='text' required="required" placeholder='Event Title' onChange={this._upDateEventTitle}/><br/>
+					<div className='row createEvent'>
+						<div className='six columns'>
+							<label>Name Your Event</label><input type='text' required="required" placeholder='Event Title' onChange={this._upDateEventTitle}/>
 						</div>
-						<div clasName='six columns'>
-							<label>Date</label><input type='date' required="required" placeholder='Event Date' onChange={this._upDateEventDate}/><br/>
+						<div className='six columns'>
+							<label>Date</label><input type='date' required="required" placeholder='Event Date' onChange={this._upDateEventDate}/>
 						</div>
-						<div clasName='six columns'>
-							<label>Event Location</label><input type='text' required="required" placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
+						<div className='six columns'>
+							<label>Event Location</label><input type='text' required="required" placeholder='Event Location' onChange={this._upDateEventLocation}/>
 						</div>
-						<div clasName='six columns'>
-							<label>Food To Bring</label><input id='bringFood' type='text' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/>
-							<i className="fa fa-plus-circle" onClick={this._addInput}></i><br/>
+						<div className='six columns'>
+							<label>Food To Bring</label><input id='bringFood' type='textarea' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/>
 						</div>
-						<div clasName='six columns'>
-						<label>Foods to Not Bring</label><input type='text' required="required" placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
-						</div>
+						<div className='six columns'>
+						<label>Foods to Not Bring</label><input type='textarea'  placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
+						</div><br/><br/>
 		                <button>Submit!</button>
 	                </div>
 				</form>

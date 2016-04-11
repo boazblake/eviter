@@ -36,6 +36,7 @@ import fetch from "isomorphic-fetch"
 import DOM from 'react-dom'
 import React, {Component} from 'react'
 import $ from 'jquery'
+console.log($)
 import _ from 'underscore'
 
 import BackboneFire from 'bbfire'
