@@ -56,6 +56,10 @@ var Attendances = BackboneFire.Firebase.Collection.extend({
 	}
 })
 
+
+/**
+ * eventFinder
+ */
 var EventFinder = BackboneFire.Firebase.Collection.extend({
 	initialize:function(eventID){
 		this.url = fbRef.child('events').orderByChild('id').equalTo(eventID)
@@ -63,4 +67,4 @@ var EventFinder = BackboneFire.Firebase.Collection.extend({
 })
 
 
-export {User, Users, Event, Events, Attendance, Attendances, EventFinder}
+export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl}

@@ -44,33 +44,35 @@ export function createUser(userObj) {
     })
 }
 
-export function addGuest(){
-	var newGuest = new UserSearch(eventObj.guestName)
+export function addGuest(evt){
+	// var newUserEmail = evt.currentTarget.getAttribute('newUserEmail').value
+	console.log('evt',evt)
+	// var newGuest = new UserSearch(eventObj.guestName)
 	
-	newGuest.fetch()
-	newGuest.on('sync', function(){
+	// newGuest.fetch()
+	// newGuest.on('sync', function(){
 
-		var guestID = newGuest.models[0].get('id')
-		var EventObjectsColl = new EventObjects(guestID)
-		EventObjectsColl.create({
-			content: eventObj,
-			sender_email: fbRef.getAuth().password.email,
-			sender_id: fbRef.getAuth().uid,
-			sender_name:eventObj.firstName + eventObj.lastName
-		})
-		// storing events sent	
-		EventObjectsColl.on('sync', function(){
-			var inviteModels = EventObjectsColl.models.filter(function(m){ return m.get('id') })
-			var mostRecentInvite = inviteModels[ inviteModels.length - 1 ]
+	// 	var guestID = newGuest.models[0].get('id')
+	// 	var EventObjectsColl = new EventObjects(guestID)
+	// 	EventObjectsColl.create({
+	// 		content: eventObj,
+	// 		sender_email: fbRef.getAuth().password.email,
+	// 		sender_id: fbRef.getAuth().uid,
+	// 		sender_name:eventObj.firstName + eventObj.lastName
+	// 	})
+	// 	// storing events sent	
+	// 	EventObjectsColl.on('sync', function(){
+	// 		var inviteModels = EventObjectsColl.models.filter(function(m){ return m.get('id') })
+	// 		var mostRecentInvite = inviteModels[ inviteModels.length - 1 ]
 			
-			var receivedEventColl = new EventObjects(fbRef.getAuth().uid)
+	// 		var receivedEventColl = new EventObjects(fbRef.getAuth().uid)
 			
-			receivedEventColl.create(mostRecentInvite.toJSON() )
+	// 		receivedEventColl.create(mostRecentInvite.toJSON() )
 			// this.forceUpdate()
-		})
+		// })
 		
-	})
-	location.hash='dash'
+	// })
+	// location.hash='dash'
 }
 
 export function logUserIn(userObj){

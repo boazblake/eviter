@@ -1,7 +1,7 @@
 import DOM from 'react-dom'
 import fbRef from './fbref'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuest} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder} from './data'
 
 //Modules
@@ -189,7 +189,7 @@ var EventItem = React.createClass({
 				<div className='eventInfo' onClick={handleEvent} id={event.event_id}>
 					<p>Title:{event.title}</p>
 					<p>Date:{event.date}</p>
-					<p>Host:{event.event_id}</p>
+					<p>eventID:{event.event_id}</p>
 				</div>
 			</div>		
 		)
@@ -197,7 +197,7 @@ var EventItem = React.createClass({
 })
 
 var EventPage = React.createClass({
-	
+
 	getInitialState:function() {
 		return {
 			eventArr:[],
@@ -224,7 +224,25 @@ var EventPage = React.createClass({
 		})
 	},
 
+
+
+
 	render:function(){
+		var newUserEmail=''
+
+		function _upDateGuestEmail(evt){
+			console.log(evt.target.value)
+			// var email = evt.target.value
+			// component.newUser = email
+			newUserEmail = evt.target.value
+			console.log(newUserEmail)
+		}
+
+		function addNewGuest(){
+			addGuest(newUserEmail)
+		}
+
+
 		return(
 			<div className='eventView'>
 				<Header/>
@@ -243,6 +261,12 @@ var EventPage = React.createClass({
 									<p>BRING THIS: {info.get('doBringThis')}</p>
 									<p>DONT BRING THIS: {info.get('doNotBringThis')}</p>
 									<p>LOCATION: {info.get('location')}</p>
+									<form data-id='newUserEmail'>
+										<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='newUserEmail'/>
+										<button onClick={addNewGuest} className='adduserbutton button-secondary pure-button'>
+											<i className="fa fa-user-plus" aria-hidden="true"></i>
+										</button>
+									</form>
 								</div>
 							)
 						})
