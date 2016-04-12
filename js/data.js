@@ -49,12 +49,13 @@ var Attendance = BackboneFire.Model.extend({})
 var Attendances = BackboneFire.Firebase.Collection.extend({
 	url: fbUrl('/attendance'),
 	model: Attendance,
-	initialize: function(id){
-		if(id){
-			this.url = new Firebase(fbUrl('/attendance')).orderByChild('user_id').equalTo(id)
+	initialize: function(childKey, id){
+		if(childKey && id){
+			this.url = new Firebase(fbUrl('/attendance')).orderByChild(childKey).equalTo(id)
 		}
 	}
 })
+
 
 
 /**
@@ -62,9 +63,15 @@ var Attendances = BackboneFire.Firebase.Collection.extend({
  */
 var EventFinder = BackboneFire.Firebase.Collection.extend({
 	initialize:function(eventID){
-		this.url = fbRef.child('events').orderByChild('id').equalTo(eventID)
+		this.url = fbRef.child('events').orderByChild('uid').equalTo(eventID)
 	},
 })
 
+var QueryByEmail = BackboneFire.Firebase.Collection.extend({
+    initialize: function(targetEmail) {
+        this.url = fbRef.child('users').orderByChild('email').equalTo(targetEmail)
+    },
+})
 
-export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl}
+
+export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail}

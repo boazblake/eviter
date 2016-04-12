@@ -1,20 +1,20 @@
 import fbRef from './fbref'
-import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl} from './data'
+import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail} from './data'
 
 export function createEvent(eventObj) {
-
 	var data = {
 		...eventObj,
 		sender_id: fbRef.getAuth().uid
 	}
+	console.log('eventObj',eventObj)
 
+	console.log('this is the data>>>>', data)
 	let events = new Events(),
 		a = new Attendances()
 
 	let {id:event_id} = events.create(data)
-
 	events.once('sync', function() {
-		let {id:attendance_id} = a.create({user_id: data.sender_id, event_id, title:eventObj.title, date:eventObj.date })
+		let {id:attendance_id} = a.create({user_uid: data.sender_id, event_id, title:eventObj.title, date:eventObj.date})
 		a.once('sync', () => {
 			location.hash = 'dash'
 		})
@@ -44,35 +44,29 @@ export function createUser(userObj) {
     })
 }
 
-export function addGuest(evt){
-	// var newUserEmail = evt.currentTarget.getAttribute('newUserEmail').value
-	console.log('evt',evt)
-	// var newGuest = new UserSearch(eventObj.guestName)
-	
-	// newGuest.fetch()
-	// newGuest.on('sync', function(){
+export function addGuestToEvent(obj){
 
-	// 	var guestID = newGuest.models[0].get('id')
-	// 	var EventObjectsColl = new EventObjects(guestID)
-	// 	EventObjectsColl.create({
-	// 		content: eventObj,
-	// 		sender_email: fbRef.getAuth().password.email,
-	// 		sender_id: fbRef.getAuth().uid,
-	// 		sender_name:eventObj.firstName + eventObj.lastName
-	// 	})
-	// 	// storing events sent	
-	// 	EventObjectsColl.on('sync', function(){
-	// 		var inviteModels = EventObjectsColl.models.filter(function(m){ return m.get('id') })
-	// 		var mostRecentInvite = inviteModels[ inviteModels.length - 1 ]
-			
-	// 		var receivedEventColl = new EventObjects(fbRef.getAuth().uid)
-			
-	// 		receivedEventColl.create(mostRecentInvite.toJSON() )
-			// this.forceUpdate()
-		// })
-		
-	// })
-	// location.hash='dash'
+	console.log('obj',obj)
+
+	var queriedUsers = new QueryByEmail(obj.email)
+	var user = queriedUsers
+
+	queriedUsers.once('sync', function( ){
+		if( user.models[0].id ){
+			var userData = user.models[0]
+			console.log('userData', userData)
+			var attendList = new Attendances()
+			attendList.create({
+				event_id: obj.eventData.id,
+				sender_uid: obj.eventData.get('sender_uid'),
+				date: obj.eventData.get('date'),
+				title:obj.eventData.get('title'),
+				user_uid:userData.get('id'),
+				userName:userData.get('firstName') + ' ' + userData.get('lastName')
+			})
+		}
+
+	})	
 }
 
 export function logUserIn(userObj){
@@ -99,6 +93,7 @@ export function getMyEvents(){
 
 export function handleEvent(evt){
 		var event_id = evt.currentTarget.id
+		console.log('event_id',event_id)
 		location.hash = 'event/' + event_id
 }
 
