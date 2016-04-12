@@ -34,11 +34,22 @@ var Users = BackboneFire.Firebase.Collection.extend({
 /**
  * EVENTS
  */
-var Event = BackboneFire.Model.extend({})
+var Event = BackboneFire.Firebase.Model.extend({
+	autoSync: false,
+
+	url: "" ,
+
+	initialize: function(evtId){
+		this.url = fbRef.child('events').child(evtId)
+		console.log(`for event  ${evtId}`, this.url)
+
+	}
+})
 
 var Events = BackboneFire.Firebase.Collection.extend({
-	url: fbUrl('/events'),
-	model: Event
+	autoSync: false,
+	url: fbUrl('/events/'),
+	// model: Event
 })
 
 /**
@@ -62,8 +73,8 @@ var Attendances = BackboneFire.Firebase.Collection.extend({
  * eventFinder
  */
 var EventFinder = BackboneFire.Firebase.Collection.extend({
-	initialize:function(eventID){
-		this.url = fbRef.child('events').orderByChild('uid').equalTo(eventID)
+	initialize:function(attendanceId){
+		this.url = fbRef.child('attendanceId').orderByChild(attendanceId).equalTo(attendanceId)
 	},
 })
 

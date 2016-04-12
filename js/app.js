@@ -63,7 +63,7 @@ function app() {
     		'logout':'doLogOut',
     		'createevent':'doCreateEvent',
     		'dash':'showDashPage',
-    		'event/:id':'viewEvent',
+    		'event/:evtID':'viewEvent',
     		'*splash':'showSplashPage',
     	},
 
@@ -93,9 +93,7 @@ function app() {
 
 		viewEvent:function (id){
 			checkAuth()
-			var hash = window.location.hash.split('/')
-			var event_id = hash[1]
-    		DOM.render(<EventPage eventId={event_id}/>, document.querySelector('.container'))
+    		DOM.render(<EventPage eventID={id}/>, document.querySelector('.container'))
 		}
 	})
 

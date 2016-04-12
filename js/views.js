@@ -126,7 +126,7 @@ var DashPage = React.createClass({
 var MyEvents = React.createClass({
 	getInitialState:function(){
 		return{
-			events:[]
+			attendanceMods:[]
 		}
 	},
 
@@ -139,32 +139,29 @@ var MyEvents = React.createClass({
 	componentDidMount(){
 		var component = this
 		console.log(fbRef.getAuth().uid)
-		let events = new Attendances('user_uid', fbRef.getAuth().uid )
-		events.fetch()
-		events.once('sync', function() {
-			var eventColl = events.models
-			console.log('eventColl', eventColl)
-			var noGhostList = eventColl.filter(function(model, i){
+		let myAttendances = new Attendances('user_uid', fbRef.getAuth().uid )
+		myAttendances.fetch()
+		myAttendances.once('sync', function() {
+			var mods = myAttendances.models
+			var noGhostList = mods.filter(function(model, i){
 				 return model.id
 			})
 
 			console.log('noooo ghosts', noGhostList)
 			component.setState({
-				events: noGhostList
+				attendanceMods: noGhostList
 			})
 		})
 	},
 	 
 	 render:function(){
-
 	 	return(
 	 		<div className='myEvents pure-g'>
 	 			{
-	 				this.state.events.map( function(event, i ){
+	 				this.state.attendanceMods.map( function(attendanceMod, i ){
 	 					return (
-	 						<EventItem eventID={event} key={i} />
+	 						<EventItem attendanceMod={attendanceMod} key={i} />
 	 					)
-
 	 				})
 	 			}
 	 		</div>
@@ -175,22 +172,22 @@ var MyEvents = React.createClass({
 var EventItem = React.createClass({
 	
 
-	_removeEvent: function(evt) {
-		this.props.event.destroy()
+	removeAttendance: function(evt) {
+		this.props.attendanceMod.destroy()
 	},
 
 	render:function(){
-		var event = this.props.eventID
-		console.log('event>>>>',event)
+		var attendanceMod = this.props.attendanceMod
+		console.log('attendanceMod>>>>',attendanceMod)
 		return(
-			<div className='event pure-u-1-3 button-secondary'>
-				<button data-id={event.id} onClick={removeEventAttendance} className='removeEventButton button-error'>
+			<div className='attendance pure-u-1-3 button-secondary'>
+				<button data-id={attendanceMod.id} onClick={this.removeAttendance} className='removeAttendanceButton button-error'>
 					<i className="fa fa-times"></i>
 				</button>
-				<div className='eventInfo' onClick={handleEvent} id={event.id}>
-					<p>Title:{event.get('title')}</p>
-					<p>Date:{event.get('date')}</p>
-					<p>eventID:{event.get('event_id')}</p>
+				<div className='eventInfo' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
+					<p>Title:{attendanceMod.get('title')}</p>
+					<p>Date:{attendanceMod.get('date')}</p>
+					<p>eventId:{attendanceMod.get('event_id')}</p>
 				</div>
 			</div>		
 		)
@@ -207,21 +204,17 @@ var EventPage = React.createClass({
 
 	componentDidMount:function(){
 		var component = this
-
-		let currentEvent = new EventFinder(this.props.eventID)
-		console.log('currentEvent>>>>',currentEvent)
+		var currentMod = ''
+		console.log('current event id??', this.props.eventID)
+		let currentEvent = new Event(this.props.eventID)
+		
 		currentEvent.fetch()
+		
 		currentEvent.on('sync', function(){
-			console.log('currentEvent>>>>>',currentEvent)
-			var currentEvtArr = currentEvent.models
-			currentEvtArr.filter(function(model, i){
-				if (model.id === undefined) {
-					return currentEvtArr.pop(currentEvtArr.model)
-				}
-			})
+			console.log('currentEvent>>>>>', currentEvent)
 
 			component.setState({
-				eventArr:currentEvtArr
+				eventArr:currentEvent
 			})
 		})
 	},
@@ -238,6 +231,7 @@ var EventPage = React.createClass({
 	},
 
 	render:function(){
+
 		var component = this
 
 		var newUserEmail = ''
@@ -254,28 +248,15 @@ var EventPage = React.createClass({
 				<NavBar/>
 				<br/>
 				<div className='eventContent'>
-					{
-						this.state.eventArr.map( function(info, i) {
+					<div className='currentEvent'>
 
-							eventInfo = info
-
-							return (
-								<div key={i} className='currentEvent'>
-									<p>TITLE: {info.get('title')}</p>
-									<p>DATE: {info.get('date')}</p>
-									<p>BRING THIS: {info.get('doBringThis')}</p>
-									<p>DONT BRING THIS: {info.get('doNotBringThis')}</p>
-									<p>LOCATION: {info.get('location')}</p>
-									<form data-id='newUserEmail'>
-										<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='info.id' ref={'userEmail'}/>
-										<button data-id='newUserEmail' onClick={component._handleAddGuest.bind(component, eventInfo )} className='adduserbutton button-secondary pure-button'>
-											<i className="fa fa-user-plus" aria-hidden="true"></i>
-										</button>
-									</form>
-								</div>
-							)
-						})
-					}
+						<form data-id='newUserEmail'>
+							<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
+							<button data-id='newUserEmail' onClick={component._handleAddGuest.bind(component, eventInfo )} className='adduserbutton button-secondary pure-button'>
+								<i className="fa fa-user-plus" aria-hidden="true"></i>
+							</button>
+						</form>
+					</div>
 				</div>
 				<Footer/>
 			</div>

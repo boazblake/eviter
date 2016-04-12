@@ -92,12 +92,12 @@ export function getMyEvents(){
 }
 
 export function handleEvent(evt){
-		var event_id = evt.currentTarget.id
+		var event_id = evt.currentTarget.getAttribute('data-event-id')
 		console.log('event_id',event_id)
 		location.hash = 'event/' + event_id
 }
 
-export function removeEventAttendance(evt){
+export function removeAttendance(evt){
 	console.log(evt.currentTarget)
 	console.log('eventID>>>>', evt.currentTarget.getAttribute('data-id'))
 	console.log('userID>>>>', fbRef.getAuth().uid)

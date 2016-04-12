@@ -181,16 +181,22 @@ html {
 
 
 .signUp {
-    background: rgba(230, 126, 34,0.4)
+    background: rgba(230, 126, 34,0.4);
+    text-shadow: 1px 1px 1px #A1A1A1;
+    color:#d35400
+
 }
 
 
 .logIn {
     background: rgba(211, 84, 0, 0.4);
+    text-shadow: 1px 1px 1px #A1A1A1;
+    color:#d35400
+
 }
 
  
-.event{
+.attendance{
     border-radius: 10px;
     box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
     display:inline-block;
@@ -199,7 +205,7 @@ html {
     padding:10px;
     z-index: 1;
 
-    .removeEventButton {
+    .removeAttendanceButton {
         display: none;
         color: rgba(192, 57, 43,1.0);
         border-radius: 50px;
@@ -208,7 +214,7 @@ html {
      }
 }
 
-.event:hover > .removeEventButton {
+.attendance:hover > .removeAttendanceButton {
     display:block;
 }
 
