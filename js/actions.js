@@ -1,39 +1,37 @@
 import fbRef from './fbref'
 import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance} from './data'
 
-export function createEvent(eventObj, hostName) {
+export function createEvent(eventObj, hostModel) {
 	var data = {
 		...eventObj,
-		sender_id: fbRef.getAuth().uid,
-		hostName:hostName
+		host_id: fbRef.getAuth().uid,
+		hostName: hostModel.get('firstName') + ' ' + hostModel.get('lastName')
 	}
-	// console.log('eventObj',eventObj)
-	// console.log('hostName',hostName)
-	// console.log('this is the data>>>>', data)
 
 	var events = new Events()
-
 	var eventModel = events.create(data)
 
-	// console.log('eventModel', eventModel)
-	// console.log('eventid', eventModel.id)
-
-	var attendanceObj = {
-		date:eventModel.get('date'),
-		title:eventModel.get('title'),
-		hostName:hostName,
-		user_uid:fbRef.getAuth().uid
-	}	
-
-	// console.log('eventid', eventModel.id)
+	console.log('eventModel', eventModel)
 
 	eventModel.once('sync', function() {
-		// console.log('eventid', eventModel.id)
 	
-		attendanceObj.event_id = eventModel.id
-		var attendances = new Attendances()
-		var attendanceModel = attendances.create(attendanceObj)
-		// console.log('attendanceModel', attendanceModel)
+		var attendanceObj = {
+			event_id: eventModel.id,
+			sender_id: eventModel.get('host_id'),
+			date: eventModel.get('date'),
+			title:eventModel.get('title'),
+			user_uid:hostModel.get('id'),
+			userName:hostModel.get('firstName') + ' ' + hostModel.get('lastName'),
+			email: hostModel.get('email'),
+			hostName:eventModel.get('hostName')
+		}
+		
+		console.log('attendanceObj', attendanceObj)
+
+
+
+		createAttendanceForEvt(attendanceObj)
+
 	})
 
 	location.hash = 'dash'
@@ -64,32 +62,69 @@ export function createUser(userObj) {
 
 export function addGuestToEvent(recipientEmail, evtModel){
 
-	console.log('evtModel : ',evtModel)
+	console.log('evtModel', evtModel)
 
 	var queriedUsers = new QueryByEmail(recipientEmail)
 	var user = queriedUsers
 
+	console.log('user', user)
+
 	queriedUsers.once('sync', function( ){
 		if( user.models[0].id ){
 			var recipientUserModel = user.models[0]
-			console.log('userData : ', recipientUserModel)
-			var attendList = new Attendances()
-			console.log("evt mofdel", evtModel)
-			attendList.create({
+			console.log('queried email result:  : ', recipientUserModel)
+
+			var attDataObj = {
 				event_id: evtModel.id,
-				sender_id: evtModel.get('sender_id'),
+				sender_id: evtModel.get('host_id'),
 				date: evtModel.get('date'),
 				title:evtModel.get('title'),
 				user_uid:recipientUserModel.get('id'),
 				userName:recipientUserModel.get('firstName') + ' ' + recipientUserModel.get('lastName'),
-				email: recipientUserModel.get('email')
-			})
+				email: recipientUserModel.get('email'),
+				hostName:evtModel.get('hostName'),
+			}
+
+			createAttendanceForEvt(attDataObj)
 		} else{
 			alert('no match for ', recipientEmail)
 		}
-
 	})	
 }
+
+export function createAttendanceForEvt(evtPlusUsrObj){
+	// REQUIRES
+	//-----------
+		// event_id: 
+		// sender_id: 
+		// date: 
+		// title:	
+		// user_uid:
+		// userName:
+		// email: 
+		// hostName:
+	console.log('evtPlusUsrObj', evtPlusUsrObj)
+
+
+	if (!evtPlusUsrObj.event_id)  {console.log("obj missing event_id"); return}
+	if (!evtPlusUsrObj.sender_id)  {console.log("obj missing sender_id"); return}
+	if (!evtPlusUsrObj.date)  {console.log("obj missing date"); return}
+	if (!evtPlusUsrObj.title)  {console.log("obj missing title"); return}
+	if (!evtPlusUsrObj.user_uid)  {console.log("obj missing user_uid"); return}
+	if (!evtPlusUsrObj.userName)  {console.log("obj missing userName"); return}
+	if (!evtPlusUsrObj.email)  {console.log("obj missing email"); return}
+	if (!evtPlusUsrObj.hostName)  {console.log("obj missing hostName"); return}
+
+	var attendList = new Attendances()
+	attendList.once('sync', function(){
+		
+		attendList.create(evtPlusUsrObj)
+
+	})
+
+}
+
+
 
 export function logUserIn(userObj){
 	fbRef.authWithPassword({
@@ -118,6 +153,8 @@ export function handleEvent(evt){
 		// console.log('event_id',event_id)
 		location.hash = 'event/' + event_id
 }
+
+
 
 export function removeAttendance(evt){
 	// console.log(evt.currentTarget)

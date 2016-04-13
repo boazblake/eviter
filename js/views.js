@@ -2,7 +2,7 @@ import DOM from 'react-dom'
 import fbRef from './fbref'
 import React, {Component} from 'react'
 import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent} from './actions'
-import {Host, User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance} from './data'
+import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance} from './data'
 
 
 //Modules
@@ -214,26 +214,26 @@ var EventPage = React.createClass({
 	},
 
 	componentWillMount:function(){
-		// get the attendances for the event
 		this.state.event.fetchWithPromise().then(() => this.forceUpdate())
 	},
 
 
 	_handleAddGuest: function(eventInfo){
-		console.log('userEmail', this.refs.userEmail.value)
-		console.log(this.state.event)
 
 		var userEmail = this.refs.userEmail.value
-		var userUID = fbRef.getAuth().uid
+		var eventID = this.props.eventID
+		this.refs.userEmail.value = ''
 
-		console.log('userEmail', userEmail)
-		console.log('userUID', userUID)
+		var searchForAttendance = new QueriedAttendance('email', userEmail)
+		console.log('searchForAttendance', searchForAttendance)
+		
+		if (!searchForAttendance.models.id) {
+			addGuestToEvent(userEmail, this.state.event)
+		}
+		else {
+			alert( userEmail +'has already been invited!')
+		}
 
-		var searchForEvent = new QueriedAttendance('userEmail', userUID)
-		console.log('searchForEvent', searchForEvent)
-
-		//if this.refs.userEmail.value is NOT found on the attendanceList, then run this...
-		addGuestToEvent(this.refs.userEmail.value, this.state.event)
 		// else pop an alertt
 	},
 
@@ -320,16 +320,9 @@ var CreateEvent = React.createClass({
 	_submitEvent:function(evt){
 		evt.preventDefault()
 		var component = this
-		var hostModel = new Host(fbRef.getAuth().uid)
+		var hostModel = new User(fbRef.getAuth().uid)
 		hostModel.once('sync', function(){
-			// console.log('hostModel',hostModel)
-			
-			var hostName = hostModel.get('firstName') + ' ' + hostModel.get('lastName')
-
-			// console.log('hostName', hostName)
-
-			createEvent(component.eventObj, hostName)
-
+			createEvent(component.eventObj, hostModel)
 		})
 	},
 

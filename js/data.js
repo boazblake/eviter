@@ -24,27 +24,21 @@ BackboneFire.Firebase.Collection.prototype.fetchWithPromise =
 
 const fbUrl = (path="") => `https://eviter.firebaseio.com${path}`
 
-/**
-HOST
-**/
-
-var Host = BackboneFire.Firebase.Model.extend({
-	url:'',
-	initialize:function(host_id){
-		this.url = fbRef.child('users').child(host_id)
-	}
-})
-
 
 /**
 USERS
 **/
 var User = BackboneFire.Firebase.Model.extend({
-	url: fbUrl('/users'),
+	url: '',
+	initialize: function(uid) {
+		this.url = fbRef.child('users').child(uid)
+	}
+
 })
 
 var Users = BackboneFire.Firebase.Collection.extend({
-	model: User
+	url: fbRef.child('users'),
+
 })
 
 /**
@@ -72,18 +66,11 @@ var Events = BackboneFire.Firebase.Collection.extend({
  * Attendance
  */
 var Attendance = BackboneFire.Firebase.Model.extend({
-	// defaults: {
-	// 	date:'',
-	// 	location:'',
-	// 	title:'',
-	// 	doBringThis:'',
-	// 	doNotBringThis:''
-	// }
+
 })
 
 var Attendances = BackboneFire.Firebase.Collection.extend({
-	url: fbUrl('/attendance'),
-	model: Attendance
+	url: fbRef.child('attendance'),
 })
 
 var QueriedAttendance = BackboneFire.Firebase.Collection.extend({
@@ -98,7 +85,7 @@ var QueriedAttendance = BackboneFire.Firebase.Collection.extend({
  */
 var EventFinder = BackboneFire.Firebase.Collection.extend({
 	initialize:function(attendanceId){
-		this.url = fbRef.child('attendanceId').orderByChild(attendanceId).equalTo(attendanceId)
+		this.url = fbRef.child('attendance').orderByChild('email').equalTo(attendanceId)
 	},
 })
 
@@ -109,4 +96,4 @@ var QueryByEmail = BackboneFire.Firebase.Collection.extend({
 })
 
 
-export {Host, User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance}
+export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance}
