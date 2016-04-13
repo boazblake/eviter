@@ -93,7 +93,8 @@ function app() {
 
 		viewEvent:function (id){
 			checkAuth()
-    		DOM.render(<EventPage eventID={id}/>, document.querySelector('.container'))
+			console.assert(id !== undefined)
+    		DOM.render(<EventPage eventID={id} />, document.querySelector('.container'))
 		}
 	})
 

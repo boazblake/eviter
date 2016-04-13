@@ -2,7 +2,8 @@ import DOM from 'react-dom'
 import fbRef from './fbref'
 import React, {Component} from 'react'
 import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent} from './actions'
-import {User, Users, Event, Events, Attendances, EventFinder} from './data'
+import {Host, User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance} from './data'
+
 
 //Modules
 var Header = React.createClass({
@@ -123,6 +124,7 @@ var DashPage = React.createClass({
 	}
 })
 
+
 var MyEvents = React.createClass({
 	getInitialState:function(){
 		return{
@@ -130,31 +132,41 @@ var MyEvents = React.createClass({
 		}
 	},
 
+
 	_eventInvite:function(model, i){
-		console.log('model:>>>>',model)
+		// console.log('model:>>>>',model)
 		if (model.id)
-		return <EventItem eventInfo={model} key={i} viewEvent={this.props.viewEvent}/>
+		return <EventItem eventInfo={model} key={i} viewEvent={this.props.viewEvent} />
 	},
+
 
 	componentDidMount(){
 		var component = this
-		console.log(fbRef.getAuth().uid)
-		let myAttendances = new Attendances('user_uid', fbRef.getAuth().uid )
-		myAttendances.fetch()
-		myAttendances.once('sync', function() {
-			var mods = myAttendances.models
-			var noGhostList = mods.filter(function(model, i){
+		console.log('user uid',fbRef.getAuth().uid)
+		this.myAttendances = new QueriedAttendance('user_uid', fbRef.getAuth().uid )
+		
+		this.myAttendances.on('sync update', function() {
+			console.log('myAttendances', component.myAttendances)
+
+			var modsArr = component.myAttendances.models
+			var noGhostList = modsArr.filter(function(model, i){
 				 return model.id
 			})
 
-			console.log('noooo ghosts', noGhostList)
+			// console.log('noooo ghosts', noGhostList)
 			component.setState({
 				attendanceMods: noGhostList
 			})
 		})
 	},
+
+	  componentWillUnmount: function(){
+	  	this.myAttendances.off()
+	  },
 	 
 	 render:function(){
+
+	 	// console.log('this.state.attendanceMods', this.state.attendanceMods)
 	 	return(
 	 		<div className='myEvents pure-g'>
 	 			{
@@ -174,11 +186,12 @@ var EventItem = React.createClass({
 
 	removeAttendance: function(evt) {
 		this.props.attendanceMod.destroy()
+		// console.log('this.props.attendanceMod', this.props.attendanceMod)
 	},
 
 	render:function(){
 		var attendanceMod = this.props.attendanceMod
-		console.log('attendanceMod>>>>',attendanceMod)
+		// console.log('attendanceMod>>>>',attendanceMod)
 		return(
 			<div className='attendance pure-u-1-3 button-secondary'>
 				<button data-id={attendanceMod.id} onClick={this.removeAttendance} className='removeAttendanceButton button-error'>
@@ -187,7 +200,7 @@ var EventItem = React.createClass({
 				<div className='eventInfo' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
 					<p>Title:{attendanceMod.get('title')}</p>
 					<p>Date:{attendanceMod.get('date')}</p>
-					<p>eventId:{attendanceMod.get('event_id')}</p>
+					<p>Host:{attendanceMod.get('hostName')}</p>
 				</div>
 			</div>		
 		)
@@ -197,51 +210,47 @@ var EventItem = React.createClass({
 var EventPage = React.createClass({
 
 	getInitialState:function() {
-		return {
-			eventArr:[]
-		}
+		return {event: new Event(this.props.eventID)}
 	},
 
-	componentDidMount:function(){
-		var component = this
-		var currentMod = ''
-		console.log('current event id??', this.props.eventID)
-		let currentEvent = new Event(this.props.eventID)
-		
-		currentEvent.fetch()
-		
-		currentEvent.on('sync', function(){
-			console.log('currentEvent>>>>>', currentEvent)
-
-			component.setState({
-				eventArr:currentEvent
-			})
-		})
+	componentWillMount:function(){
+		// get the attendances for the event
+		this.state.event.fetchWithPromise().then(() => this.forceUpdate())
 	},
 
 
-	_handleAddGuest:function(eventInfo){
-		console.log('this.refs', this.refs.userEmail.value)
+	_handleAddGuest: function(eventInfo){
+		console.log('userEmail', this.refs.userEmail.value)
+		console.log(this.state.event)
 
-		 var userObj = {
-			email: this.refs.userEmail.value,
-			eventData: eventInfo
-		}
-		addGuestToEvent(userObj)
+		var userEmail = this.refs.userEmail.value
+		var userUID = fbRef.getAuth().uid
+
+		console.log('userEmail', userEmail)
+		console.log('userUID', userUID)
+
+		var searchForEvent = new QueriedAttendance('userEmail', userUID)
+		console.log('searchForEvent', searchForEvent)
+
+		//if this.refs.userEmail.value is NOT found on the attendanceList, then run this...
+		addGuestToEvent(this.refs.userEmail.value, this.state.event)
+		// else pop an alertt
 	},
 
 	render:function(){
 
 		var component = this
+		var event = this.state.event
 
+		// console.log('currentEvent',currentEvent)
 		var newUserEmail = ''
 		var eventInfo = ''
 
 		function _upDateGuestEmail(evt){
 			newUserEmail = evt.target.value
-			console.log(newUserEmail)
+			// console.log(newUserEmail)
 		}
-
+		// console.log('component.props.event',component.props.event)
 		return(
 			<div className='eventView'>
 				<Header/>
@@ -249,7 +258,11 @@ var EventPage = React.createClass({
 				<br/>
 				<div className='eventContent'>
 					<div className='currentEvent'>
-
+						<p>{event.get('date')}</p>
+						<p>{event.get('location')}</p>
+						<p>{event.get('title')}</p>
+						<p>{event.get('doBringThis')}</p>
+						<p>{event.get('doNotBringThis')}</p>
 						<form data-id='newUserEmail'>
 							<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
 							<button data-id='newUserEmail' onClick={component._handleAddGuest.bind(component, eventInfo )} className='adduserbutton button-secondary pure-button'>
@@ -271,7 +284,9 @@ var CreateEvent = React.createClass({
 		'date':'',
 		'location':'',
 		'doBringThis':'',
+		'quantity':'',
 		'doNotBringThis':'',
+		'hostName':''
 	},
 
 	_upDateEventTitle:function(evt){
@@ -294,21 +309,36 @@ var CreateEvent = React.createClass({
 		this.eventObj.doBringThis = evt.target.value
 	},
 
+	_upDateItemQuantity:function(evt){
+		this.eventObj.quantity = evt.target.value
+	},
+
 	_upDateDONOTBringItems:function(evt){
 		this.eventObj.doNotBringThis = evt.target.value
 	},
 
-	_submitMessage:function(evt){
+	_submitEvent:function(evt){
 		evt.preventDefault()
-		createEvent(this.eventObj)
+		var component = this
+		var hostModel = new Host(fbRef.getAuth().uid)
+		hostModel.once('sync', function(){
+			// console.log('hostModel',hostModel)
+			
+			var hostName = hostModel.get('firstName') + ' ' + hostModel.get('lastName')
+
+			// console.log('hostName', hostName)
+
+			createEvent(component.eventObj, hostName)
+
+		})
 	},
 
 	_addInput:function(evt){
-		console.log(evt.target.bringFood)
+		// console.log(evt.target.bringFood)
 		var i = 1
-		var newDiv = document.createElement('div')
-		newDiv.innerHTML = 'Entry' + (i + 1) + `<input type='text' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/><i className="fa fa-plus-circle" onClick={this._addInput('bringFood')}></i><br/>`
-		document.getElementById(divName)
+		var newItemDiv = document.createElement('div')
+		newItemDiv.innerHTML = 'Entry' + (i + 1) + `<input type='text' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/><i className="fa fa-plus-circle" onClick={this._addInput('bringFood')}></i><br/>`
+		document.querySelector('bringThis').appendChild(newItemDiv)
 		i++
 
 	},
@@ -318,7 +348,7 @@ var CreateEvent = React.createClass({
 			<div className='createEventView'>
 				<Header/>
 				<NavBar/>
-				<form className='pure-form' onSubmit={this._submitMessage}>
+				<form className='pure-form' onSubmit={this._submitEvent}>
 					<div className='row createEvent'>
 							<label>Name Your Event</label>
 							<input type='text' required="required" placeholder='Event Title' onChange={this._upDateEventTitle}/>

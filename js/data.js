@@ -2,9 +2,11 @@ import fbRef from './fbref'
 
 import BackboneFire from 'bbfire'
 
-BackboneFire.Model.prototype.fetchWithPromise = 
-	BackboneFire.Firebase.Model.prototype.fetchWithPromise = 
-	BackboneFire.Firebase.Collection.prototype.fetchWithPromise = 
+
+
+
+BackboneFire.Firebase.Model.prototype.fetchWithPromise = 
+BackboneFire.Firebase.Collection.prototype.fetchWithPromise = 
 	function() {
 	    this.fetch()
 	    var self = this
@@ -19,15 +21,29 @@ BackboneFire.Model.prototype.fetchWithPromise =
 	    return p
 	}
 
+
 const fbUrl = (path="") => `https://eviter.firebaseio.com${path}`
+
+/**
+HOST
+**/
+
+var Host = BackboneFire.Firebase.Model.extend({
+	url:'',
+	initialize:function(host_id){
+		this.url = fbRef.child('users').child(host_id)
+	}
+})
+
 
 /**
 USERS
 **/
-var User = BackboneFire.Model.extend({})
+var User = BackboneFire.Firebase.Model.extend({
+	url: fbUrl('/users'),
+})
 
 var Users = BackboneFire.Firebase.Collection.extend({
-	url: fbUrl('/users'),
 	model: User
 })
 
@@ -41,7 +57,7 @@ var Event = BackboneFire.Firebase.Model.extend({
 
 	initialize: function(evtId){
 		this.url = fbRef.child('events').child(evtId)
-		console.log(`for event  ${evtId}`, this.url)
+		// console.log(`for event  ${evtId}`, this.url)
 
 	}
 })
@@ -55,18 +71,26 @@ var Events = BackboneFire.Firebase.Collection.extend({
 /**
  * Attendance
  */
-var Attendance = BackboneFire.Model.extend({})
+var Attendance = BackboneFire.Firebase.Model.extend({
+	// defaults: {
+	// 	date:'',
+	// 	location:'',
+	// 	title:'',
+	// 	doBringThis:'',
+	// 	doNotBringThis:''
+	// }
+})
 
 var Attendances = BackboneFire.Firebase.Collection.extend({
 	url: fbUrl('/attendance'),
-	model: Attendance,
-	initialize: function(childKey, id){
-		if(childKey && id){
-			this.url = new Firebase(fbUrl('/attendance')).orderByChild(childKey).equalTo(id)
-		}
-	}
+	model: Attendance
 })
 
+var QueriedAttendance = BackboneFire.Firebase.Collection.extend({
+	initialize: function(childKey,id) {
+		this.url = fbRef.child('attendance').orderByChild(childKey).equalTo(id)
+	}
+})
 
 
 /**
@@ -85,4 +109,4 @@ var QueryByEmail = BackboneFire.Firebase.Collection.extend({
 })
 
 
-export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail}
+export {Host, User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance}
