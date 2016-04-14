@@ -234,30 +234,37 @@ input{
     margin:0 auto;
 
     .eventDeets{
+        display: flex;
+        background-color:rgba(192, 57, 43, 0.6);
         color: aliceblue;
-        display: block;
         width: 90%;
-        margin: auto;
+        margin: 0, auto;
         flex-direction: row;
         justify-content:space-around;
-        align-items:baseline;
+        align-items:center;
 
         p {
-               display: inline-block;
-               border-radius: 2%;
-               border:1px solid rgba(192, 57, 43,1.0);
-               // width: 30%;
+            margin: 0, auto;
+            min-width: 33%;
+            display: inline-block;
+            vertical-align: middle;
+            border: 1px solid black;
            }
     }
     
     .guests{
-        width: 80%;
+        width: 50%;
         display: inline-block;
     }
 
     .bringThis {
-        width: 20%;
+        width: 50%;
+        color: aliceblue;
         display: inline-block;
+
+        .foodItem {
+            background-color:rgba(230, 126, 34,0.6);
+        }
     }
 
 }

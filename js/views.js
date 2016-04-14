@@ -1,8 +1,8 @@
 import DOM from 'react-dom'
 import fbRef from './fbref'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, submitFood} from './actions'
-import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, FoodToBring, FoodsToBring, FoodList} from './data'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent} from './actions'
+import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, FoodToBring, FoodsToBring} from './data'
 
 
 //Modules
@@ -269,31 +269,20 @@ var EventItem = React.createClass({
 var EventPage = React.createClass({
 
 	getInitialState:function() {
-		return {event: new Event(this.props.eventID)}
+		return {
+			event: new Event(this.props.eventID),
+			foodListColl: new FoodsToBring(this.props.eventID)
+		}
 	},
 
 	componentWillMount:function(){
+		var component = this
 		this.state.event.fetchWithPromise().then(() => this.forceUpdate())
+		this.state.foodListColl.fetchWithPromise().then(function(){
+			component.forceUpdate()	
+		})
 	},
 
-
-	_handleAddGuest: function(eventInfo){
-
-		var userEmail = this.refs.userEmail.value
-		var eventID = this.props.eventID
-		this.refs.userEmail.value = ''
-
-		var searchForAttendance = new QueriedAttendance('email', userEmail)
-		console.log('searchForAttendance', searchForAttendance)
-		
-		if (!searchForAttendance.models.id) {
-			addGuestToEvent(userEmail, this.state.event)
-		}
-		else {
-			alert( userEmail +'has already been invited!')
-		}
-
-	},
 
 	render:function(){
 
@@ -305,8 +294,8 @@ var EventPage = React.createClass({
 				<NavBar/>
 				<br/>
 				<EventDeets eventDeets={this.state.event}/>
-				<Guests eventID={this.state.event.id}/>
-				<FoodInput eventID={this.state.event.id} />
+				<Guests eventID={this.state.event}/>
+				<FoodInput eventID={this.state.event.id} foodListColl={this.state.foodListColl}/>
 				<Footer/>
 			</div>
 		)
@@ -332,6 +321,23 @@ var EventDeets = React.createClass({
 
 var Guests = React.createClass({
 
+	_handleAddGuest: function(eventInfo){
+
+		var userEmail = this.refs.userEmail.value
+		var eventID = this.props.eventID
+		this.refs.userEmail.value = ''
+
+		var searchForAttendance = new QueriedAttendance('email', userEmail)
+		console.log('searchForAttendance', searchForAttendance)
+		
+		if (!searchForAttendance.models.id) {
+			addGuestToEvent(userEmail, this.state.event.id)
+		}
+		else {
+			alert( userEmail + 'has already been invited!')
+		}
+
+	},
 
 	render:function(){
 		var component = this
@@ -359,29 +365,21 @@ var Guests = React.createClass({
 	}
 })
 
-
 var FoodInput = React.createClass({
 	
 	foodItem:{
 		food_name:'',
 		food_quantity:'',
-		bringer_id:null,
-		bringer_name:null,
+		bringer_id:'0000',
+		bringer_name:'unassigned',
 		event_id:''
 	},
 
-
-	getInitialState:function() {
-		return {
-			foodItemsColl:''
-		}
-	},
-
 	componentWillMount:function(){
-		var foodList = new FoodList(this.props.eventID.id)
-		this.state.foodList.fetchWithPromise().then(
-			() => this.forceUpdate()
-		)
+		var component = this
+		this.props.foodListColl.on('sync update', function(){
+			component.forceUpdate()
+		})
 	},
 
 	_upDateFoodName:function(evt){
@@ -394,16 +392,9 @@ var FoodInput = React.createClass({
 
 	_handleFoodItem: function(evt){
 		var event_id = this.props.eventID
-		console.log('event_id', event_id)
 		this.foodItem.event_id = event_id
-
-		submitFood(this.foodItem)
+		createFoodItemForEvent(this.foodItem, event_id)
 	},
-
-	_showFoodItems:function(){
-			// console.log(this.state.foodItemsColl)
-	},
-
 
 
 	render: function(){
@@ -411,12 +402,43 @@ var FoodInput = React.createClass({
 		return(
 			<div className='bringThis'>
 				<div>
-					<p>{this._showFoodItems()}</p>
+				<FoodList foodListColl={this.props.foodListColl}/>
 				</div>
 				<label>Food To Bring</label>
 				<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
 				<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
 				<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
+			</div>
+		)
+	}
+})
+
+
+
+var FoodList = React.createClass({
+
+	_handleFoodBringer:function(evt){
+		console.log(evt)
+	},
+
+	_showFoodItems:function(){
+
+		var FoodListArr = this.props.foodListColl
+		return FoodListArr.map(function(foodItem, i){
+			return(
+				<div key={i} className='foodItem' >
+					<p className='foodItem'>Food:{foodItem.get('food_name')}</p>
+					<p className='foodItem'>Quantitiy:{foodItem.get('food_quantity')}</p>
+					<p className='foodItem'>Bringer:{foodItem.get('bringer_name')}</p>
+				</div>
+			)
+		}) 
+	},
+
+	render:function(){
+		return(
+			<div>
+					{this._showFoodItems()}
 			</div>
 		)
 	}

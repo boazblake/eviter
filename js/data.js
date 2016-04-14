@@ -99,17 +99,21 @@ FOODS
 **/
 
 var FoodToBring = BackboneFire.Firebase.Model.extend({})
-var FoodsToBring = BackboneFire.Firebase.Collection.extend({
-		url:fbRef.child('foodsToBring')
-})
 
-var FoodList = BackboneFire.Firebase.Collection.extend({
+var FoodsToBring = BackboneFire.Firebase.Collection.extend({
 	url:'',
-	initialize: function(event_id) {
-	    this.url = fbRef.child('foodsToBring').orderByChild(event_id).equalTo(event_id)
+	initialize:function(eventID){
+		this.url=fbRef.child('events').child(eventID).child('foodItems')
 	}
 })
 
+// var FoodListConst = BackboneFire.Firebase.Collection.extend({
+// 	url:'',
+// 	initialize: function(event_id) {
+// 	    this.url = fbRef.child('event').orderByChild('event_id').equalTo(event_id)
+// 	}
+// })
+
  
 
-export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, FoodToBring, FoodList}
+export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, FoodToBring}

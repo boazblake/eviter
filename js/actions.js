@@ -1,8 +1,10 @@
 import fbRef from './fbref'
 import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, FoodList} from './data'
 
-export function submitFood(foodItem) {
-	var foodBeingSubmitted = new FoodsToBring()
+export function createFoodItemForEvent(foodItem, eventID ) {
+	console.log('foodItem', foodItem )
+	console.log('eventID', eventID )
+	var foodBeingSubmitted = new FoodsToBring(eventID)
 	foodBeingSubmitted.once('sync', function(){
 		foodBeingSubmitted.create(foodItem)
 	})
