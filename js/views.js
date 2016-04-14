@@ -185,6 +185,8 @@ var CreateEvent = React.createClass({
 	}
 })
 
+
+//Events
 var MyEvents = React.createClass({
 	getInitialState:function(){
 		return{
@@ -254,7 +256,7 @@ var EventItem = React.createClass({
 		// console.log('attendanceMod>>>>',attendanceMod)
 		return(
 			<div className='attendance pure-u-1-3 button-secondary'>
-				<button data-id={attendanceMod.id} onClick={this.removeAttendance} className='removeAttendanceButton button-error'>
+				<button data-id={attendanceMod.id} onClick={this.removeAttendance} className='removeButton button-error'>
 					<i className="fa fa-times"></i>
 				</button>
 				<div className='eventInfo' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
@@ -273,7 +275,8 @@ var EventPage = React.createClass({
 		return {
 			event: new Event(this.props.eventID),
 			foodListColl: new FoodsToBring(this.props.eventID),
-			userModel: new User(fbRef.getAuth().uid)
+			userModel: new User(fbRef.getAuth().uid),
+			guestList: new QueriedAttendance('event_id', this.props.eventID)
 		}
 	},
 
@@ -284,10 +287,12 @@ var EventPage = React.createClass({
 			component.forceUpdate()	
 		})
 		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
+		this.state.guestList.fetchWithPromise().then(() => this.forceUpdate())
 
 		BackboneFire.Events.on('updateComponent',
 			function(){
 				component.state.event.fetchWithPromise().then(() => component.forceUpdate())
+				component.state.guestList.fetchWithPromise().then(() => component.forceUpdate())
 				component.state.foodListColl.fetchWithPromise().then(function(){
 					component.forceUpdate()	
 				})
@@ -305,7 +310,7 @@ var EventPage = React.createClass({
 				<NavBar/>
 				<br/>
 				<EventDeets eventDeets={this.state.event}/>
-				<Guests eventID={this.state.event}/>
+				<Guests guestList={this.state.guestList} eventID={this.state.event}/>
 				<FoodInput userModel={this.state.userModel} eventID={this.state.event.id} foodListColl={this.state.foodListColl}/>
 				<Footer/>
 			</div>
@@ -330,6 +335,8 @@ var EventDeets = React.createClass({
 	}
 })
 
+
+//Guests
 var Guests = React.createClass({
 
 	_handleAddGuest: function(eventInfo){
@@ -342,7 +349,7 @@ var Guests = React.createClass({
 		console.log('searchForAttendance', searchForAttendance)
 		
 		if (!searchForAttendance.models.id) {
-			addGuestToEvent(userEmail, this.state.event.id)
+			addGuestToEvent(userEmail, this.props.eventID)
 		}
 		else {
 			alert( userEmail + 'has already been invited!')
@@ -365,6 +372,9 @@ var Guests = React.createClass({
 
 		return(
 			<div className='guests'>
+				<div>
+					<GuestList eventID={this.props.eventID} guests={this.props.guestList} />
+				</div>
 				<form data-id='newUserEmail'>
 					<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
 					<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton button-secondary pure-button'>
@@ -376,6 +386,37 @@ var Guests = React.createClass({
 	}
 })
 
+
+var GuestList = React.createClass({
+
+	_showGuests:function(){
+		var component = this
+		var guestsArr = this.props.guests
+		return guestsArr.map(function(guest, i){
+			if(guest.id) {
+				return (
+					<div key={i} className='guestItem'>
+						<p>{guest.get('userName')}</p>
+						<p>{guest.get('email')}</p>
+					</div>
+				)
+			}
+		})
+
+	},
+
+	render:function(){
+		var component = this
+		var guestsArr = this.props.guestList
+		return(
+			<div className='guestList'>
+				{this._showGuests()}
+			</div>
+		)
+	}
+})
+
+//Foods
 var FoodInput = React.createClass({
 	
 	foodItem:{
@@ -388,7 +429,7 @@ var FoodInput = React.createClass({
 
 	componentWillMount:function(){
 		var component = this
-		this.props.foodListColl.once('sync update', function(){
+		this.props.foodListColl.on('sync update', function(){
 			component.forceUpdate()
 		})
 	},
@@ -402,9 +443,13 @@ var FoodInput = React.createClass({
 	},
 
 	_handleFoodItem: function(evt){
+		var component = this
 		var event_id = this.props.eventID
 		this.foodItem.event_id = event_id
-		createFoodItemForEvent(this.foodItem, event_id)
+		createFoodItemForEvent(this.foodItem, event_id, function(){
+			component.foodItem = {}
+			component.forceUpdate()
+		})
 	},
 
 
@@ -424,8 +469,6 @@ var FoodInput = React.createClass({
 	}
 })
 
-
-
 var FoodList = React.createClass({
 
 	_handleFoodBringer:function(foodItem, evt){
@@ -438,16 +481,23 @@ var FoodList = React.createClass({
 		selectMyFoods(foodItem, userModel, event_id )
 	},
 
+	_removeFood: function(){},
+
 	_showFoodItems:function(){
 		var component = this
-		var FoodListArr = this.props.foodListColl
-		return FoodListArr.map(function(foodItem, i){
+		var foodListArr = this.props.foodListColl
+		return foodListArr.map(function(foodItem, i){
 			if (foodItem.id) {
 				return(
-					<div key={i} className='foodItem' data-fooditem_id={foodItem.id} onClick={component._handleFoodBringer.bind(component, foodItem)}>
-						<p className='foodItem'>Food:{foodItem.get('food_name')}</p>
-						<p className='foodItem'>Quantitiy:{foodItem.get('food_quantity')}</p>
-						<p className='foodItem'>Bringer:{foodItem.get('bringer_name')}</p>
+					<div  className='foodItem' key={i} >
+						<button data-fooditem_id={foodItem.id} onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
+							<i className="fa fa-times"></i>
+						</button>
+						<div data-fooditem_id={foodItem.id} onClick={component._handleFoodBringer.bind(component, foodItem)}>
+							<p className='foodItem'>Food:{foodItem.get('food_name')}</p>
+							<p className='foodItem'>Quantitiy:{foodItem.get('food_quantity')}</p>
+							<p className='foodItem'>Bringer:{foodItem.get('bringer_name')}</p>
+						</div>
 					</div>
 				)				
 			}

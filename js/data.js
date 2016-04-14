@@ -29,6 +29,7 @@ const fbUrl = (path="") => `https://eviter.firebaseio.com${path}`
 USERS
 **/
 var User = BackboneFire.Firebase.Model.extend({
+		autoSync: false,
 	url: '',
 	initialize: function(uid) {
 		this.url = fbRef.child('users').child(uid)
@@ -74,6 +75,7 @@ var Attendances = BackboneFire.Firebase.Collection.extend({
 })
 
 var QueriedAttendance = BackboneFire.Firebase.Collection.extend({
+		autoSync: false,
 	initialize: function(childKey,id) {
 		this.url = fbRef.child('attendance').orderByChild(childKey).equalTo(id)
 	}
@@ -102,11 +104,12 @@ FOODS
 var MyFoods = BackboneFire.Firebase.Model.extend({
 	url:'',
 	initialize:function(foodBringerUID, eventID){
-		this.url=fbRef.child('events').child(eventID).child('foodItems')
+		this.url=fbRef.child('events').child(eventID).child('foodBringerUID')
 	}
 })
 
 var FoodsToBring = BackboneFire.Firebase.Collection.extend({
+		autoSync: false,
 	url:'',
 	initialize:function(eventID){
 		this.url=fbRef.child('events').child(eventID).child('foodItems')

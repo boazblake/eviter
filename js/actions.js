@@ -3,14 +3,14 @@ import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl,
 import BackboneFire from 'bbfire'
 
 
-export function createFoodItemForEvent(foodItem, eventID ) {
-
+export function createFoodItemForEvent(foodItem, eventID, donefunction) {
 	var foodBeingSubmitted = new FoodsToBring(eventID)
-	foodBeingSubmitted.once('sync', function(){
+
 		foodBeingSubmitted.create(foodItem)
-	})
+		foodBeingSubmitted.on('sync', function(){
+			donefunction()
+		})
 	BackboneFire.Events.trigger('updateComponent')
-	
 	console.log('foodBeingSubmitted',foodBeingSubmitted)
 }
 
@@ -19,13 +19,13 @@ export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
 	console.log('foodItmModel', foodItmModel)
 	console.log('eventID', eventID)
 
+ 
 	foodItmModel.set({
 		bringer_uid: foodBringerMdl.id,
 		bringer_name:foodBringerMdl.get('firstName') + ' ' + foodBringerMdl.get('lastName')
 	})
 	BackboneFire.Events.trigger('updateComponent')
 }
-
 
 export function createEvent(eventObj, hostModel) {
 	var data = {
