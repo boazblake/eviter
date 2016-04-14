@@ -1,8 +1,8 @@
 import DOM from 'react-dom'
 import fbRef from './fbref'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent} from './actions'
-import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance} from './data'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, submitFood} from './actions'
+import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, FoodToBring, FoodsToBring, FoodList} from './data'
 
 
 //Modules
@@ -124,6 +124,65 @@ var DashPage = React.createClass({
 	}
 })
 
+var CreateEvent = React.createClass({
+
+	eventObj:{
+		'title':'',
+		'date':'',
+		'location':'',
+		'hostName':''
+	},
+
+	_upDateEventTitle:function(evt){
+		this.eventObj.title = evt.target.value
+	},
+
+	_upDateEventDate:function(evt){
+		this.eventObj.date = evt.target.value
+	},
+
+	_upDateEventLocation:function(evt){
+		this.eventObj.location = evt.target.value
+	},
+
+	_upDateEventName:function(evt){
+		this.eventObj.name = evt.target.value
+	},
+
+	_submitEvent:function(evt){
+		evt.preventDefault()
+		var component = this
+		var hostModel = new User(fbRef.getAuth().uid)
+		hostModel.once('sync', function(){
+			createEvent(component.eventObj, hostModel)
+		})
+	},
+
+	
+	render:function(){
+		return(
+			<div className='createEventView'>
+				<Header/>
+				<NavBar/>
+				<form className='pure-form' onSubmit={this._submitEvent}>
+					<div className='row createEvent'>
+							<label>Name Your Event</label>
+							<input type='text' required="required" placeholder='Event Title' onChange={this._upDateEventTitle}/>
+							
+							<label>Date</label>
+							<input type='date' required="required" placeholder='Event Date' onChange={this._upDateEventDate}/>
+							<br/>
+							<label>Event Location</label>
+							<input type='text' required="required" placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
+					</div>
+					<br/>
+		            <button className='pure-button pure-button-primary'>Submit!</button>
+				</form>
+				<Footer/>
+			</div>
+		)
+	}
+})
 
 var MyEvents = React.createClass({
 	getInitialState:function(){
@@ -234,137 +293,130 @@ var EventPage = React.createClass({
 			alert( userEmail +'has already been invited!')
 		}
 
-		// else pop an alertt
 	},
 
 	render:function(){
 
-		var component = this
-		var event = this.state.event
 
-		// console.log('currentEvent',currentEvent)
-		var newUserEmail = ''
-		var eventInfo = ''
 
-		function _upDateGuestEmail(evt){
-			newUserEmail = evt.target.value
-			// console.log(newUserEmail)
-		}
-		// console.log('component.props.event',component.props.event)
 		return(
 			<div className='eventView'>
 				<Header/>
 				<NavBar/>
 				<br/>
-				<div className='eventContent'>
-					<div className='currentEvent'>
-						<p>{event.get('date')}</p>
-						<p>{event.get('location')}</p>
-						<p>{event.get('title')}</p>
-						<p>{event.get('doBringThis')}</p>
-						<p>{event.get('doNotBringThis')}</p>
-						<form data-id='newUserEmail'>
-							<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
-							<button data-id='newUserEmail' onClick={component._handleAddGuest.bind(component, eventInfo )} className='adduserbutton button-secondary pure-button'>
-								<i className="fa fa-user-plus" aria-hidden="true"></i>
-							</button>
-						</form>
-					</div>
-				</div>
+				<EventDeets eventDeets={this.state.event}/>
+				<Guests eventID={this.state.event.id}/>
+				<FoodInput eventID={this.state.event.id} />
 				<Footer/>
 			</div>
 		)
 	}
 })
 
-var CreateEvent = React.createClass({
+var EventDeets = React.createClass({
+	render:function(){
 
-	eventObj:{
-		'title':'',
-		'date':'',
-		'location':'',
-		'doBringThis':'',
-		'quantity':'',
-		'doNotBringThis':'',
-		'hostName':''
+		var component = this
+		var event = component.props.eventDeets
+
+
+		return (
+			<div className='eventDeets pure-u-*'>
+				<p>DATE<br/>{event.get('date')}</p>
+				<p>LOCATION<br/>{event.get('location')}</p>
+				<p>TITLE<br/>{event.get('title')}</p>
+			</div>
+		)
+	}
+})
+
+var Guests = React.createClass({
+
+
+	render:function(){
+		var component = this
+		var event = component.props.event
+
+		var newUserEmail = ''
+		var eventInfo = ''
+
+		function _upDateGuestEmail(evt){
+			newUserEmail = evt.target.value
+		}
+
+
+
+		return(
+			<div className='guests'>
+				<form data-id='newUserEmail'>
+					<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
+					<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton button-secondary pure-button'>
+						<i className="fa fa-user-plus" aria-hidden="true"></i>
+					</button>
+				</form>
+			</div>
+		)
+	}
+})
+
+
+var FoodInput = React.createClass({
+	
+	foodItem:{
+		food_name:'',
+		food_quantity:'',
+		bringer_id:null,
+		bringer_name:null,
+		event_id:''
 	},
 
-	_upDateEventTitle:function(evt){
-		this.eventObj.title = evt.target.value
+
+	getInitialState:function() {
+		return {
+			foodItemsColl:''
+		}
 	},
 
-	_upDateEventDate:function(evt){
-		this.eventObj.date = evt.target.value
+	componentWillMount:function(){
+		var foodList = new FoodList(this.props.eventID.id)
+		this.state.foodList.fetchWithPromise().then(
+			() => this.forceUpdate()
+		)
 	},
 
-	_upDateEventLocation:function(evt){
-		this.eventObj.location = evt.target.value
-	},
-
-	_upDateEventName:function(evt){
-		this.eventObj.name = evt.target.value
-	},
-
-	_upDateBringItems:function(evt){
-		this.eventObj.doBringThis = evt.target.value
+	_upDateFoodName:function(evt){
+		this.foodItem.food_name = evt.target.value
 	},
 
 	_upDateItemQuantity:function(evt){
-		this.eventObj.quantity = evt.target.value
+		this.foodItem.food_quantity = evt.target.value
 	},
 
-	_upDateDONOTBringItems:function(evt){
-		this.eventObj.doNotBringThis = evt.target.value
+	_handleFoodItem: function(evt){
+		var event_id = this.props.eventID
+		console.log('event_id', event_id)
+		this.foodItem.event_id = event_id
+
+		submitFood(this.foodItem)
 	},
 
-	_submitEvent:function(evt){
-		evt.preventDefault()
-		var component = this
-		var hostModel = new User(fbRef.getAuth().uid)
-		hostModel.once('sync', function(){
-			createEvent(component.eventObj, hostModel)
-		})
+	_showFoodItems:function(){
+			// console.log(this.state.foodItemsColl)
 	},
 
-	_addInput:function(evt){
-		// console.log(evt.target.bringFood)
-		var i = 1
-		var newItemDiv = document.createElement('div')
-		newItemDiv.innerHTML = 'Entry' + (i + 1) + `<input type='text' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/><i className="fa fa-plus-circle" onClick={this._addInput('bringFood')}></i><br/>`
-		document.querySelector('bringThis').appendChild(newItemDiv)
-		i++
 
-	},
 
-	render:function(){
+	render: function(){
+
 		return(
-			<div className='createEventView'>
-				<Header/>
-				<NavBar/>
-				<form className='pure-form' onSubmit={this._submitEvent}>
-					<div className='row createEvent'>
-							<label>Name Your Event</label>
-							<input type='text' required="required" placeholder='Event Title' onChange={this._upDateEventTitle}/>
-							
-							<label>Date</label>
-							<input type='date' required="required" placeholder='Event Date' onChange={this._upDateEventDate}/>
-							<br/>
-							<label>Event Location</label>
-							<input type='text' required="required" placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
-							
-							<div className='bringThis'>
-								<label>Food To Bring</label>
-								<input type='text' id='itemName' required="required" placeholder='Bring This!' onChange={this._upDateBringItems}/>
-								<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
-								<i className="fa fa-plus-square-o pure-button pure-button-primary"></i>
-							</div>
-							<br/>
-							<label>Foods to Not Bring</label>
-							<input type='textarea'  placeholder='DO NOT Bring This!' onChange={this._upDateDONOTBringItems}/><br/>
-					</div><br/>
-		            <button className='pure-button pure-button-primary'>Submit!</button>
-				</form>
-				<Footer/>
+			<div className='bringThis'>
+				<div>
+					<p>{this._showFoodItems()}</p>
+				</div>
+				<label>Food To Bring</label>
+				<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
+				<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
+				<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
 			</div>
 		)
 	}

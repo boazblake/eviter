@@ -1,5 +1,15 @@
 import fbRef from './fbref'
-import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance} from './data'
+import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, FoodList} from './data'
+
+export function submitFood(foodItem) {
+	var foodBeingSubmitted = new FoodsToBring()
+	foodBeingSubmitted.once('sync', function(){
+		foodBeingSubmitted.create(foodItem)
+	})
+	
+	console.log('foodBeingSubmitted',foodBeingSubmitted)
+}
+
 
 export function createEvent(eventObj, hostModel) {
 	var data = {
@@ -121,10 +131,7 @@ export function createAttendanceForEvt(evtPlusUsrObj){
 		attendList.create(evtPlusUsrObj)
 
 	})
-
 }
-
-
 
 export function logUserIn(userObj){
 	fbRef.authWithPassword({
@@ -153,8 +160,6 @@ export function handleEvent(evt){
 		// console.log('event_id',event_id)
 		location.hash = 'event/' + event_id
 }
-
-
 
 export function removeAttendance(evt){
 	// console.log(evt.currentTarget)

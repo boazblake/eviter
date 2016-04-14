@@ -1,16 +1,16 @@
 @import "../bower_components/normalize-scss/_normalize.scss";
 @import "../bower_components/typeplate-starter-kit/scss/_typeplate.scss";
 
-p+p {
-    text-indent: 0;
-    margin-top: 0;
-}
+// p+p {
+//     text-indent: 0;
+//     margin-top: 0;
+// }
 
-p {
-    max-width: 80ch;
-    margin-left: 0;
-    margin-right: auto;
-}
+// p {
+//     max-width: 80ch;
+//     margin-left: 0;
+//     margin-right: auto;
+// }
 
 ul, ol {
     max-width: 80ch;
@@ -141,6 +141,11 @@ html {
     background-repeat: no-repeat;
 }
 
+input{
+    color:rgba(44, 62, 80,1.0);
+}
+
+
 .logo {
     width: 80px;
 }
@@ -222,17 +227,39 @@ html {
     display: inline-block;
 }
 
-.currentEvent{
-    color: aliceblue;
 
-    input{
-        color:rgba(44, 62, 80,1.0);
-    }
-}
 
 .eventView {
     width: 90%;
     margin:0 auto;
+
+    .eventDeets{
+        color: aliceblue;
+        display: block;
+        width: 90%;
+        margin: auto;
+        flex-direction: row;
+        justify-content:space-around;
+        align-items:baseline;
+
+        p {
+               display: inline-block;
+               border-radius: 2%;
+               border:1px solid rgba(192, 57, 43,1.0);
+               // width: 30%;
+           }
+    }
+    
+    .guests{
+        width: 80%;
+        display: inline-block;
+    }
+
+    .bringThis {
+        width: 20%;
+        display: inline-block;
+    }
+
 }
  .footer{
     background-color: rgba(44, 62, 80,1.0);

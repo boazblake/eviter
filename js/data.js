@@ -79,7 +79,6 @@ var QueriedAttendance = BackboneFire.Firebase.Collection.extend({
 	}
 })
 
-
 /**
  * eventFinder
  */
@@ -95,5 +94,22 @@ var QueryByEmail = BackboneFire.Firebase.Collection.extend({
     },
 })
 
+/**
+FOODS
+**/
 
-export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance}
+var FoodToBring = BackboneFire.Firebase.Model.extend({})
+var FoodsToBring = BackboneFire.Firebase.Collection.extend({
+		url:fbRef.child('foodsToBring')
+})
+
+var FoodList = BackboneFire.Firebase.Collection.extend({
+	url:'',
+	initialize: function(event_id) {
+	    this.url = fbRef.child('foodsToBring').orderByChild(event_id).equalTo(event_id)
+	}
+})
+
+ 
+
+export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, FoodToBring, FoodList}
