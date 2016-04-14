@@ -1,15 +1,29 @@
 import fbRef from './fbref'
-import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, FoodList} from './data'
+import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, MyFoods} from './data'
+import BackboneFire from 'bbfire'
+
 
 export function createFoodItemForEvent(foodItem, eventID ) {
-	console.log('foodItem', foodItem )
-	console.log('eventID', eventID )
+
 	var foodBeingSubmitted = new FoodsToBring(eventID)
 	foodBeingSubmitted.once('sync', function(){
 		foodBeingSubmitted.create(foodItem)
 	})
+	BackboneFire.Events.trigger('updateComponent')
 	
 	console.log('foodBeingSubmitted',foodBeingSubmitted)
+}
+
+export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
+	console.log('foodBringerMdl', foodBringerMdl)
+	console.log('foodItmModel', foodItmModel)
+	console.log('eventID', eventID)
+
+	foodItmModel.set({
+		bringer_uid: foodBringerMdl.id,
+		bringer_name:foodBringerMdl.get('firstName') + ' ' + foodBringerMdl.get('lastName')
+	})
+	BackboneFire.Events.trigger('updateComponent')
 }
 
 
