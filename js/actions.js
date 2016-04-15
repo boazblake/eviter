@@ -26,8 +26,10 @@ export function createFoodItemForEvent(foodItem, eventID, donefunction) {
 		foodBeingSubmitted.on('sync', function(){
 			donefunction()
 		})
-	BackboneFire.Events.trigger('updateComponent')
-	console.log('foodBeingSubmitted',foodBeingSubmitted)
+		BackboneFire.Events.trigger('updateComponent')
+		setTimeout(function(){
+			BackboneFire.Events.trigger('pollForNewData')
+		}, 1000)
 }
 
 export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
@@ -73,9 +75,11 @@ export function createEvent(eventObj, hostModel) {
 
 
 		createAttendanceForEvt(attendanceObj)
-
+		BackboneFire.Events.trigger('updateComponent')
+		setTimeout(function(){
+			BackboneFire.Events.trigger('pollForNewData')
+		}, 1000)
 	})
-	BackboneFire.Events.trigger('updateComponent')
 
 	location.hash = 'dash'
 }
@@ -114,7 +118,7 @@ export function addGuestToEvent(recipientEmail, evtModel){
 
 	console.log('user', user)
 
-	queriedUsers.once('sync', function( ){
+	queriedUsers.on('sync', function( ){
 		if( user.models[0].id ){
 			var recipientUserModel = user.models[0]
 			console.log('queried email result:  : ', recipientUserModel)
@@ -131,10 +135,13 @@ export function addGuestToEvent(recipientEmail, evtModel){
 			}
 
 			createAttendanceForEvt(attDataObj)
-			BackboneFire.Events.trigger('updateComponent')
 		} else{
 			alert('no match for ', recipientEmail)
 		}
+		setTimeout(function(){
+			BackboneFire.Events.trigger('pollForNewData')
+		}, 1000)
+
 	})	
 }
 

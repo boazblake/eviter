@@ -29,7 +29,6 @@ const fbUrl = (path="") => `https://eviter.firebaseio.com${path}`
 USERS
 **/
 var User = BackboneFire.Firebase.Model.extend({
-		autoSync: false,
 	url: '',
 	initialize: function(uid) {
 		this.url = fbRef.child('users').child(uid)

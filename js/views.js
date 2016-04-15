@@ -76,11 +76,13 @@ var SplashPage = React.createClass({
 		this.userObj.lastName = evt.currentTarget.value
 	},
 
-	_handleSubmit:function(){
+	_handleSubmit:function(evt){
+		evt.preventDefault()
 		createUser(this.userObj)
 	},
 
-	_handleLogin:function(){
+	_handleLogin:function(evt){
+		evt.preventDefault()
 		logUserIn(this.userObj)
 	},
 
@@ -151,9 +153,10 @@ var CreateEvent = React.createClass({
 	},
 
 	_submitEvent:function(evt){
-		// evt.preventDefault()
+		evt.preventDefault()
 		var component = this
 		var hostModel = new User(fbRef.getAuth().uid)
+		hostModel.fetch()
 		hostModel.once('sync', function(){
 			createEvent(component.eventObj, hostModel)
 		})
@@ -206,7 +209,7 @@ var MyEvents = React.createClass({
 		var component = this
 		console.log('user uid',fbRef.getAuth().uid)
 		this.myAttendances = new QueriedAttendance('user_uid', fbRef.getAuth().uid )
-		
+		this.myAttendances.fetch()
 		this.myAttendances.on('sync update', function() {
 			console.log('myAttendances', component.myAttendances)
 
@@ -220,10 +223,15 @@ var MyEvents = React.createClass({
 				attendanceMods: noGhostList
 			})
 		})
+
+		BackboneFire.Events.on('pollForNewData', function(){
+			component.myAttendances.fetch()
+		})
 	},
 
 	  componentWillUnmount: function(){
 	  	this.myAttendances.off()
+	  	BackboneFire.Events.off()
 	  },
 	 
 	 render:function(){
@@ -289,8 +297,10 @@ var EventPage = React.createClass({
 		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
 		this.state.guestList.fetchWithPromise().then(() => this.forceUpdate())
 
-		BackboneFire.Events.on('updateComponent',
+		BackboneFire.Events.on('pollForNewData',
 			function(){
+				console.log('poll heard, component updating...')
+
 				component.state.event.fetchWithPromise().then(() => component.forceUpdate())
 				component.state.guestList.fetchWithPromise().then(() => component.forceUpdate())
 				component.state.foodListColl.fetchWithPromise().then(function(){
@@ -339,8 +349,8 @@ var EventDeets = React.createClass({
 //Guests
 var Guests = React.createClass({
 
-	_handleAddGuest: function(eventInfo){
-
+	_handleAddGuest: function(eventInfo, evt){
+		// evt.preventDefault()
 		var userEmail = this.refs.userEmail.value
 		var eventID = this.props.eventID
 		this.refs.userEmail.value = ''
@@ -443,6 +453,7 @@ var FoodInput = React.createClass({
 	},
 
 	_handleFoodItem: function(evt){
+		evt.preventDefault()
 		var component = this
 		var event_id = this.props.eventID
 		this.foodItem.event_id = event_id
