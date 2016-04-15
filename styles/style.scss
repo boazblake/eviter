@@ -128,6 +128,12 @@ body {
  * App code
  */
 
+
+
+.foodItem * {
+    border: 1px solid black
+}
+
 html {
     background-color: inear-gradient( 
         rgba(255, 0, 0, 0.45), 
@@ -283,18 +289,26 @@ input{
             display: inline-block;
         }
 
+        .lowerHalfFoodItem {
+            p{
+                width:70%;
+            }
+
+        }
+
 
 
         .foodQuantityWrapper {
+            width:20%;
             display: inline-block;
             flex-direction:row;
             justify-content:center;
             align-items:baseline;
-            padding-left: 35%;
-            padding-right: 35%;
+            // padding-left: 35%;
+            // padding-right: 35%;
         }
         .foodQuantityWrapper* {
-            display: inline-block;
+            display:block;
             width: 50%;
 
 

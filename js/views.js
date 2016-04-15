@@ -88,7 +88,7 @@ var SplashPage = React.createClass({
 		return(
 			<div className='splashPageView'>
 				<Header/>
-				<form className='signUp pure-form'>
+				<form className='signUp pure-form pure-form-aligned'>
 					<h3>SIGN UP HERE</h3>
 					<input required='required' type='text' placeholder='email@host.com' onChange={this._upDateEmail}/>
 					<input required='required' type='passWord' placeholder='password' onChange={this._upDatePass}/><br/>
@@ -96,7 +96,7 @@ var SplashPage = React.createClass({
 					<input required='required' type='text' placeholder='Last Name' onChange={this._lastName}/><br/>
 					<button className='pure-button pure-button-primary' onClick={this._handleSubmit}>SIGN UP!</button>
 				</form><br/><br/>
-				<form className='logIn pure-form'>
+				<form className='logIn pure-form pure-form-aligned'>
 					<h3>LOG IN HERE</h3>
 					<input required='required' type='text' placeholder='email@host.com' onChange={this._upDateEmail}/>
 					<input required='required' type='passWord' placeholder='password' onChange={this._upDatePass}/>
@@ -375,7 +375,7 @@ var Guests = React.createClass({
 				<div>
 					<GuestList eventID={this.props.eventID} guests={this.props.guestList} />
 				</div>
-				<form data-id='newUserEmail'>
+				<form className='pure-form pure-form-alligned' data-id='newUserEmail'>
 					<label>Invite Guests</label>
 					<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
 					<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton button-secondary pure-button'>
@@ -461,9 +461,11 @@ var FoodInput = React.createClass({
 				<FoodList userModel={this.props.userModel} foodListColl={this.props.foodListColl} eventID={this.props.eventID}/>
 				</div>
 				<label>Food To Bring</label>
-				<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
-				<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
-				<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
+				<form className='pure-form pure-form-alligned'>
+					<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
+					<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
+					<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
+				</form>
 			</div>
 		)
 	}
@@ -471,6 +473,18 @@ var FoodInput = React.createClass({
 
 var FoodList = React.createClass({
 
+	// getInitialState: function () {
+	//     return {hover: false};
+	// },
+	
+	// _mouseEnter: function () {
+	// 	// onMouseEnter={component._mouseEnter} onMouseLeave={component._mouseLeave}
+	//     this.setState({hover: true});
+	// },
+	
+	// _mouseLeave: function () {
+	//     this.setState({hover: false});
+	// },
 
 
 	_handleFoodBringer:function(foodItem, evt){
@@ -496,6 +510,17 @@ var FoodList = React.createClass({
 
 
 	_showFoodItems:function(){
+
+
+		  // var buttonStyle = {display: 'none'};
+    //     if (this.state.hover) {
+    //         buttonStyle = {display: 'block'};
+    //     }
+    //     style={buttonStyle}
+
+
+
+
 		var component = this
 		var foodListArr = this.props.foodListColl
 		return foodListArr.map(function(foodItem, i){
@@ -504,27 +529,26 @@ var FoodList = React.createClass({
 					<div  className='foodItem' key={i} >
 
 
-						<button data-fooditem_id={foodItem.id} onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
+						<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
 							<i className="fa fa-times"></i>
 						</button>
 
 
 						<div data-fooditem_id={foodItem.id}>
-							<p onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodItem'>{foodItem.get('bringer_name')}  is Bringing</p>
+							<p onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodItem foodBringerName'>{foodItem.get('bringer_name')}  is Bringing</p>
 
-							<div className='lowerHalfFoodItem'>
-							<div className='foodQuantityWrapper'>
-								<i data-foodquant_id='minus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
-								<p className='foodItem'>{foodItem.get('food_quantity')}</p>
-								<i data-foodquant_id='plus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+							<div className='lowerHalfFoodItem' >
+								<div className='foodQuantityWrapper'>
+									<i data-foodquant_id='minus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+									<p className='foodItem foodItemName'>{foodItem.get('food_quantity')}</p>
+									<i data-foodquant_id='plus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+								</div>
+
+								<p className='foodItem'>{foodItem.get('food_name')}</p>
 							</div>
-
-							<p className='foodItem'>{foodItem.get('food_name')}</p>
-							</div>
-
-							
 
 						</div>
+
 					</div>
 				)				
 			}
@@ -535,7 +559,7 @@ var FoodList = React.createClass({
 
 		return(
 			<div>
-					{this._showFoodItems()}
+					{this._showFoodItems()}<br/>
 			</div>
 		)
 	}
