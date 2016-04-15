@@ -119,4 +119,4 @@ var FoodsToBring = BackboneFire.Firebase.Collection.extend({
 
  
 
-export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, MyFoods FoodsToBring, FoodToBring}
+export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, MyFoods FoodsToBring}
