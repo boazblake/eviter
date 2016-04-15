@@ -427,7 +427,7 @@ var FoodInput = React.createClass({
 		event_id:''
 	},
 
-	componentWillMount:function(){
+	componentDidMount:function(){
 		var component = this
 		this.props.foodListColl.on('sync update', function(){
 			component.forceUpdate()
@@ -474,7 +474,6 @@ var FoodList = React.createClass({
 	_handleFoodBringer:function(foodItem, evt){
 		console.log('clicked targets model-foodItem',foodItem)
 		// var foodItem = evt.currentTarget.dataset.fooditem_id
-
 		var foodBringerName
 		var event_id = this.props.eventID
 		var userModel = this.props.userModel
