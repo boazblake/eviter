@@ -277,6 +277,33 @@ input{
         .foodItem:hover > .removeButton {
             display:block;
         }
+
+        .lowerHalfFoodItem *{
+            display: inline-block;
+        }
+
+
+
+        .foodQuantityWrapper {
+            display: inline-block;
+            flex-direction:row;
+            justify-content:center;
+            align-items:baseline;
+            padding-left: 35%;
+            padding-right: 35%;
+        }
+        .foodQuantityWrapper* {
+            display: inline-block;
+            width: 50%;
+
+
+            p {
+                width: 50%;
+                margin: 0 auto;
+                display: inline-block;
+            }
+        }
+
     }
 
 }

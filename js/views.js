@@ -471,6 +471,8 @@ var FoodInput = React.createClass({
 
 var FoodList = React.createClass({
 
+
+
 	_handleFoodBringer:function(foodItem, evt){
 		console.log('clicked targets model-foodItem',foodItem)
 		// var foodItem = evt.currentTarget.dataset.fooditem_id
@@ -486,6 +488,11 @@ var FoodList = React.createClass({
 		this.forceUpdate()
 	},
 
+	_handleChangeFoodQuant: function(evt){
+		console.log(evt.currentTarget.dataset.foodquant_id)
+		// changeFoodAmount(evt)
+	},
+
 	_showFoodItems:function(){
 		var component = this
 		var foodListArr = this.props.foodListColl
@@ -493,13 +500,27 @@ var FoodList = React.createClass({
 			if (foodItem.id) {
 				return(
 					<div  className='foodItem' key={i} >
+
+
 						<button data-fooditem_id={foodItem.id} onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
 							<i className="fa fa-times"></i>
 						</button>
+
+
 						<div data-fooditem_id={foodItem.id} onClick={component._handleFoodBringer.bind(component, foodItem)}>
-							<p className='foodItem'>Food:{foodItem.get('food_name')}</p>
-							<p className='foodItem'>Quantitiy:{foodItem.get('food_quantity')}</p>
-							<p className='foodItem'>Bringer:{foodItem.get('bringer_name')}</p>
+							<p className='foodItem'>{foodItem.get('bringer_name')}  is Bringing</p>
+
+							<div className='foodQuantityWrapper'>
+								<i data-foodquant_id='plus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant} aria-hidden="true"></i>
+								<p className='foodItem'>{foodItem.get('food_quantity')}</p>
+								<i data-foodquant_id='minus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant} aria-hidden="true"></i>
+							</div>
+
+							<p className='foodItem'>{foodItem.get('food_name')}</p>
+							
+
+							
+
 						</div>
 					</div>
 				)				
