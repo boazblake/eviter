@@ -3,6 +3,22 @@ import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl,
 import BackboneFire from 'bbfire'
 
 
+export function changeFoodAmount(foodItemMdl, evt){
+	console.log('evt.currentTarget.dataset.foodquant_id', evt.currentTarget.dataset.foodquant_id)
+	console.log('foodItemMdl', foodItemMdl)
+	var buttonPressed = evt.currentTarget.dataset.foodquant_id
+
+	if (buttonPressed === 'plus') {
+		foodItemMdl.set({
+			food_quantity:foodItemMdl.get('food_quantity') + 1
+		})
+	} else if (buttonPressed === 'minus') {
+		foodItemMdl.set({
+			food_quantity:foodItemMdl.get('food_quantity') - 1
+		})
+	}
+}
+
 export function createFoodItemForEvent(foodItem, eventID, donefunction) {
 	var foodBeingSubmitted = new FoodsToBring(eventID)
 

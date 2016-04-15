@@ -2,7 +2,7 @@ import DOM from 'react-dom'
 import fbRef from './fbref'
 import BackboneFire from 'bbfire'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, FoodToBring, FoodsToBring} from './data'
 
 
@@ -488,10 +488,12 @@ var FoodList = React.createClass({
 		this.forceUpdate()
 	},
 
-	_handleChangeFoodQuant: function(evt){
-		console.log(evt.currentTarget.dataset.foodquant_id)
-		// changeFoodAmount(evt)
+	_handleChangeFoodQuant: function(foodItemMdl, evt){
+		console.log('evt.currentTarget.dataset.foodquant_id', evt.currentTarget.dataset.foodquant_id)
+		console.log('foodItemMdl', foodItemMdl)
+		changeFoodAmount(foodItemMdl, evt)
 	},
+
 
 	_showFoodItems:function(){
 		var component = this
@@ -507,17 +509,18 @@ var FoodList = React.createClass({
 						</button>
 
 
-						<div data-fooditem_id={foodItem.id} onClick={component._handleFoodBringer.bind(component, foodItem)}>
-							<p className='foodItem'>{foodItem.get('bringer_name')}  is Bringing</p>
+						<div data-fooditem_id={foodItem.id}>
+							<p onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodItem'>{foodItem.get('bringer_name')}  is Bringing</p>
 
+							<div className='lowerHalfFoodItem'>
 							<div className='foodQuantityWrapper'>
-								<i data-foodquant_id='plus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant} aria-hidden="true"></i>
+								<i data-foodquant_id='minus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
 								<p className='foodItem'>{foodItem.get('food_quantity')}</p>
-								<i data-foodquant_id='minus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant} aria-hidden="true"></i>
+								<i data-foodquant_id='plus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
 							</div>
 
 							<p className='foodItem'>{foodItem.get('food_name')}</p>
-							
+							</div>
 
 							
 
