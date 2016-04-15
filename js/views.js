@@ -376,6 +376,7 @@ var Guests = React.createClass({
 					<GuestList eventID={this.props.eventID} guests={this.props.guestList} />
 				</div>
 				<form data-id='newUserEmail'>
+					<label>Invite Guests</label>
 					<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
 					<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton button-secondary pure-button'>
 						<i className="fa fa-user-plus" aria-hidden="true"></i>
@@ -385,7 +386,6 @@ var Guests = React.createClass({
 		)
 	}
 })
-
 
 var GuestList = React.createClass({
 
@@ -481,7 +481,11 @@ var FoodList = React.createClass({
 		selectMyFoods(foodItem, userModel, event_id )
 	},
 
-	_removeFood: function(){},
+	_removeFood: function(foodItem, evt){
+		var listArr = this.props.foodListColl
+		listArr.remove(foodItem)
+		this.forceUpdate()
+	},
 
 	_showFoodItems:function(){
 		var component = this
