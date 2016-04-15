@@ -249,14 +249,14 @@ input{
         width: 90%;
         margin: 0, auto;
         flex-direction: row;
-        justify-content:space-around;
+        justify-content:space-between;
         align-items:center;
 
         p {
             margin: 0, auto;
             min-width: 33%;
             display: inline-block;
-            vertical-align: middle;
+            vertical-align: top;
             border: 1px solid black;
            }
     }
@@ -280,7 +280,9 @@ input{
         .foodItem {
             background-color:rgba(230, 126, 34,0.6);
         }
-
+        p{
+            font-size: 1.25em;
+        }
         .foodItem:hover > .removeButton {
             display:block;
         }
@@ -290,9 +292,7 @@ input{
         }
 
         .lowerHalfFoodItem {
-            p{
-                width:70%;
-            }
+
 
         }
 

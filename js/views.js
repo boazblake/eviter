@@ -151,7 +151,7 @@ var CreateEvent = React.createClass({
 	},
 
 	_submitEvent:function(evt){
-		evt.preventDefault()
+		// evt.preventDefault()
 		var component = this
 		var hostModel = new User(fbRef.getAuth().uid)
 		hostModel.once('sync', function(){
@@ -326,7 +326,7 @@ var EventDeets = React.createClass({
 
 
 		return (
-			<div className='eventDeets pure-u-*'>
+			<div className='eventDeets pure-u'>
 				<p>DATE<br/>{event.get('date')}</p>
 				<p>LOCATION<br/>{event.get('location')}</p>
 				<p>TITLE<br/>{event.get('title')}</p>

@@ -116,12 +116,6 @@ var FoodsToBring = BackboneFire.Firebase.Collection.extend({
 	}
 })
 
-// var FoodListConst = BackboneFire.Firebase.Collection.extend({
-// 	url:'',
-// 	initialize: function(event_id) {
-// 	    this.url = fbRef.child('event').orderByChild('event_id').equalTo(event_id)
-// 	}
-// })
 
  
 

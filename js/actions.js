@@ -10,7 +10,7 @@ export function changeFoodAmount(foodItemMdl, evt){
 
 	if (buttonPressed === 'plus') {
 		foodItemMdl.set({
-			food_quantity:foodItemMdl.get('food_quantity') + 1
+			food_quantity:parseInt(foodItemMdl.get('food_quantity')) + 1
 		})
 	} else if (buttonPressed === 'minus') {
 		foodItemMdl.set({
@@ -75,6 +75,7 @@ export function createEvent(eventObj, hostModel) {
 		createAttendanceForEvt(attendanceObj)
 
 	})
+	BackboneFire.Events.trigger('updateComponent')
 
 	location.hash = 'dash'
 }
@@ -97,6 +98,8 @@ export function createUser(userObj) {
                 lastName: userObj.lastName,
                 email: userObj.email,
             })
+			BackboneFire.Events.trigger('updateComponent')
+
             logUserIn(userObj)
         }
     })
@@ -128,6 +131,7 @@ export function addGuestToEvent(recipientEmail, evtModel){
 			}
 
 			createAttendanceForEvt(attDataObj)
+			BackboneFire.Events.trigger('updateComponent')
 		} else{
 			alert('no match for ', recipientEmail)
 		}
@@ -213,6 +217,8 @@ export function removeAttendance(evt){
 	  } else {
 	    // console.log('Synchronization succeeded');
 	  }
+		BackboneFire.Events.trigger('updateComponent')
+
 	};
 	removeEvent.remove(onComplete);
 }
