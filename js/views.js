@@ -237,7 +237,7 @@ var MyEvents = React.createClass({
 
 	 	console.log('this.state.attendanceMods', this.state.attendanceMods)
 	 	return(
-	 		<div className='myEvents pure-g'>
+	 		<div className='myEvents pure-g-*'>
 	 			{
 	 				this.state.attendanceMods.map( function(attendanceMod, i ){
 	 					return (
@@ -262,11 +262,11 @@ var EventItem = React.createClass({
 		var attendanceMod = this.props.attendanceMod
 		// console.log('attendanceMod>>>>',attendanceMod)
 		return(
-			<div className='attendance pure-u-1-3 button-secondary'>
+			<div className='attendance pure-u-1-3-* button-secondary'>
 				<button data-id={attendanceMod.id} onClick={this.removeAttendance} className='removeButton button-error'>
 					<i className="fa fa-times"></i>
 				</button>
-				<div className='eventInfo' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
+				<div className='eventInfo pure-u-*' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
 					<p>Title:{attendanceMod.get('title')}</p>
 					<p>Date:{attendanceMod.get('date')}</p>
 					<p>Host:{attendanceMod.get('hostName')}</p>
@@ -333,7 +333,7 @@ var EventDeets = React.createClass({
 
 
 		return (
-			<div className='eventDeets pure-u'>
+			<div className='eventDeets pure-u-*'>
 				<p>DATE<br/>{event.get('date')}</p>
 				<p>LOCATION<br/>{event.get('location')}</p>
 				<p>TITLE<br/>{event.get('title')}</p>
@@ -383,7 +383,7 @@ var Guests = React.createClass({
 					<GuestList eventID={this.props.eventID} guests={this.props.guestList} />
 				</div>
 
-				<form className='pure-form pure-form-alligned' data-id='newUserEmail'>
+				<form className='pure-form-* pure-form-alligned' data-id='newUserEmail'>
 					<input type='text' placeholder='email@host.com' 
 					onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
 					<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton button-secondary pure-button'>
@@ -463,12 +463,12 @@ var Food = React.createClass({
 	render: function(){
 
 		return(
-			<div className='bringThis'>
+			<div className='bringThis pure-g-*'>
 				<div>
 				<FoodList userModel={this.props.userModel} foodListColl={this.props.foodListColl} eventID={this.props.eventID}/>
 				</div>
 				<label>Food To Bring</label>
-				<form className='pure-form pure-form-alligned'>
+				<form className='pure-form-* pure-form-alligned'>
 					<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
 					<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
 					<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
@@ -533,14 +533,14 @@ var FoodList = React.createClass({
 		return foodListArr.map(function(foodItem, i){
 			if (foodItem.id) {
 				return(
-					<div className='foodItemWrapper'>
+					<div className='foodItemWrapper pure-g-*'>
 						<div  className='foodItem' key={i} >
 							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
 								<i className="fa fa-times"></i>
 							</button>
 
 
-							<div data-fooditem_id={foodItem.id}>
+							<div data-fooditem_id={foodItem.id} className='foodItemWrapper pure-g-*'>
 								<p onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName'>{foodItem.get('bringer_name')}  is Bringing</p>
 
 								<div className='lowerHalfFoodItem' >
