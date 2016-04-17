@@ -222,7 +222,7 @@ var MyEvents = React.createClass({
 				attendanceMods: noGhostList
 			})
 		})
-
+		console.log('about to poll')
 		BackboneFire.Events.on('pollForNewData', function(){
 			component.myAttendances.fetch()
 		})
@@ -235,7 +235,7 @@ var MyEvents = React.createClass({
 	 
 	 render:function(){
 
-	 	// console.log('this.state.attendanceMods', this.state.attendanceMods)
+	 	console.log('this.state.attendanceMods', this.state.attendanceMods)
 	 	return(
 	 		<div className='myEvents pure-g'>
 	 			{
@@ -359,7 +359,7 @@ var Guests = React.createClass({
 			addGuestToEvent(userEmail, this.props.eventID)
 		}
 		else {
-			alert( userEmail + 'has already been invited!')
+			swal( userEmail + 'has already been invited!')
 		}
 
 	},
@@ -457,8 +457,12 @@ var Food = React.createClass({
 		var event_id = this.props.eventID
 		this.foodItem.event_id = event_id
 		createFoodItemForEvent(this.foodItem, event_id)
+		component._clearInputs()
 	},
 
+	_clearInputs: function(evt) {
+		console.log('evt.currentTarget.dataset.foodName-id', evt.currentTarget.dataset.foodName-id)
+	},
 
 	render: function(){
 
@@ -469,8 +473,8 @@ var Food = React.createClass({
 				</div>
 				<label>Food To Bring</label>
 				<form className='pure-form pure-form-alligned'>
-					<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
-					<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
+					<input type='text' data-foodName-id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
+					<input type='number' data-itemq-id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
 					<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
 				</form>
 			</div>
