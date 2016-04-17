@@ -404,7 +404,7 @@ var GuestList = React.createClass({
 		return guestsArr.map(function(guest, i){
 			if(guest.id) {
 				return (
-					<div key={i} className='guestItem'>
+					<div key={i} className='guestItem pure-u-*'>
 						<p>{guest.get('userName')}</p>
 						<p>{guest.get('email')}</p>
 					</div>
