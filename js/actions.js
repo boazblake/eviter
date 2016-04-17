@@ -2,6 +2,12 @@ import fbRef from './fbref'
 import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, MyFoods} from './data'
 import BackboneFire from 'bbfire'
 
+function pollForNewData(){
+	console.log('polling for new data')
+	setTimeout(function(){
+		BackboneFire.Events.trigger('pollForNewData')
+	}, 500)
+}
 
 export function changeFoodAmount(foodItemMdl, evt){
 	console.log('evt.currentTarget.dataset.foodquant_id', evt.currentTarget.dataset.foodquant_id)
@@ -14,22 +20,20 @@ export function changeFoodAmount(foodItemMdl, evt){
 		})
 	} else if (buttonPressed === 'minus') {
 		foodItemMdl.set({
-			food_quantity:foodItemMdl.get('food_quantity') - 1
+			food_quantity:parseInt(foodItemMdl.get('food_quantity')) - 1
 		})
 	}
+	foodItemMdl.save()
+	// BackboneFire.Events.trigger('updateComponent')
+	pollForNewData()
 }
 
 export function createFoodItemForEvent(foodItem, eventID, donefunction) {
 	var foodBeingSubmitted = new FoodsToBring(eventID)
 
 		foodBeingSubmitted.create(foodItem)
-		foodBeingSubmitted.on('sync', function(){
-			donefunction()
-		})
-		BackboneFire.Events.trigger('updateComponent')
-		setTimeout(function(){
-			BackboneFire.Events.trigger('pollForNewData')
-		}, 1000)
+		foodBeingSubmitted.on('sync')
+
 }
 
 export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
@@ -43,6 +47,7 @@ export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
 		bringer_name:foodBringerMdl.get('firstName') + ' ' + foodBringerMdl.get('lastName')
 	})
 	BackboneFire.Events.trigger('updateComponent')
+	pollForNewData()
 }
 
 export function createEvent(eventObj, hostModel) {
@@ -76,9 +81,7 @@ export function createEvent(eventObj, hostModel) {
 
 		createAttendanceForEvt(attendanceObj)
 		BackboneFire.Events.trigger('updateComponent')
-		setTimeout(function(){
-			BackboneFire.Events.trigger('pollForNewData')
-		}, 1000)
+		pollForNewData()
 	})
 
 	location.hash = 'dash'
@@ -103,7 +106,7 @@ export function createUser(userObj) {
                 email: userObj.email,
             })
 			BackboneFire.Events.trigger('updateComponent')
-
+			pollForNewData()
             logUserIn(userObj)
         }
     })
@@ -138,9 +141,7 @@ export function addGuestToEvent(recipientEmail, evtModel){
 		} else{
 			alert('no match for ', recipientEmail)
 		}
-		setTimeout(function(){
-			BackboneFire.Events.trigger('pollForNewData')
-		}, 1000)
+		pollForNewData()
 
 	})	
 }
@@ -224,7 +225,8 @@ export function removeAttendance(evt){
 	  } else {
 	    // console.log('Synchronization succeeded');
 	  }
-		BackboneFire.Events.trigger('updateComponent')
+		// BackboneFire.Events.trigger('updateComponent')
+		pollForNewData()
 
 	};
 	removeEvent.remove(onComplete);

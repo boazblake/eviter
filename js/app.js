@@ -44,6 +44,8 @@ import {User, Users, Event, Events, EventFinder} from './data'
 import fbRef from './fbref'
 import {createEvent, createUser, addGuestMaker, LogUserIn, handleEvent} from './actions'
 
+$('.container').css('max-height',$(window).height());
+
 function checkAuth(){
 	if (!fbRef.getAuth()) {
 		location.hash = 'splash'

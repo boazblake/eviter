@@ -90,19 +90,19 @@ var SplashPage = React.createClass({
 		return(
 			<div className='splashPageView'>
 				<Header/>
-				<form className='signUp pure-form pure-form-aligned'>
+				<form className='signUp pure-form pure-form-aligned' onSubmit={this._handleSubmit}>
 					<h3>SIGN UP HERE</h3>
 					<input required='required' type='text' placeholder='email@host.com' onChange={this._upDateEmail}/>
 					<input required='required' type='passWord' placeholder='password' onChange={this._upDatePass}/><br/>
 					<input required='required' type='text' placeholder='First name' onChange={this._firstName}/>
 					<input required='required' type='text' placeholder='Last Name' onChange={this._lastName}/><br/>
-					<button className='pure-button pure-button-primary' onClick={this._handleSubmit}>SIGN UP!</button>
+					<button className='pure-button pure-button-primary' >SIGN UP!</button>
 				</form><br/><br/>
-				<form className='logIn pure-form pure-form-aligned'>
+				<form className='logIn pure-form pure-form-aligned' onSubmit={this._handleLogin}>
 					<h3>LOG IN HERE</h3>
 					<input required='required' type='text' placeholder='email@host.com' onChange={this._upDateEmail}/>
 					<input required='required' type='passWord' placeholder='password' onChange={this._upDatePass}/>
-					<button className='pure-button pure-button-primary' onClick={this._handleLogin}>LOG IN</button>
+					<button className='pure-button pure-button-primary'>LOG IN</button>
 				</form>
 				<Footer/>	
 			</div>
@@ -170,14 +170,13 @@ var CreateEvent = React.createClass({
 				<NavBar/>
 				<form className='pure-form' onSubmit={this._submitEvent}>
 					<div className='row createEvent'>
-							<label>Name Your Event</label>
-							<input type='text' required="required" placeholder='Event Title' onChange={this._upDateEventTitle}/>
+
+							<input type='text' required="required" placeholder='Event Title...' onChange={this._upDateEventTitle}/>
 							
-							<label>Date</label>
-							<input type='date' required="required" placeholder='Event Date' onChange={this._upDateEventDate}/>
-							<br/>
-							<label>Event Location</label>
-							<input type='text' required="required" placeholder='Event Location' onChange={this._upDateEventLocation}/><br/>
+							<input type='date' required="required" placeholder='Event Date...' onChange={this._upDateEventDate}/>
+
+							<input type='text' required="required" placeholder='Event Location...' onChange={this._upDateEventLocation}/>
+
 					</div>
 					<br/>
 		            <button className='pure-button pure-button-primary'>Submit!</button>
@@ -205,7 +204,7 @@ var MyEvents = React.createClass({
 	},
 
 
-	componentDidMount(){
+	componentWillMount(){
 		var component = this
 		console.log('user uid',fbRef.getAuth().uid)
 		this.myAttendances = new QueriedAttendance('user_uid', fbRef.getAuth().uid )
@@ -277,6 +276,9 @@ var EventItem = React.createClass({
 	}
 })
 
+
+
+// Detail of Event
 var EventPage = React.createClass({
 
 	getInitialState:function() {
@@ -291,16 +293,13 @@ var EventPage = React.createClass({
 	componentWillMount:function(){
 		var component = this
 		this.state.event.fetchWithPromise().then(() => this.forceUpdate())
-		this.state.foodListColl.fetchWithPromise().then(function(){
-			component.forceUpdate()	
-		})
+		this.state.foodListColl.fetchWithPromise().then(() => this.forceUpdate())
 		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
 		this.state.guestList.fetchWithPromise().then(() => this.forceUpdate())
 
 		BackboneFire.Events.on('pollForNewData',
 			function(){
 				console.log('poll heard, component updating...')
-
 				component.state.event.fetchWithPromise().then(() => component.forceUpdate())
 				component.state.guestList.fetchWithPromise().then(() => component.forceUpdate())
 				component.state.foodListColl.fetchWithPromise().then(function(){
@@ -312,8 +311,6 @@ var EventPage = React.createClass({
 
 	render:function(){
 
-
-
 		return(
 			<div className='eventView'>
 				<Header/>
@@ -321,7 +318,7 @@ var EventPage = React.createClass({
 				<br/>
 				<EventDeets eventDeets={this.state.event}/>
 				<Guests guestList={this.state.guestList} eventID={this.state.event}/>
-				<FoodInput userModel={this.state.userModel} eventID={this.state.event.id} foodListColl={this.state.foodListColl}/>
+				<Food userModel={this.state.userModel} eventID={this.state.event.id} foodListColl={this.state.foodListColl}/>
 				<Footer/>
 			</div>
 		)
@@ -385,13 +382,15 @@ var Guests = React.createClass({
 				<div>
 					<GuestList eventID={this.props.eventID} guests={this.props.guestList} />
 				</div>
+
 				<form className='pure-form pure-form-alligned' data-id='newUserEmail'>
-					<label>Invite Guests</label>
-					<input type='text' placeholder='email@host.com' onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
+					<input type='text' placeholder='email@host.com' 
+					onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
 					<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton button-secondary pure-button'>
 						<i className="fa fa-user-plus" aria-hidden="true"></i>
 					</button>
 				</form>
+
 			</div>
 		)
 	}
@@ -427,7 +426,7 @@ var GuestList = React.createClass({
 })
 
 //Foods
-var FoodInput = React.createClass({
+var Food = React.createClass({
 	
 	foodItem:{
 		food_name:'',
@@ -453,14 +452,11 @@ var FoodInput = React.createClass({
 	},
 
 	_handleFoodItem: function(evt){
-		evt.preventDefault()
+		// evt.preventDefault()
 		var component = this
 		var event_id = this.props.eventID
 		this.foodItem.event_id = event_id
-		createFoodItemForEvent(this.foodItem, event_id, function(){
-			component.foodItem = {}
-			component.forceUpdate()
-		})
+		createFoodItemForEvent(this.foodItem, event_id)
 	},
 
 
@@ -537,29 +533,30 @@ var FoodList = React.createClass({
 		return foodListArr.map(function(foodItem, i){
 			if (foodItem.id) {
 				return(
-					<div  className='foodItem' key={i} >
+					<div className='foodItemWrapper'>
+						<div  className='foodItem' key={i} >
+							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
+								<i className="fa fa-times"></i>
+							</button>
 
 
-						<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
-							<i className="fa fa-times"></i>
-						</button>
+							<div data-fooditem_id={foodItem.id}>
+								<p onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName'>{foodItem.get('bringer_name')}  is Bringing</p>
 
+								<div className='lowerHalfFoodItem' >
+									<div className='foodQuantityWrapper'>
+										<i data-foodquant_id='plus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+										<p className='foodItemName'>{foodItem.get('food_quantity')}</p>
+										<i data-foodquant_id='minus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+									</div>
 
-						<div data-fooditem_id={foodItem.id}>
-							<p onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodItem foodBringerName'>{foodItem.get('bringer_name')}  is Bringing</p>
-
-							<div className='lowerHalfFoodItem' >
-								<div className='foodQuantityWrapper'>
-									<i data-foodquant_id='minus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
-									<p className='foodItem foodItemName'>{foodItem.get('food_quantity')}</p>
-									<i data-foodquant_id='plus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+									<p className='foodName'>{foodItem.get('food_name')}</p>
 								</div>
 
-								<p className='foodItem'>{foodItem.get('food_name')}</p>
 							</div>
 
 						</div>
-
+						<br/>
 					</div>
 				)				
 			}
@@ -570,7 +567,7 @@ var FoodList = React.createClass({
 
 		return(
 			<div>
-					{this._showFoodItems()}<br/>
+					{this._showFoodItems()}
 			</div>
 		)
 	}
