@@ -11,8 +11,8 @@ var Header = React.createClass({
 	render: function(){
 		return(
 			<div className='header'>
-				<p className='heading'>EVITER</p>
-				<p className='subHeading'> Your goto Event Organizer</p>
+				<a href='#dash'> <p className='heading'>EVITER</p> </a>
+				<p className='userWelcome'> Hi</p>
 			</div>
 		)
 	}
@@ -21,7 +21,7 @@ var Header = React.createClass({
 var NavBar = React.createClass({
 	_showDashButton:function(){
 		if (location.hash !=='#dash') {
-			return (<i className='fa fa-reply pure-menu-heading pure-menu-link'>back to dashboard</i>)
+			return (<i className='fa fa-reply pure-menu-heading pure-menu-link'><p>back to dashboard</p></i>)
 		} else {
 			return ''
 		}
@@ -31,8 +31,10 @@ var NavBar = React.createClass({
 	render: function(){
 		return(
 			<div className='pure-menu pure-menu-horizontal navBar'>
-				<a href='#dash'>{this._showDashButton()}</a>
-				<a href='#logout'><i className='fa fa-sign-out pure-menu-heading pure-menu-link'> Sign Out</i></a>
+				<a href='#dash' title='back to dashboard'>{this._showDashButton()}</a>
+				
+				<a href='#logout' title='logout'><i className='fa fa-sign-out pure-menu-heading pure-menu-link'><p>sign out</p></i></a>
+
 			</div>
 		)
 	}
@@ -267,9 +269,24 @@ var EventItem = React.createClass({
 					<i className="fa fa-times"></i>
 				</button>
 				<div className='eventInfo pure-u-*' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
-					<p>Title:{attendanceMod.get('title')}</p>
-					<p>Date:{attendanceMod.get('date')}</p>
-					<p>Host:{attendanceMod.get('hostName')}</p>
+					<p>
+						<span>
+							Event:
+						</span>
+						{attendanceMod.get('title')}
+					</p>
+					<p>
+						<span>
+							Date:
+						</span>
+						{attendanceMod.get('date')}
+					</p>
+					<p>
+						<span>
+							Host:
+						</span>
+						{attendanceMod.get('hostName')}
+					</p>
 				</div>
 			</div>		
 		)
@@ -312,7 +329,7 @@ var EventPage = React.createClass({
 	render:function(){
 
 		return(
-			<div className='eventView'>
+			<div className='eventView pure-u-1 pure-u-md-1-2 pure-u-lg-1-4'>
 				<Header/>
 				<NavBar/>
 				<br/>
@@ -333,10 +350,22 @@ var EventDeets = React.createClass({
 
 
 		return (
-			<div className='eventDeets pure-u-*'>
-				<p>DATE<br/>{event.get('date')}</p>
-				<p>LOCATION<br/>{event.get('location')}</p>
-				<p>TITLE<br/>{event.get('title')}</p>
+			<div className='eventDeets pure-u-1 pure-u-md-1-2 pure-u-lg-1-4'>
+				<p>
+					<span>DATE:</span>
+					<br/>
+					{event.get('date')}
+				</p>
+				<p>
+					<span>LOCATION:</span>
+					<br/>
+					{event.get('location')}
+				</p>
+				<p>
+					<span>Event:</span>
+					<br/>
+					{event.get('title')}
+				</p>
 			</div>
 		)
 	}
@@ -378,18 +407,26 @@ var Guests = React.createClass({
 
 
 		return(
-			<div className='guests'>
+			<div className='guests pure-u-1 pure-u-md-1-2 pure-u-lg-1-4'>
+
+				<form className='pure-form-* pure-form-alligned' data-id='newUserEmail'>
+					<div className='inviteWrapper'>
+						<label>Invite Guests Here</label>
+						<br/>
+						<input type='text' placeholder='email@host.com' 
+						onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
+						<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton button-secondary pure-button'>
+							<i className="fa fa-user-plus" aria-hidden="true"></i>
+						</button>
+					</div>
+
+				</form>
+
 				<div>
 					<GuestList eventID={this.props.eventID} guests={this.props.guestList} />
 				</div>
 
-				<form className='pure-form-* pure-form-alligned' data-id='newUserEmail'>
-					<input type='text' placeholder='email@host.com' 
-					onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
-					<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton button-secondary pure-button'>
-						<i className="fa fa-user-plus" aria-hidden="true"></i>
-					</button>
-				</form>
+
 
 			</div>
 		)
@@ -404,7 +441,7 @@ var GuestList = React.createClass({
 		return guestsArr.map(function(guest, i){
 			if(guest.id) {
 				return (
-					<div key={i} className='guestItem pure-u-*'>
+					<div key={i} className='guestItem '>
 						<p>{guest.get('userName')}</p>
 						<p>{guest.get('email')}</p>
 					</div>
@@ -418,7 +455,7 @@ var GuestList = React.createClass({
 		var component = this
 		var guestsArr = this.props.guestList
 		return(
-			<div className='guestList'>
+			<div className='guestList '>
 				{this._showGuests()}
 			</div>
 		)
@@ -463,16 +500,22 @@ var Food = React.createClass({
 	render: function(){
 
 		return(
-			<div className='bringThis pure-g-*'>
+			<div className='bringThis pure-u-1 pure-u-md-1-2 pure-u-lg-1-4'>
+		
+				<div className='foodAddWrapper'>
+					<label>Add Item</label>
+					<form className='pure-form-* pure-form-alligned'>
+						<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
+						<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
+						<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
+					</form>
+				</div>
+
 				<div>
 				<FoodList userModel={this.props.userModel} foodListColl={this.props.foodListColl} eventID={this.props.eventID}/>
 				</div>
-				<label>Food To Bring</label>
-				<form className='pure-form-* pure-form-alligned'>
-					<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
-					<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
-					<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
-				</form>
+				
+
 			</div>
 		)
 	}
@@ -481,18 +524,9 @@ var Food = React.createClass({
 var FoodList = React.createClass({
 
 	// getInitialState: function () {
-	//     return {hover: false};
+	//     return {selected: false};
 	// },
 	
-	// _mouseEnter: function () {
-	// 	// onMouseEnter={component._mouseEnter} onMouseLeave={component._mouseLeave}
-	//     this.setState({hover: true});
-	// },
-	
-	// _mouseLeave: function () {
-	//     this.setState({hover: false});
-	// },
-
 
 	_handleFoodBringer:function(foodItem, evt){
 		console.log('clicked targets model-foodItem',foodItem)
@@ -517,30 +551,32 @@ var FoodList = React.createClass({
 
 
 	_showFoodItems:function(){
+		// var divStyle = {}
 
-
-		  // var buttonStyle = {display: 'none'};
-    //     if (this.state.hover) {
-    //         buttonStyle = {display: 'block'};
-    //     }
-    //     style={buttonStyle}
-
-
-
+		// if (!this.state.selected){
+		// 	divStyle = {
+		// 		color:'rgba(255,175,75,1)'
+		// 	}
+		// } else if (this.state.selected) {
+		// 	divStyle = {
+		// 		color:'rgba(22, 160, 133,1)'
+		// 	}
+		// }
+		// style={divStyle}
 
 		var component = this
 		var foodListArr = this.props.foodListColl
 		return foodListArr.map(function(foodItem, i){
 			if (foodItem.id) {
 				return(
-					<div className='foodItemWrapper pure-g-*'>
-						<div  className='foodItem' key={i} >
+					<div className='foodItemWrapper pure-u-1'>
+						<div   className='foodItem' key={i} >
 							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
 								<i className="fa fa-times"></i>
 							</button>
 
 
-							<div data-fooditem_id={foodItem.id} className='foodItemWrapper pure-g-*'>
+							<div data-fooditem_id={foodItem.id} className='foodItemWrapper pure-u-1 pure-u-md-1-2 '>
 								<p onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName'>{foodItem.get('bringer_name')}  is Bringing</p>
 
 								<div className='lowerHalfFoodItem' >

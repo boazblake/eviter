@@ -1,16 +1,16 @@
 @import "../bower_components/normalize-scss/_normalize.scss";
 @import "../bower_components/typeplate-starter-kit/scss/_typeplate.scss";
 
-// p+p {
-//     text-indent: 0;
-//     margin-top: 0;
-// }
+p+p {
+    text-indent: 0;
+    margin-top: 0;
+}
 
-// p {
-//     max-width: 80ch;
-//     margin-left: 0;
-//     margin-right: auto;
-// }
+p {
+    max-width: 80ch;
+    margin-left: 0;
+    margin-right: auto;
+}
 
 ul, ol {
     max-width: 80ch;
@@ -95,7 +95,7 @@ img {
 body {
     height: 90vh;
 
-    font-family: 'San Francisco', 'Helvetica', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Oxygen, San Francisco', 'Helvetica', 'Trebuchet MS', Arial, sans-serif;
 }
 
 /**
@@ -132,21 +132,15 @@ body {
 
 
 
-.foodItem * {
-    // border: 1px solid black
-}
-
 html {
     background-color: inear-gradient( 
         rgba(255, 0, 0, 0.45), 
         rgba(255, 0, 0, 0.45)
     );
-
-    
     background: url('./img/3.jpg');
     
-    // background-size: cover;
-    // background-repeat: no-repeat;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 input{
@@ -161,15 +155,18 @@ input{
 .container {
     width: 90%;
     margin:0 auto;
+    min-height: 90vh;
 }
 
-
 .removeButton {
-    display: none;
+    opacity: 0;
     color: rgba(192, 57, 43,1.0);
     border-radius: 50px;
     z-index: 2;
-    transition: 2s all ease;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+
  }
 
  .header{
@@ -177,17 +174,20 @@ input{
     text-shadow: 1px 1px 1px #A1A1A1;
     text-align: center;
     color:rgba(236, 240, 241,0.5);
+    text-decoration:none;
         
     .heading{
         font-size: 80px;
         font-weight: bold;
         background-size: 100%;
         margin-bottom: 0;
+        text-decoration:none;
+        color: rgba(236, 240, 241,1.0);
     }
 
     .subHeading {
         color: rgba(211, 84, 0,0.6);
-        font-size: 20px;
+        font-size: 2em;
         font-weight: bold;
         background-size: 100%;
     }
@@ -199,11 +199,24 @@ input{
     justify-content:space-between;
     align-items:baseline;
     background-color:rgba(236, 240, 241,0.5);
+    position: relative;
+
+    p{
+        position: absolute;
+        // top:-10px;
+        display: none;
+        color:black;
+    }
+
+    a:hover > p {
+        display: block;
+
+    }
 }
 
 
 .signUp {
-    background: rgba(230, 126, 34,0.4);
+    background-color: rgba(44, 62, 80,0.2);
     text-shadow: 1px 1px 1px #A1A1A1;
     color:#d35400
 
@@ -211,7 +224,7 @@ input{
 
 
 .logIn {
-    background: rgba(211, 84, 0, 0.4);
+    background-color: rgba(44, 62, 80,0.2);
     text-shadow: 1px 1px 1px #A1A1A1;
     color:#d35400
 
@@ -219,6 +232,7 @@ input{
 
  
 .attendance{
+    position: relative;
     border-radius: 10px;
     box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
     display:inline-block;
@@ -227,20 +241,26 @@ input{
     padding:10px;
     z-index: 1;
 
+    .eventInfo{
+        cursor: pointer;
+        cursor: hand;
+
+        span p{
+            text-shadow: 2px 0 9px rgba(255,255,255,1);
+            font-weight:bold;
+        }
+    }
 }
 
 .attendance:hover > .removeButton {
-    display:block;
+    opacity:1;
 }
 
 .row.createEvent *{
     display: inline-block;
 }
 
-.eventInfo{
-    cursor: pointer;
-    cursor: hand;
-}
+
 
 .eventView {
     height: 100vh;
@@ -249,24 +269,27 @@ input{
 
     .eventDeets{
         background-color: rgba(44, 62, 80,0.8);
-        height:auto;
-        max-height:150%;
-        overflow:auto;
+        align-content:center;
         display: flex;
         color: aliceblue;
         width: 90%;
-        margin: 0, auto;
-        flex-direction: row;
+        margin: 0 auto;
         justify-content:space-between;
-        vertical-align: bottom;
 
         p {
-            margin: 0, auto;
+            text-align: center;
+            vertical-align: bottom;
+            margin: 0 auto;
             min-width: 33%;
             display: inline-block;
-            vertical-align: top;
-            border: 1px solid black;
+            vertical-align: bottom;
            }
+
+
+        span{
+            text-shadow: 0 0 9px rgba(255,255,255,1) ;
+            font-weight:bolder;
+        }
     }
     
     .guests{
@@ -275,7 +298,16 @@ input{
         overflow:auto;
         width: 50%;
         display: inline-block;
-        
+
+        label{ 
+            font-weight: bolder;
+            text-shadow: 0 0 9px rgba(255,255,255,1) ;
+        }
+
+        .inviteWrapper {
+            text-align: center;
+        }
+
         .guestItem   {
             color: aliceblue;
             background: rgba(22,97,120,1);
@@ -288,9 +320,20 @@ input{
 
     .bringThis {
         width: 50%;
-        color: aliceblue;
+        // color: aliceblue;
         display: inline-block;
         
+        .foodAddWrapper {
+            text-align: center;
+
+            label {
+            font-weight: bolder;
+            text-align: center;
+            text-shadow: 0 0 9px rgba(255,255,255,1) ;
+
+
+            }
+        }
         
         .fa {
             cursor: pointer;
@@ -299,31 +342,41 @@ input{
 
         .foodItemWrapper {
             display: inline-block;
+            position: relative;
         }
 
         .foodItemWrapper *{
-            border: 1px solid black;
+            // border: 1px solid black;
         }
 
         .foodItem {
+            display: flex;
+            flex-direction:row;
+            align-items:center;
+            justify-content:center;
+            flex-wrap:wrap;
+            flex-flow:row wrap;
+            align-content:flex-end;
             background: rgba(255,175,75,1);
 
             background: radial-gradient(ellipse at center, rgba(255,175,75,1) 0%, rgba(255,146,10,0.84) 77%, rgba(255,146,10,0.79) 100%);
             filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a', GradientType=1 );
 
-            border-radius: 153px 37px 176px 37px;
-            width:100%;
+            border-radius: 64px 64px 64px 64px;;
+            // width:80%;
+            text-align: center;
 
             .foodBringerName{
+                margin: 0 auto;
                 cursor: pointer;
                 cursor: hand;
             }
         }
-        p{
+        p{  
             font-size: 1.25em;
         }
         .foodItem:hover > .removeButton {
-            display:block;
+            opacity:1;
         }
 
         .lowerHalfFoodItem *{
@@ -338,13 +391,11 @@ input{
 
 
         .foodQuantityWrapper {
-            width:20%;
             display: inline-block;
             flex-direction:row;
             justify-content:center;
             align-items:baseline;
-            // padding-left: 35%;
-            // padding-right: 35%;
+            vertical-align: middle;
         }
         .foodQuantityWrapper* {
             display:block;
