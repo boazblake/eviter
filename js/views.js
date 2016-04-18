@@ -12,7 +12,7 @@ var Header = React.createClass({
 		return(
 			<div className='header'>
 				<a href='#dash'> <p className='heading'>EVITER</p> </a>
-				<p className='userWelcome'> Hi</p>
+				<p className='userWelcome'></p>
 			</div>
 		)
 	}

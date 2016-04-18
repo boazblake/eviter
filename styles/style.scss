@@ -173,7 +173,7 @@ input{
     background-color: rgba(44, 62, 80,0.4);
     text-shadow: 1px 1px 1px #A1A1A1;
     text-align: center;
-    color:rgba(236, 240, 241,0.5);
+    color:rgba(189, 195, 199,1.0);
     text-decoration:none;
         
     .heading{
@@ -182,7 +182,7 @@ input{
         background-size: 100%;
         margin-bottom: 0;
         text-decoration:none;
-        color: rgba(236, 240, 241,1.0);
+        color:rgba(189, 195, 199,1.0);
     }
 
     .subHeading {
@@ -200,6 +200,7 @@ input{
     align-items:baseline;
     background-color:rgba(236, 240, 241,0.5);
     position: relative;
+    
 
     p{
         position: absolute;
@@ -218,7 +219,7 @@ input{
 .signUp {
     background-color: rgba(44, 62, 80,0.2);
     text-shadow: 1px 1px 1px #A1A1A1;
-    color:#d35400
+    color:rgba(41, 128, 185,1.0);
 
 }
 
@@ -226,7 +227,7 @@ input{
 .logIn {
     background-color: rgba(44, 62, 80,0.2);
     text-shadow: 1px 1px 1px #A1A1A1;
-    color:#d35400
+    color:rgba(41, 128, 185,1.0);
 
 }
 

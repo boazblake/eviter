@@ -33,6 +33,7 @@ export function createFoodItemForEvent(foodItem, eventID, donefunction) {
 
 		foodBeingSubmitted.create(foodItem)
 		foodBeingSubmitted.on('sync')
+		pollForNewData()
 
 }
 
@@ -46,7 +47,6 @@ export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
 		bringer_uid: foodBringerMdl.id,
 		bringer_name:foodBringerMdl.get('firstName') + ' ' + foodBringerMdl.get('lastName')
 	})
-	BackboneFire.Events.trigger('updateComponent')
 	pollForNewData()
 }
 
