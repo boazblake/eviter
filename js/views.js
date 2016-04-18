@@ -401,6 +401,7 @@ var Guests = React.createClass({
 		var eventInfo = ''
 
 		function _upDateGuestEmail(evt){
+			evt.preventDefault()
 			newUserEmail = evt.target.value
 		}
 
@@ -489,7 +490,7 @@ var Food = React.createClass({
 	},
 
 	_handleFoodItem: function(evt){
-		// evt.preventDefault()
+		evt.preventDefault()
 		var component = this
 		var event_id = this.props.eventID
 		this.foodItem.event_id = event_id
