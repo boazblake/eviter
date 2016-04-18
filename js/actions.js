@@ -32,8 +32,9 @@ export function createFoodItemForEvent(foodItem, eventID, donefunction) {
 	var foodBeingSubmitted = new FoodsToBring(eventID)
 
 		foodBeingSubmitted.create(foodItem)
-		foodBeingSubmitted.on('sync')
+		foodBeingSubmitted.on('sync', function (){
 		pollForNewData()
+		})
 
 }
 
