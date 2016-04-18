@@ -376,7 +376,7 @@ var EventDeets = React.createClass({
 var Guests = React.createClass({
 
 	_handleAddGuest: function(eventInfo, evt){
-		// evt.preventDefault()
+		evt.preventDefault()
 		var userEmail = this.refs.userEmail.value
 		var eventID = this.props.eventID
 		this.refs.userEmail.value = ''
