@@ -144,6 +144,7 @@ export function addGuestToEvent(recipientEmail, evtModel){
 				userName:recipientUserModel.get('firstName') + ' ' + recipientUserModel.get('lastName'),
 				email: recipientUserModel.get('email'),
 				hostName:evtModel.get('hostName'),
+				gravatarUrl:recipientUserModel.get('gravatarUrl')
 			}
 
 			createAttendanceForEvt(attDataObj)

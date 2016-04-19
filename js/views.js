@@ -24,7 +24,7 @@ var Header = React.createClass({
 	_showUserProfile: function(){
 		if (fbRef.getAuth()) {
 			var gravatar = fbRef.getAuth().password.profileImageURL
-			console.log('gravatar', gravatar)
+			// console.log('gravatar', gravatar)
 			return (
 				<img src={gravatar}/>
 				)
@@ -479,6 +479,7 @@ var Guests = React.createClass({
 		function _upDateGuestEmail(evt){
 			evt.preventDefault()
 			newUserEmail = evt.target.value
+			// evt.target.value= ''
 		}
 
 
@@ -520,6 +521,7 @@ var GuestList = React.createClass({
 				console.log('guest',guest)
 				return (
 					<div key={i} className='guestItem ' style={{background: "tomato", padding: '20px', margin: '5px 0'}}>
+						<img src={guest.get('gravatarUrl')}/>
 						<h3>{guest.get('userName')}</h3>
 						<h5>{guest.get('email')}</h5>
 					</div>
