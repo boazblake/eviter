@@ -164,9 +164,9 @@ var DashPage = React.createClass({
 			<div className='dashPageView'>
 				<Header userModel={this.state.userModel}/>
 				<NavBar/>
-				<div className='invites'>
+				<div className='container  invites'>
 					<a className='pure-button pure-button-primary' href="#createevent">Create New Event!</a>
-				<MyEvents />
+					<MyEvents />
 				</div>
 				<Footer/>
 			</div>
@@ -308,7 +308,7 @@ var MyEvents = React.createClass({
 
 	 	console.log('this.state.attendanceMods', this.state.attendanceMods)
 	 	return(
-	 		<div className='myEvents pure-g-*'>
+	 		<div className='row myEvents'>
 	 			{
 	 				this.state.attendanceMods.map( function(attendanceMod, i ){
 	 					return (
@@ -333,29 +333,31 @@ var EventItem = React.createClass({
 		var attendanceMod = this.props.attendanceMod
 		// console.log('attendanceMod>>>>',attendanceMod)
 		return(
-			<div className='attendance pure-u-1-3-* button-secondary'>
-				<button data-id={attendanceMod.id} onClick={this.removeAttendance} className='removeButton button-error'>
-					<i className="fa fa-times"></i>
-				</button>
-				<div className='eventInfo pure-u-*' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
-					<p>
-						<span>
-							Event:
-						</span>
-						{attendanceMod.get('title')}
-					</p>
-					<p>
-						<span>
-							Date:
-						</span>
-						{attendanceMod.get('date')}
-					</p>
-					<p>
-						<span>
-							Host:
-						</span>
-						{attendanceMod.get('hostName')}
-					</p>
+			<div className='col-xs-12 col-sm-6 col-md-4'>
+				<div className='attendance'>
+					<button data-id={attendanceMod.id} onClick={this.removeAttendance} className='btn btn-danger btn-xs removeButton'>
+						<i className="fa fa-times"></i>
+					</button>
+					<div className='eventInfo' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
+						<p>
+							<span>
+								Event:
+							</span>
+							{attendanceMod.get('title')}
+						</p>
+						<p>
+							<span>
+								Date:
+							</span>
+							{attendanceMod.get('date')}
+						</p>
+						<p>
+							<span>
+								Host:
+							</span>
+							{attendanceMod.get('hostName')}
+						</p>
+					</div>
 				</div>
 			</div>		
 		)
@@ -398,13 +400,17 @@ var EventPage = React.createClass({
 	render:function(){
 
 		return(
-			<div className='eventView pure-u-1 pure-u-md-1-2 pure-u-lg-1-4'>
+			<div className=''>
 				<Header userModel={this.state.userModel}/>
 				<NavBar/>
 				<br/>
-				<EventDeets eventDeets={this.state.event}/>
-				<Guests guestList={this.state.guestList} eventID={this.state.event}/>
-				<Food userModel={this.state.userModel} eventID={this.state.event.id} foodListColl={this.state.foodListColl}/>
+				<div className= 'container'>
+					<EventDeets eventDeets={this.state.event}/>
+					<div className='row'>
+						<Guests guestList={this.state.guestList} eventID={this.state.event}/>
+						<Food userModel={this.state.userModel} eventID={this.state.event.id} foodListColl={this.state.foodListColl}/>
+					</div>
+				</div>
 				<Footer/>
 			</div>
 		)
@@ -419,22 +425,22 @@ var EventDeets = React.createClass({
 
 
 		return (
-			<div className='eventDeets pure-u-1 pure-u-md-1-2 pure-u-lg-1-4'>
-				<p>
+			<div className='row eventDeets'>
+				<div className='col-xs-4'>
 					<span>DATE:</span>
 					<br/>
 					{event.get('date')}
-				</p>
-				<p>
+				</div>
+				<div className='col-xs-4'>
 					<span>LOCATION:</span>
 					<br/>
 					{event.get('location')}
-				</p>
-				<p>
+				</div>
+				<div className='col-xs-4'>
 					<span>Event:</span>
 					<br/>
 					{event.get('title')}
-				</p>
+				</div>
 			</div>
 		)
 	}
@@ -477,9 +483,9 @@ var Guests = React.createClass({
 
 
 		return(
-			<div className='guests pure-u-1 pure-u-md-1-2 pure-u-lg-1-4'>
+			<div className='col-xs-12 col-sm-8 guests'>
 
-				<form className='pure-form-* pure-form-alligned' data-id='newUserEmail'>
+				<form className='' data-id='newUserEmail'>
 					<div className='inviteWrapper'>
 						<label>Invite Guests Here</label>
 						<br/>
@@ -512,9 +518,9 @@ var GuestList = React.createClass({
 			if(guest.id) {
 				console.log('guest',guest)
 				return (
-					<div key={i} className='guestItem '>
-						<p>{guest.get('userName')}</p>
-						<p>{guest.get('email')}</p>
+					<div key={i} className='guestItem ' style={{background: "tomato", padding: '20px', margin: '5px 0'}}>
+						<h3>{guest.get('userName')}</h3>
+						<h5>{guest.get('email')}</h5>
 					</div>
 				)
 			}
@@ -576,11 +582,11 @@ var Food = React.createClass({
 	render: function(){
 
 		return(
-			<div className='bringThis pure-u-1 pure-u-md-1-2 pure-u-lg-1-4'>
+			<div className='col-xs-12 col-sm-4 bringThis '>
 		
 				<div className='foodAddWrapper'>
 					<label>Add Item</label>
-					<form className='pure-form-* pure-form-alligned'>
+					<form className=''>
 						<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
 						<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
 						<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
@@ -645,24 +651,27 @@ var FoodList = React.createClass({
 		return foodListArr.map(function(foodItem, i){
 			if (foodItem.id) {
 				return(
-					<div className='foodItemWrapper pure-u-*'>
+					<div className='foodItemWrapper '>
 						<div   className='foodItem' key={i} >
 							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
 								<i className="fa fa-times"></i>
 							</button>
 
 
-							<div data-fooditem_id={foodItem.id} className='foodItemWrapper pure-u-1 pure-u-md-1-2 '>
-								<p onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName'>{foodItem.get('bringer_name')}  is Bringing</p>
+							<div data-fooditem_id={foodItem.id} className='foodItemWrapper '>
+								<span onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName'>{foodItem.get('bringer_name')}  is Bringing</span>
 
 								<div className='lowerHalfFoodItem' >
 									<div className='foodQuantityWrapper'>
-										<i data-foodquant_id='plus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
-										<p className='foodItemName'>{foodItem.get('food_quantity')}</p>
 										<i data-foodquant_id='minus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+										<span className='foodItemName'>{foodItem.get('food_quantity')}</span>
+										
+										<i data-foodquant_id='plus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+
+										<span className='foodName'>{foodItem.get('food_name')}
+										</span>
 									</div>
 
-									<p className='foodName'>{foodItem.get('food_name')}</p>
 								</div>
 
 							</div>

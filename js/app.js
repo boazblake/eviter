@@ -44,7 +44,7 @@ import {User, Users, Event, Events, EventFinder} from './data'
 import fbRef from './fbref'
 import {createEvent, createUser, addGuestMaker, LogUserIn, handleEvent} from './actions'
 
-$('.container').css('max-height',$(window).height());
+$('#app-container').css('max-height',$(window).height());
 
 
 function checkAuth(){
@@ -81,12 +81,12 @@ function app() {
     	doCreateEvent:function(){
     		checkAuth()
 
-    		DOM.render(<CreateEvent authUserData={_currentUserData}/>, document.querySelector('.container'))
+    		DOM.render(<CreateEvent authUserData={_currentUserData}/>, document.querySelector('#app-container'))
     	},
 
     	showDashPage: function(){
     		checkAuth()
-    		DOM.render(<DashPage authUserData={_currentUserData}/>, document.querySelector('.container'))
+    		DOM.render(<DashPage authUserData={_currentUserData}/>, document.querySelector('#app-container'))
     	},
 
     	showSplashPage: function(){
@@ -94,13 +94,13 @@ function app() {
     			location.hash = 'dash'
     			return
     		}
-    		DOM.render(<SplashPage authUserData={_currentUserData}/>, document.querySelector('.container'))
+    		DOM.render(<SplashPage authUserData={_currentUserData}/>, document.querySelector('#app-container'))
     	},
 
 		viewEvent:function (id){
 			checkAuth()
 			console.assert(id !== undefined)
-    		DOM.render(<EventPage eventID={id} authUserData={_currentUserData}/>, document.querySelector('.container'))
+    		DOM.render(<EventPage eventID={id} authUserData={_currentUserData}/>, document.querySelector('#app-container'))
 		}
 	})
 
