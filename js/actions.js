@@ -95,21 +95,27 @@ export function createUser(userObj) {
         	// var gravatar = fbRef.getAuth().password.profileImageURL
         	// console.log('fbRef',fbRef.getAuth().password.profileImageURL)
         	// console.log('gravatar',gravatar)
-        	let users = new Users()
-        	users.create({
-        		id: authData.uid,
-                firstName: userObj.firstName,
-                lastName: userObj.lastName,
-                email: userObj.email,
-                // gravatar:authData.password.profileImageURL
-            })
+        	
 			BackboneFire.Events.trigger('updateComponent')
 			pollForNewData()
+            
             var p = new Promise(function(res,rej) {
-            	logUserIn(userObj,res)
+            	logUserIn(userObj, res)
             })
-            p.then(function(authData) {
-            	console.log(authData)
+            
+            p.then(function(pData) {
+            	console.log('userMod + auth data on signup...', pData)
+
+        		let users = new Users()
+        		users.create({
+        			id: pData.authData.uid,
+        	        firstName: pData.userObj.firstName,
+        	        lastName: pData.userObj.lastName,
+        	        email: pData.userObj.email,
+        	        gravatarUrl :  pData.authData.password.profileImageURL
+        	   	})
+         
+            	//add gravatr to user object???
             })
         }
     })
@@ -191,7 +197,10 @@ export function logUserIn(userObj,res){
 		} else {
 			location.hash = 'dash'
 			if (res) {
-				res(authData)
+				res({
+					authData: authData, 
+					userObj: userObj
+				})
 			}
 		}
 	})

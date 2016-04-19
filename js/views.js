@@ -24,6 +24,7 @@ var Header = React.createClass({
 	_showUserProfile: function(){
 		if (fbRef.getAuth()) {
 			var gravatar = fbRef.getAuth().password.profileImageURL
+			console.log('gravatar', gravatar)
 			return (
 				<img src={gravatar}/>
 				)
