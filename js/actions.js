@@ -91,8 +91,10 @@ export function createUser(userObj) {
         	console.log(err)
         	return
         } else {
-        	// console.log('fbRef',fbRef.getAuth())
-        	// var gravatar = authData.password.profileImageURL
+        	
+        	// var gravatar = fbRef.getAuth().password.profileImageURL
+        	// console.log('fbRef',fbRef.getAuth().password.profileImageURL)
+        	// console.log('gravatar',gravatar)
         	let users = new Users()
         	users.create({
         		id: authData.uid,
@@ -103,7 +105,12 @@ export function createUser(userObj) {
             })
 			BackboneFire.Events.trigger('updateComponent')
 			pollForNewData()
-            logUserIn(userObj)
+            var p = new Promise(function(res,rej) {
+            	logUserIn(userObj,res)
+            })
+            p.then(function(authData) {
+            	console.log(authData)
+            })
         }
     })
 }
@@ -173,7 +180,7 @@ export function createAttendanceForEvt(evtPlusUsrObj){
 	})
 }
 
-export function logUserIn(userObj){
+export function logUserIn(userObj,res){
 	fbRef.authWithPassword({
 		email:userObj.email,
 		password:userObj.passWord
@@ -183,6 +190,9 @@ export function logUserIn(userObj){
 			return
 		} else {
 			location.hash = 'dash'
+			if (res) {
+				res(authData)
+			}
 		}
 	})
 }

@@ -185,11 +185,6 @@ var CreateEvent = React.createClass({
 		var component = this
 		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
 
-		// BackboneFire.Events.on('pollForNewData',
-		// 	function(){
-		// 		console.log('poll heard, component updating...')
-		// 		component.state.userModel.fetchWithPromise().then(() => component.forceUpdate())
-		// 		})
 	},
 
 	eventObj:{
@@ -278,7 +273,7 @@ var MyEvents = React.createClass({
 				 return model.id
 			})
 
-			// console.log('noooo ghosts', noGhostList)
+			console.log('noooo ghosts', noGhostList)
 			comp.setState({
 				attendanceMods: noGhostList
 			})
