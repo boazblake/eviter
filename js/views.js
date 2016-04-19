@@ -3,7 +3,7 @@ import fbRef from './fbref'
 import BackboneFire from 'bbfire'
 import React, {Component} from 'react'
 import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount} from './actions'
-import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, FoodToBring, FoodsToBring} from './data'
+import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, AddFood, FoodsToBring} from './data'
 
 
 //Modules
@@ -376,7 +376,7 @@ var EventDeets = React.createClass({
 var Guests = React.createClass({
 
 	_handleAddGuest: function(eventInfo, evt){
-		evt.preventDefault()
+		// evt.preventDefault()
 		var userEmail = this.refs.userEmail.value
 		var eventID = this.props.eventID
 		this.refs.userEmail.value = ''
@@ -492,9 +492,19 @@ var Food = React.createClass({
 	_handleFoodItem: function(evt){
 		evt.preventDefault()
 		var component = this
-		var event_id = this.props.eventID
-		this.foodItem.event_id = event_id
-		createFoodItemForEvent(this.foodItem, event_id)
+		var foodListCollection = component.props.foodListColl
+		var event_id = component.props.eventID
+		component.foodItem.event_id = event_id
+		// createFoodItemForEvent(this.foodItem, event_id, foodListCollection)
+		var newFoodAdded = new BackboneFire.Model(component.foodItem)
+		// console.log('newFoodAdded.attributes', newFoodAdded.attributes)
+		// console.log('event_id', event_id)
+		// var submitFoodMod = new AddFood(event_id, newFoodAdded)
+		// console.log('submitFoodMod', submitFoodMod)
+		foodListCollection.create(newFoodAdded.attributes)
+		console.log('foodListCollection', foodListCollection)
+
+		
 	},
 
 
@@ -570,7 +580,7 @@ var FoodList = React.createClass({
 		return foodListArr.map(function(foodItem, i){
 			if (foodItem.id) {
 				return(
-					<div className='foodItemWrapper pure-u-1'>
+					<div className='foodItemWrapper pure-u-*'>
 						<div   className='foodItem' key={i} >
 							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
 								<i className="fa fa-times"></i>
@@ -603,7 +613,7 @@ var FoodList = React.createClass({
 	render:function(){
 
 		return(
-			<div>
+			<div className='foodListView'>
 					{this._showFoodItems()}
 			</div>
 		)

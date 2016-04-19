@@ -297,7 +297,7 @@ input{
         height:auto;
         max-height:150%;
         overflow:auto;
-        width: 50%;
+        width: 20%;
         display: inline-block;
 
         label{ 
@@ -319,8 +319,10 @@ input{
 
     }
 
+
+
     .bringThis {
-        width: 50%;
+        width: 80%;
         // color: aliceblue;
         display: inline-block;
         
@@ -341,6 +343,18 @@ input{
             cursor: hand;
         }
 
+
+        .foodListView{
+            overflow: scroll;
+            height: 50vh;
+            display: flex;
+            flex-direction:row;
+            flex-wrap:wrap;
+            justify-content: space-around;
+            align-items:baseline;
+            width: 100%;
+
+
         .foodItemWrapper {
             display: inline-block;
             position: relative;
@@ -351,7 +365,8 @@ input{
         }
 
         .foodItem {
-            display: flex;
+            display: inline-flex;
+            display: inline-block;
             flex-direction:row;
             align-items:center;
             justify-content:center;
@@ -360,11 +375,12 @@ input{
             align-content:flex-end;
             background: rgba(255,175,75,1);
 
-            background: radial-gradient(ellipse at center, rgba(255,175,75,1) 0%, rgba(255,146,10,0.84) 77%, rgba(255,146,10,0.79) 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a', GradientType=1 );
+            background: linear-gradient(to bottom, #ED4264 , #FFEDBC);
+            // background: radial-gradient(ellipse at center, rgba(255,175,75,1) 0%, rgba(255,146,10,0.84) 77%, rgba(255,146,10,0.79) 100%);
+            // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a', GradientType=1 );
 
             border-radius: 64px 64px 64px 64px;;
-            // width:80%;
+
             text-align: center;
 
             .foodBringerName{
@@ -374,7 +390,7 @@ input{
             }
         }
         p{  
-            font-size: 1.25em;
+            // font-size: 1.25em;
         }
         .foodItem:hover > .removeButton {
             opacity:1;
@@ -386,7 +402,7 @@ input{
 
         .lowerHalfFoodItem {
 
-            font-size: 1.5em;
+            // font-size: 1.5em;
         }
 
 
@@ -409,7 +425,10 @@ input{
                 display: inline-block;
             }
 
+        }    
         }
+
+        
 
     }
 

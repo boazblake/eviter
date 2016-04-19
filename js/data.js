@@ -101,11 +101,12 @@ FOODS
 **/
 
 
-var MyFoods = BackboneFire.Firebase.Model.extend({
-	autoSync: false,
+var AddFood = BackboneFire.Firebase.Model.extend({
+	// autoSync: false,
 	url:'',
-	initialize:function(foodBringerUID, eventID){
-		this.url=fbRef.child('events').child(eventID).child('foodBringerUID')
+	initialize:function(foodMod_evt_Id, foodMod){
+		console.log(foodMod)
+		this.url=fbRef.child('events').child(foodMod_evt_Id).child(foodMod)
 	}
 })
 
@@ -119,4 +120,4 @@ var FoodsToBring = BackboneFire.Firebase.Collection.extend({
 
  
 
-export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, MyFoods, FoodsToBring}
+export {User, Users, Event, Events, Attendance, Attendances, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, AddFood, FoodsToBring}

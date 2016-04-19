@@ -1,5 +1,5 @@
 import fbRef from './fbref'
-import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, MyFoods} from './data'
+import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, AddFood} from './data'
 import BackboneFire from 'bbfire'
 
 function pollForNewData(){
@@ -28,10 +28,15 @@ export function changeFoodAmount(foodItemMdl, evt){
 	pollForNewData()
 }
 
-export function createFoodItemForEvent(foodItem, eventID, donefunction) {
-	var foodBeingSubmitted = new FoodsToBring(eventID)
+export function createFoodItemForEvent(foodItem, eventID, foodListCollection) {
+	var newFoodAdded = new BackboneFire.Model(foodItem)
+	console.log('newFoodAdded', newFoodAdded)
+	// var foodBeingSubmitted = new AddFood(eventID)
+	// 	console.log('foodListCollection in actions', foodListCollection)
+	console.log('foodListCollection2', foodListCollection)
+		foodListCollection.create(newFoodAdded)
+	console.log('foodListCollection3', foodListCollection)
 
-		foodBeingSubmitted.create(foodItem)
 		foodBeingSubmitted.on('sync', function (){
 		pollForNewData()
 		})
