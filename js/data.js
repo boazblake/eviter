@@ -75,7 +75,7 @@ var Attendances = BackboneFire.Firebase.Collection.extend({
 })
 
 var QueriedAttendance = BackboneFire.Firebase.Collection.extend({
-		autoSync: false,
+	autoSync: false,
 	initialize: function(childKey,id) {
 		this.url = fbRef.child('attendance').orderByChild(childKey).equalTo(id)
 	}

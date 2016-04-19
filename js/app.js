@@ -46,6 +46,7 @@ import {createEvent, createUser, addGuestMaker, LogUserIn, handleEvent} from './
 
 $('.container').css('max-height',$(window).height());
 
+
 function checkAuth(){
 	if (!fbRef.getAuth()) {
 		location.hash = 'splash'
@@ -53,7 +54,9 @@ function checkAuth(){
 	}
 }
 
+
 function app() {
+
     // start app
     // new Router()
     var AppRouter = BackboneFire.Router.extend({
@@ -77,12 +80,13 @@ function app() {
 
     	doCreateEvent:function(){
     		checkAuth()
-    		DOM.render(<CreateEvent />, document.querySelector('.container'))
+
+    		DOM.render(<CreateEvent authUserData={_currentUserData}/>, document.querySelector('.container'))
     	},
 
     	showDashPage: function(){
     		checkAuth()
-    		DOM.render(<DashPage />, document.querySelector('.container'))
+    		DOM.render(<DashPage authUserData={_currentUserData}/>, document.querySelector('.container'))
     	},
 
     	showSplashPage: function(){
@@ -90,17 +94,20 @@ function app() {
     			location.hash = 'dash'
     			return
     		}
-    		DOM.render(<SplashPage />, document.querySelector('.container'))
+    		DOM.render(<SplashPage authUserData={_currentUserData}/>, document.querySelector('.container'))
     	},
 
 		viewEvent:function (id){
 			checkAuth()
 			console.assert(id !== undefined)
-    		DOM.render(<EventPage eventID={id} />, document.querySelector('.container'))
+    		DOM.render(<EventPage eventID={id} authUserData={_currentUserData}/>, document.querySelector('.container'))
 		}
 	})
 
 	var rtr = new AppRouter()
 	BackboneFire.history.start()
 }
+
 app()
+
+export var _currentUserData = _currentUserData

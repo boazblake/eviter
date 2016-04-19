@@ -2,17 +2,43 @@ import DOM from 'react-dom'
 import fbRef from './fbref'
 import BackboneFire from 'bbfire'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, AddFood, FoodsToBring} from './data'
 
 
 //Modules
 var Header = React.createClass({
+
+	_showWelcomeMessage:function(){
+		if (this.props.userModel) {
+			var userName = this.props.userModel.get('firstName') +' ' + this.props.userModel.get('lastName')
+
+			return (
+				<p className='userWelcome'>welcome {userName}</p>
+			)
+		} else {
+			return 'Sign in to organize all your events!'
+		}
+	},
+
+	_showUserProfile: function(){
+		if (fbRef.getAuth()) {
+			var gravatar = fbRef.getAuth().password.profileImageURL
+			return (
+				<img src={gravatar}/>
+				)
+		} else {
+			return ' '
+		}
+	},
+
 	render: function(){
+
 		return(
 			<div className='header'>
 				<a href='#dash'> <p className='heading'>EVITER</p> </a>
-				<p className='userWelcome'></p>
+				{this._showUserProfile()}
+				{this._showWelcomeMessage()}
 			</div>
 		)
 	}
@@ -32,7 +58,6 @@ var NavBar = React.createClass({
 		return(
 			<div className='pure-menu pure-menu-horizontal navBar'>
 				<a href='#dash' title='back to dashboard'>{this._showDashButton()}</a>
-				
 				<a href='#logout' title='logout'><i className='fa fa-sign-out pure-menu-heading pure-menu-link'><p>sign out</p></i></a>
 
 			</div>
@@ -114,14 +139,34 @@ var SplashPage = React.createClass({
 })
 
 var DashPage = React.createClass({
+	getInitialState:function() {
+		return {
+			userModel: new User(fbRef.getAuth().uid),
+		}
+	},
+
+	componentWillMount:function(){
+		var component = this
+		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
+
+		BackboneFire.Events.on('pollForNewData',
+			function(){
+				console.log('poll heard, component updating...')
+				component.state.userModel.fetchWithPromise().then(() => component.forceUpdate())
+				})
+
+
+	},
+
 	render:function(){
+
 		return(
 			<div className='dashPageView'>
-				<Header/>
+				<Header userModel={this.state.userModel}/>
 				<NavBar/>
 				<div className='invites'>
 					<a className='pure-button pure-button-primary' href="#createevent">Create New Event!</a>
-					<MyEvents />
+				<MyEvents />
 				</div>
 				<Footer/>
 			</div>
@@ -130,6 +175,22 @@ var DashPage = React.createClass({
 })
 
 var CreateEvent = React.createClass({
+	getInitialState:function() {
+		return {
+			userModel: new User(fbRef.getAuth().uid),
+		}
+	},
+
+	componentWillMount:function(){
+		var component = this
+		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
+
+		// BackboneFire.Events.on('pollForNewData',
+		// 	function(){
+		// 		console.log('poll heard, component updating...')
+		// 		component.state.userModel.fetchWithPromise().then(() => component.forceUpdate())
+		// 		})
+	},
 
 	eventObj:{
 		'title':'',
@@ -168,7 +229,7 @@ var CreateEvent = React.createClass({
 	render:function(){
 		return(
 			<div className='createEventView'>
-				<Header/>
+				<Header userModel={this.state.userModel}/>
 				<NavBar/>
 				<form className='pure-form' onSubmit={this._submitEvent}>
 					<div className='row createEvent'>
@@ -208,24 +269,37 @@ var MyEvents = React.createClass({
 
 	componentWillMount(){
 		var component = this
-		console.log('user uid',fbRef.getAuth().uid)
-		this.myAttendances = new QueriedAttendance('user_uid', fbRef.getAuth().uid )
-		this.myAttendances.fetch()
-		this.myAttendances.on('sync update', function() {
-			console.log('myAttendances', component.myAttendances)
 
-			var modsArr = component.myAttendances.models
+		function setAttendanceState(comp, fbAttCollection) {
+			console.log('myAttendances', fbAttCollection)
+
+			var modsArr = fbAttCollection.models
 			var noGhostList = modsArr.filter(function(model, i){
 				 return model.id
 			})
 
 			// console.log('noooo ghosts', noGhostList)
-			component.setState({
+			comp.setState({
 				attendanceMods: noGhostList
 			})
+		}
+
+		console.log('user uid',fbRef.getAuth().uid)
+		this.myAttendances = new QueriedAttendance('user_uid', fbRef.getAuth().uid )
+
+		if (typeof this.myAttendances.models[0].id === 'undefined'){
+			this.myAttendances.fetch()
+		} else {
+			setAttendanceState(this, this.myAttendances)
+		}
+
+		this.myAttendances.on('sync update', function(){ 
+			setAttendanceState(component, component.myAttendances) 
 		})
-		console.log('about to poll')
+
+		// console.log('about to poll')
 		BackboneFire.Events.on('pollForNewData', function(){
+			console.log("data getting poolled forr")
 			component.myAttendances.fetch()
 		})
 	},
@@ -330,7 +404,7 @@ var EventPage = React.createClass({
 
 		return(
 			<div className='eventView pure-u-1 pure-u-md-1-2 pure-u-lg-1-4'>
-				<Header/>
+				<Header userModel={this.state.userModel}/>
 				<NavBar/>
 				<br/>
 				<EventDeets eventDeets={this.state.event}/>
@@ -375,8 +449,8 @@ var EventDeets = React.createClass({
 //Guests
 var Guests = React.createClass({
 
-	_handleAddGuest: function(eventInfo, evt){
-		// evt.preventDefault()
+	_handleAddGuest: function(evt){
+		evt.preventDefault()
 		var userEmail = this.refs.userEmail.value
 		var eventID = this.props.eventID
 		this.refs.userEmail.value = ''
@@ -441,6 +515,7 @@ var GuestList = React.createClass({
 		var guestsArr = this.props.guests
 		return guestsArr.map(function(guest, i){
 			if(guest.id) {
+				console.log('guest',guest)
 				return (
 					<div key={i} className='guestItem '>
 						<p>{guest.get('userName')}</p>
@@ -492,19 +567,14 @@ var Food = React.createClass({
 	_handleFoodItem: function(evt){
 		evt.preventDefault()
 		var component = this
+
 		var foodListCollection = component.props.foodListColl
 		var event_id = component.props.eventID
 		component.foodItem.event_id = event_id
-		// createFoodItemForEvent(this.foodItem, event_id, foodListCollection)
+		
 		var newFoodAdded = new BackboneFire.Model(component.foodItem)
-		// console.log('newFoodAdded.attributes', newFoodAdded.attributes)
-		// console.log('event_id', event_id)
-		// var submitFoodMod = new AddFood(event_id, newFoodAdded)
-		// console.log('submitFoodMod', submitFoodMod)
 		foodListCollection.create(newFoodAdded.attributes)
 		console.log('foodListCollection', foodListCollection)
-
-		
 	},
 
 

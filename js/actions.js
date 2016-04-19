@@ -2,7 +2,9 @@ import fbRef from './fbref'
 import {User, Users, Event, Events, Attendances, Attendance, EventFinder, fbUrl, QueryByEmail, QueriedAttendance, FoodsToBring, AddFood} from './data'
 import BackboneFire from 'bbfire'
 
-function pollForNewData(){
+import {_currentUserData} from './app.js'
+
+export function pollForNewData(){
 	console.log('polling for new data')
 	setTimeout(function(){
 		BackboneFire.Events.trigger('pollForNewData')
@@ -28,20 +30,6 @@ export function changeFoodAmount(foodItemMdl, evt){
 	pollForNewData()
 }
 
-export function createFoodItemForEvent(foodItem, eventID, foodListCollection) {
-	var newFoodAdded = new BackboneFire.Model(foodItem)
-	console.log('newFoodAdded', newFoodAdded)
-	// var foodBeingSubmitted = new AddFood(eventID)
-	// 	console.log('foodListCollection in actions', foodListCollection)
-	console.log('foodListCollection2', foodListCollection)
-		foodListCollection.create(newFoodAdded)
-	console.log('foodListCollection3', foodListCollection)
-
-		foodBeingSubmitted.on('sync', function (){
-		pollForNewData()
-		})
-
-}
 
 export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
 	console.log('foodBringerMdl', foodBringerMdl)
@@ -86,7 +74,7 @@ export function createEvent(eventObj, hostModel) {
 
 
 		createAttendanceForEvt(attendanceObj)
-		BackboneFire.Events.trigger('updateComponent')
+		// BackboneFire.Events.trigger('updateComponent')
 		pollForNewData()
 	})
 
@@ -99,17 +87,19 @@ export function createUser(userObj) {
         password: userObj.passWord
     },
     function(err, authData) {
-
         if (err) {
         	console.log(err)
         	return
         } else {
+        	// console.log('fbRef',fbRef.getAuth())
+        	// var gravatar = authData.password.profileImageURL
         	let users = new Users()
         	users.create({
         		id: authData.uid,
                 firstName: userObj.firstName,
                 lastName: userObj.lastName,
                 email: userObj.email,
+                // gravatar:authData.password.profileImageURL
             })
 			BackboneFire.Events.trigger('updateComponent')
 			pollForNewData()
