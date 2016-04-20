@@ -4,6 +4,12 @@ import BackboneFire from 'bbfire'
 
 import {_currentUserData} from './app.js'
 
+export function numToMonth(month) {
+	var monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	return monthArray[month - 1]
+}
+
+
 export function pollForNewData(){
 	console.log('polling for new data')
 	setTimeout(function(){

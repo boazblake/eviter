@@ -148,7 +148,10 @@ input{
 
 
 .logo {
-    width: 80px;
+    width: 100px;
+    margin: 0, auto;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .fa {
@@ -156,11 +159,10 @@ input{
     cursor: hand;
 }
 
-// #app-container {
-//     width: 90%;
-//     margin:0 auto;
-//     min-height: 90vh;
-// }
+body .splashPageView{
+    background-image: url('https://static.pexels.com/photos/6506/alcohol-bar-drinks-party.jpg');
+    background-size: cover;
+}
 
 .removeButton {
     opacity: 0;
@@ -220,19 +222,15 @@ input{
 }
 
 
-.signUp {
+.signUp, .logIn{
     background-color: rgba(44, 62, 80,0.2);
     text-shadow: 1px 1px 1px #A1A1A1;
     color:rgba(41, 128, 185,1.0);
+    padding-left: 10px;
 
-}
-
-
-.logIn {
-    background-color: rgba(44, 62, 80,0.2);
-    text-shadow: 1px 1px 1px #A1A1A1;
-    color:rgba(41, 128, 185,1.0);
-
+    legend{
+        color: rgba(236, 240, 241,1.0);
+    }
 }
 
  
@@ -433,4 +431,9 @@ input{
     align-items:baseline;
     color: rgba(149, 165, 166,1.0);
     text-align: center;
+
+    .deets i{
+        font-size: 1.25em;       
+    }
+
  }

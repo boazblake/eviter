@@ -2,7 +2,7 @@ import DOM from 'react-dom'
 import fbRef from './fbref'
 import BackboneFire from 'bbfire'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData, numToMonth} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, AddFood, FoodsToBring} from './data'
 
 
@@ -36,7 +36,7 @@ var Header = React.createClass({
 	render: function(){
 
 		return(
-			<div className='header'>
+			<div className='row header'>
 				<a href='#dash'> <h1 className='heading'>EVITER</h1> </a>
 				<div>
 					{this._showUserProfile()}
@@ -88,9 +88,20 @@ var NavBar = React.createClass({
 var Footer = React.createClass({
 	render: function(){
 		return (
-			<div className='footer'>
+			<div className='row footer'>
 			<img className='logo' src='http://landing.theironyard.com/images/home/tiy-logo.png'/>
-			<p>Boaz Blake, 2016</p>
+					<h4 className='col'>&copy; Boaz Blake, {new Date().getFullYear()}</h4>
+					<div className='col'>
+						<div className='deets'>
+							<a href="mailto:boazblake@gmail.com"><i className="fa fa-envelope"></i></a>
+						</div>
+						<div className='deets'>
+							<a target="_blank"  href='https://github.com/boazblake?tab=repositories'><i className="fa fa-github-square"></i></a>
+						</div>
+						<div className='deets'>
+							<a target="_blank"  href='boazblake.github.io/portfolio'><i className="fa fa-book"></i></a>
+						</div>
+					</div>
 			</div>
 		)
 	}
@@ -108,7 +119,8 @@ var SplashPage = React.createClass({
 	},
 
 	_upDateEmail:function(evt){
-		this.userObj.email = evt.currentTarget.value
+		var usersEmail = evt.currentTarget.value
+		this.userObj.email = usersEmail.toLowerCase()
 	},
 
 	_upDatePass:function(evt){
@@ -137,24 +149,31 @@ var SplashPage = React.createClass({
 		return(
 			<div className='container splashPageView'>
 				<Header/>
-				<form className='panel panel-primary row form-group form-horizontal signUp' onSubmit={this._handleSubmit}>
+				<form className=' row form-group signUp' onSubmit={this._handleSubmit}>
 					<fieldset>
-						<legend className='panel-title' ><h3>SIGN UP HERE</h3></legend>
-						<input required='required' className="form-control col-xs-12 col-sm-6 col-md-4" type='text' id="focusedInput" placeholder='email@host.com' onChange={this._upDateEmail}/>
-						<input required='required' className="form-control" type='password' placeholder='password' onChange={this._upDatePass}/><br/>
-						<input required='required' className="form-control" type='text' placeholder='First name' onChange={this._firstName}/>
-						<input required='required' className="form-control" type='text' placeholder='Last Name' onChange={this._lastName}/><br/>
+						<legend className='panel-heading' ><h2>SIGN UP HERE</h2></legend>
+						<div className='form-group form-inline'>
+							<input required='required' className="form-control" type='text' id="focusedInput" placeholder='email@host.com' onChange={this._upDateEmail}/>
+							<input required='required' className="form-control" type='password' placeholder='password' onChange={this._upDatePass}/><br/>
+						</div>
+						<div className='form-group form-inline'>
+							<input required='required' className="form-control" type='text' placeholder='First name' onChange={this._firstName}/>
+							<input required='required' className="form-control" type='text' placeholder='Last Name' onChange={this._lastName}/><br/>
+						</div>
 						<button className='btn btn-primary' >SIGN UP!</button>
 					</fieldset>
 				</form>
 				<br/>
 				<br/>
-				<form className='panel panel-primary row form-group form-horizontal logIn' onSubmit={this._handleLogin}>
+
+				<form className=' row form-group logIn' onSubmit={this._handleLogin}>
 					<fieldset>
-						<legend className='panel-title'><h3>LOG IN HERE</h3></legend>
-						<input required='required' type='text' className="form-control" placeholder='email@host.com' onChange={this._upDateEmail}/>
-						<input required='required' className="form-control" type='passWord' placeholder='password' onChange={this._upDatePass}/>
-						<button className='btn btn-primary'>LOG IN</button>
+						<div className='form-group form-inline'>
+							<legend className='panel-heading'><h2>LOG IN HERE</h2></legend>
+							<input required='required' type='text' className="form-control" placeholder='email@host.com' onChange={this._upDateEmail}/>
+							<input required='required' className="form-control" type='passWord' placeholder='password' onChange={this._upDatePass}/>
+							<button className='btn btn-primary'>LOG IN</button>
+						</div>
 					</fieldset>
 				</form>
 				<Footer/>	
@@ -226,7 +245,24 @@ var CreateEvent = React.createClass({
 	},
 
 	_upDateEventDate:function(evt){
-		this.eventObj.date = evt.target.value
+		var fullDate = evt.target.value
+
+		var year = fullDate.substring(0,4)
+		var month = numToMonth(fullDate.substring(5,7))
+		var day = fullDate.substring(8,10)
+		var time = fullDate.substring(11)
+		var hour = time.substring(0,2)
+		var min = time.substring(3)
+		var amPM = 'PM'
+		var newHour = (((parseInt(hour) + 11) % 12) + 1 )
+		var newTime = newHour+':'+min
+
+		if (hour <= 12 ) {
+			amPM = 'AM'
+		}
+
+		var eventDate = day +' '+ month +' '+ year +' at ' + newTime + '' +amPM
+		this.eventObj.date = eventDate
 	},
 
 	_upDateEventLocation:function(evt){
@@ -260,11 +296,11 @@ var CreateEvent = React.createClass({
 						<legend className='col-lg-2 control-label'>Enter Event Details Below</legend>
 						<input type='text' className='form-control' required="required" placeholder='Event Title ...' onChange={this._upDateEventTitle}/>
 						
-						<input type='date' className='form-control' required="required" placeholder='Event Date ...' onChange={this._upDateEventDate}/>
+						<input type='datetime-local' className='form-control' required="required" placeholder='Event Date ...' onChange={this._upDateEventDate}/>
 
 						<input type='text' className='form-control' required="required" placeholder='Event Location...' onChange={this._upDateEventLocation}/>
 
-			            <button className="btn btn-default btn-lg btn-block">Submit! </button>
+			            <button className="btn btn-default btn-lg btn-block">Create My Event! </button>
 					</div>
 				</form>
 				<Footer/>
@@ -476,7 +512,11 @@ var Guests = React.createClass({
 
 	_handleAddGuest: function(evt){
 		evt.preventDefault()
-		var userEmail = this.refs.userEmail.value
+
+		var usersEmail = this.refs.userEmail.value
+		var userEmail = usersEmail.toLowerCase()
+		console.log('userEmail', userEmail)
+
 		var eventID = this.props.eventID
 		this.refs.userEmail.value = ''
 
@@ -615,7 +655,7 @@ var Food = React.createClass({
 					<form className='form-horizontal'>
 						<input type='text' id='foodName' required="required" className='form-control' placeholder='Bring This!' onChange={this._upDateFoodName}/>
 						<input type='number' id='itemQ'required="required" className='form-control' placeholder='quantity' onChange={this._upDateItemQuantity}/>
-						<i onClick={this._handleFoodItem} className="btn btn-primary btn-xs fa fa-plus-square fa-lg"></i>
+						<h3 onClick={this._handleFoodItem} className="btn btn-primary btn-xs">PRESS TO ADD ITEMS</h3>
 					</form>
 				</div>
 
