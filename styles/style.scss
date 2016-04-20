@@ -151,6 +151,11 @@ input{
     width: 80px;
 }
 
+.fa {
+    cursor: pointer;
+    cursor: hand;
+}
+
 // #app-container {
 //     width: 90%;
 //     margin:0 auto;
@@ -159,8 +164,6 @@ input{
 
 .removeButton {
     opacity: 0;
-    // color: rgba(192, 57, 43,1.0);
-    // border-radius: 50px;
     z-index: 2;
     position: absolute;
     top: -10px;
@@ -203,14 +206,12 @@ input{
 
     p{
         position: absolute;
-        // top:-10px;
         display: none;
         color:black;
     }
 
     a:hover > p {
         display: block;
-
     }
 }
 
@@ -261,175 +262,152 @@ input{
 }
 
 
+.eventDeets{
+    background-color: rgba(44, 62, 80,0.8);
+    align-content:center;
+    display: flex;
+    color: aliceblue;
+    width: 90%;
+    margin: 0 auto;
+    justify-content:space-between;
 
-.eventView {
-    // height: 100vh;
-    // width: 90%;
-    // margin:0 auto;
-
-    .eventDeets{
-        background-color: rgba(44, 62, 80,0.8);
-        align-content:center;
-        display: flex;
-        color: aliceblue;
-        width: 90%;
+    p {
+        text-align: center;
+        vertical-align: bottom;
         margin: 0 auto;
-        justify-content:space-between;
-
-        p {
-            text-align: center;
-            vertical-align: bottom;
-            margin: 0 auto;
-            min-width: 33%;
-            display: inline-block;
-            vertical-align: bottom;
-           }
+        min-width: 33%;
+        display: inline-block;
+        vertical-align: bottom;
+       }
 
 
-        span{
-            text-shadow: 0 0 9px rgba(255,255,255,1) ;
-            font-weight:bolder;
+    span{
+        text-shadow: 0 0 9px rgba(255,255,255,1) ;
+        font-weight:bolder;
+    }
+}
+    
+.guests{
+    display: inline-block;
+
+    label{ 
+    font-weight: bolder;
+    text-shadow: 0 0 9px rgba(255,255,255,1) ;
+    }
+
+    .inviteWrapper {
+    text-align: center;
+    }
+
+    .guestList{
+       display: flex;
+       flex-direction:row;
+       flex-wrap:wrap;
+       justify-content: space-around;
+       align-items:baseline; 
+    }
+
+
+
+
+    .guestItem   {
+        background: tomato;
+        padding: 20px;
+        margin: 5px 5px;
+        display:inline-block;
+        color: aliceblue;
+        background: rgba(22,97,120,1);
+        display: inline-flex;
+        display: inline-block;
+        flex-direction:row;
+        align-items:center;
+        justify-content:center;
+        flex-wrap:wrap;
+        flex-flow:row wrap;
+        align-content:flex-end;
+    }
+
+}
+
+.bringThis {
+    z-index: 1;
+    display: inline-block;
+    
+    .foodAddWrapper {
+        text-align: center;
+
+        label {
+        font-weight: bolder;
+        text-align: center;
+        text-shadow: 0 0 9px rgba(255,255,255,1) ;
         }
     }
     
-    .guests{
-        height:auto;
-        max-height:150%;
-        overflow:auto;
-        width: 20%;
+    .foodListView{
+        display: flex;
+        flex-direction:row;
+        flex-wrap:wrap;
+        justify-content: space-around;
+        align-items:baseline;
+
+
+    .foodItemWrapper {
         display: inline-block;
-
-        label{ 
-            font-weight: bolder;
-            text-shadow: 0 0 9px rgba(255,255,255,1) ;
-        }
-
-        .inviteWrapper {
-            text-align: center;
-        }
-
-        .guestItem   {
-            color: aliceblue;
-            background: rgba(22,97,120,1);
-
-            background: linear-gradient(to right, rgba(22,97,120,1) 0%, rgba(45,143,173,1) 0%, rgba(188,224,238,0.2) 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#166178', endColorstr='#bce0ee', GradientType=1 );
-        }
-
+        position: relative;
+        margin: 5px 0;
+        background-color: rgba(52, 73, 94,1.0);
     }
 
-
-
-    .bringThis {
-        width: 80%;
-        // color: aliceblue;
+    .foodItem {
+        display: inline-flex;
         display: inline-block;
-        
-        .foodAddWrapper {
-            text-align: center;
+        flex-direction:row;
+        align-items:center;
+        justify-content:center;
+        flex-wrap:wrap;
+        flex-flow:row wrap;
+        align-content:flex-end;
+        color: aliceblue;
 
-            label {
-            font-weight: bolder;
-            text-align: center;
-            text-shadow: 0 0 9px rgba(255,255,255,1) ;
+        text-align: center;
 
-
-            }
-        }
-        
-        .fa {
+        .foodBringerName{
+            margin: 0 auto;
             cursor: pointer;
             cursor: hand;
         }
-
-
-        .foodListView{
-            overflow: scroll;
-            height: 50vh;
-            display: flex;
-            flex-direction:row;
-            flex-wrap:wrap;
-            justify-content: space-around;
-            align-items:baseline;
-            width: 100%;
-
-
-        .foodItemWrapper {
-            display: inline-block;
-            position: relative;
-        }
-
-        .foodItemWrapper *{
-            // border: 1px solid black;
-        }
-
-        .foodItem {
-            display: inline-flex;
-            display: inline-block;
-            flex-direction:row;
-            align-items:center;
-            justify-content:center;
-            flex-wrap:wrap;
-            flex-flow:row wrap;
-            align-content:flex-end;
-            background: rgba(255,175,75,1);
-
-            background: linear-gradient(to bottom, #ED4264 , #FFEDBC);
-            // background: radial-gradient(ellipse at center, rgba(255,175,75,1) 0%, rgba(255,146,10,0.84) 77%, rgba(255,146,10,0.79) 100%);
-            // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a', GradientType=1 );
-
-            border-radius: 64px 64px 64px 64px;;
-
-            text-align: center;
-
-            .foodBringerName{
-                margin: 0 auto;
-                cursor: pointer;
-                cursor: hand;
-            }
-        }
-        p{  
-            // font-size: 1.25em;
-        }
-        .foodItem:hover > .removeButton {
-            opacity:1;
-        }
-
-        .lowerHalfFoodItem *{
-            display: inline-block;
-        }
-
-        .lowerHalfFoodItem {
-
-            // font-size: 1.5em;
-        }
-
-
-
-        .foodQuantityWrapper {
-            display: inline-block;
-            flex-direction:row;
-            justify-content:center;
-            align-items:baseline;
-            vertical-align: middle;
-        }
-        .foodQuantityWrapper* {
-            display:block;
-            width: 50%;
-
-
-            p {
-                width: 50%;
-                margin: 0 auto;
-                display: inline-block;
-            }
-
-        }    
-        }
-
-        
-
     }
+  
+    .foodItem:hover > .removeButton {
+        opacity:1;
+    }
+
+    .lowerHalfFoodItem *{
+        display: inline-block;
+    }
+
+
+    .foodQuantityWrapper {
+        display: inline-block;
+        flex-direction:row;
+        justify-content:center;
+        align-items:baseline;
+        vertical-align: middle;
+    }
+
+    // .foodQuantityWrapper* {
+    //     display:block;
+    //     width: 50%;
+
+
+    //     p {
+    //         width: 50%;
+    //         margin: 0 auto;
+    //         display: inline-block;
+    //     }
+
+    // }    
+}
 
 }
  .footer{

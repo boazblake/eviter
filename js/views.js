@@ -493,7 +493,7 @@ var Guests = React.createClass({
 						<br/>
 						<input type='text' placeholder='email@host.com' 
 						onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
-						<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton button-secondary pure-button'>
+						<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton btn btn-primary btn-sm'>
 							<i className="fa fa-user-plus" aria-hidden="true"></i>
 						</button>
 					</div>
@@ -520,7 +520,7 @@ var GuestList = React.createClass({
 			if(guest.id) {
 				console.log('guest',guest)
 				return (
-					<div key={i} className='guestItem ' style={{background: "tomato", padding: '20px', margin: '5px 0'}}>
+					<div key={i} className='guestItem '>
 						<img src={guest.get('gravatarUrl')}/>
 						<h3>{guest.get('userName')}</h3>
 						<h5>{guest.get('email')}</h5>
@@ -585,14 +585,14 @@ var Food = React.createClass({
 	render: function(){
 
 		return(
-			<div className='col-xs-12 col-sm-4 bringThis '>
+			<div className='col-xs-12 col-sm-4 bringThis'>
 		
 				<div className='foodAddWrapper'>
 					<label>Add Item</label>
 					<form className=''>
 						<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
 						<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
-						<i onClick={this._handleFoodItem} className="fa fa-plus-square-o pure-button pure-button-primary"></i>
+						<i onClick={this._handleFoodItem} className="btn btn-primary btn-xs fa fa-shopping-cart"></i>
 					</form>
 				</div>
 
@@ -656,7 +656,7 @@ var FoodList = React.createClass({
 				return(
 					<div className='foodItemWrapper '>
 						<div   className='foodItem' key={i} >
-							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='removeButton button-error'>
+							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='btn btn-danger btn-xs removeButton'>
 								<i className="fa fa-times"></i>
 							</button>
 
