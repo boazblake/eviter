@@ -71,6 +71,7 @@ export function createEvent(eventObj, hostModel) {
 			userName:hostModel.get('firstName') + ' ' + hostModel.get('lastName'),
 			email: hostModel.get('email'),
 			hostName:eventModel.get('hostName'),
+			hostGravatarURL:data.gravatarURL,
 			gravatarURL:data.gravatarURL
 		}
 		
@@ -140,7 +141,7 @@ export function addGuestToEvent(recipientEmail, evtModel){
 			var recipientUserModel = user.models[0]
 			console.log('queried email result:  : ', recipientUserModel)
 
-			var attDataObj = {
+			var evtPlusUsrObj = {
 				event_id: evtModel.id,
 				sender_id: evtModel.get('host_id'),
 				date: evtModel.get('date'),
@@ -149,16 +150,17 @@ export function addGuestToEvent(recipientEmail, evtModel){
 				userName:recipientUserModel.get('firstName') + ' ' + recipientUserModel.get('lastName'),
 				email: recipientUserModel.get('email'),
 				hostName:evtModel.get('hostName'),
+				hostGravatarURL:evtModel.get('gravatarURL'),
 				gravatarURL:recipientUserModel.get('gravatarURL')
 			}
 
-			createAttendanceForEvt(attDataObj)
+			createAttendanceForEvt(evtPlusUsrObj)
 		} else{
 			alert('no match for ', recipientEmail)
 		}
 
-			console.log('attDataObj ', attDataObj)
-		
+			console.log('evtPlusUsrObj ', evtPlusUsrObj)
+
 		pollForNewData()
 
 	})	
@@ -187,7 +189,7 @@ export function createAttendanceForEvt(evtPlusUsrObj){
 	if (!evtPlusUsrObj.email)  {alert("obj missing email"); return}
 	if (!evtPlusUsrObj.hostName)  {alert("obj missing hostName"); return}
 	if (!evtPlusUsrObj.gravatarURL)  {alert("obj missing gravatarURL"); return}
-
+	if (!evtPlusUsrObj.hostGravatarURL)  {alert("obj missing hostGravatarURL"); return}
 
 	var attendList = new Attendances()
 	attendList.once('sync', function(){

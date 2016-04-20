@@ -202,7 +202,7 @@ var CreateEvent = React.createClass({
 		'date':'',
 		'location':'',
 		'hostName':'',
-		'gravatarURL':''
+		gravatarURL:'',
 	},
 
 	_upDateEventTitle:function(evt){
@@ -230,6 +230,7 @@ var CreateEvent = React.createClass({
 		hostModel.once('sync', function(){
 			createEvent(component.eventObj, hostModel)
 		})
+
 	},
 
 	
@@ -337,7 +338,7 @@ var EventItem = React.createClass({
 
 	removeAttendance: function(evt) {
 		this.props.attendanceMod.destroy()
-		// console.log('this.props.attendanceMod', this.props.attendanceMod)
+		console.log('this.props.attendanceMod', this.props.attendanceMod)
 	},
 
 	render:function(){
@@ -367,7 +368,7 @@ var EventItem = React.createClass({
 								Host:
 							</span>
 							{attendanceMod.get('hostName')}
-							<img src={attendanceMod.get('gravatarURL')}/>
+							<img src={attendanceMod.get('hostGravatarURL')}/>
 						</p>
 					</div>
 				</div>
@@ -572,11 +573,11 @@ var Food = React.createClass({
 	},
 
 	_upDateFoodName:function(evt){
-		this.foodItem.food_name = evt.target.value
+			this.foodItem.food_name = evt.target.value
 	},
 
 	_upDateItemQuantity:function(evt){
-		this.foodItem.food_quantity = evt.target.value
+			this.foodItem.food_quantity = evt.target.value
 	},
 
 	_handleFoodItem: function(evt){
@@ -590,6 +591,7 @@ var Food = React.createClass({
 		var newFoodAdded = new BackboneFire.Model(component.foodItem)
 		foodListCollection.create(newFoodAdded.attributes)
 		console.log('foodListCollection', foodListCollection)
+
 	},
 
 
