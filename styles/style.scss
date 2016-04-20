@@ -293,6 +293,9 @@ body .splashPageView{
 .guests{
     display: inline-block;
 
+    .addGuests {
+        text-align: center;
+    }
 
     label{ 
     font-weight: bolder;
@@ -337,6 +340,8 @@ body .splashPageView{
 .bringThis {
     z-index: 1;
     display: inline-block;
+    background:hsla(210, 29%, 24%, 0.19);
+
     
     .foodAddWrapper {
         text-align: center;

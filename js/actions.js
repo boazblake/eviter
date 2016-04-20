@@ -42,6 +42,8 @@ export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
 	console.log('foodItmModel', foodItmModel)
 	console.log('eventID', eventID)
 
+	
+
 	foodItmModel.set({
 		bringer_grav:foodBringerMdl.get('gravatarURL'),
 		bringer_uid: foodBringerMdl.id,

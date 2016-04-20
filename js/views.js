@@ -50,8 +50,8 @@ var Header = React.createClass({
 var NavBar = React.createClass({
 	_showDashButton:function(){
 		if (location.hash !=='#dash') {
-			return (
-					<i className='btn btn-lg btn-primary fa fa-reply fa-fw'></i>
+			return ( 
+				<i className='btn btn-lg btn-primary fa fa-reply fa-fw'></i>
 			)
 		} else {
 			return ''
@@ -66,11 +66,18 @@ var NavBar = React.createClass({
 				</h2>
 			)
 
+		} else if (location.hash ==='#dash') {
+			return (
+				<h2>
+					DASHBOARD
+				</h2>
+			)
 		} else return (
 			<h2>
-				DASHBOARD
+				Create New Event
 			</h2>
 		)
+		
 	},
 
 
@@ -153,7 +160,7 @@ var SplashPage = React.createClass({
 					<fieldset>
 						<legend className='panel-heading' ><h2>SIGN UP HERE</h2></legend>
 						<div className='form-group form-inline'>
-							<input required='required' className="form-control" type='text' id="focusedInput" placeholder='email@host.com' onChange={this._upDateEmail}/>
+							<input required='required' className="form-control" type='text' id="focusedInput" placeholder='Enter email here' onChange={this._upDateEmail}/>
 							<input required='required' className="form-control" type='password' placeholder='password' onChange={this._upDatePass}/><br/>
 						</div>
 						<div className='form-group form-inline'>
@@ -170,7 +177,7 @@ var SplashPage = React.createClass({
 					<fieldset>
 						<div className='form-group form-inline'>
 							<legend className='panel-heading'><h2>LOG IN HERE</h2></legend>
-							<input required='required' type='text' className="form-control" placeholder='email@host.com' onChange={this._upDateEmail}/>
+							<input required='required' type='text' className="form-control" placeholder='Enter email here' onChange={this._upDateEmail}/>
 							<input required='required' className="form-control" type='passWord' placeholder='password' onChange={this._upDatePass}/>
 							<button className='btn btn-primary'>LOG IN</button>
 						</div>
@@ -550,10 +557,10 @@ var Guests = React.createClass({
 		return(
 			<div className='col-xs-12 col-sm-8 guests'>
 
-				<form className='form-horizontal' data-id='newUserEmail'>
+				<form className='form-inline col' data-id='newUserEmail'>
 					<div className='form-group inviteWrapper'>
-						<label className='control-label'>Invite Guests Here</label>
-						<input className='form-control' id="inputEmail" type='text' placeholder='email@host.com' 
+						<label className='control-label'>Invite Guests Here</label><br/>
+						<input className='form-control' id="inputEmail" type='text' placeholder='Enter email here' 
 						onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
 						<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton btn btn-primary btn-sm'>
 							<i className="fa fa-user-plus" aria-hidden="true"></i>
@@ -651,7 +658,7 @@ var Food = React.createClass({
 			<div className='col-xs-12 col-sm-4 bringThis'>
 		
 				<div className='form-group foodAddWrapper'>
-					<label>Add Item</label>
+					<label>Add Items Here</label>
 					<form className='form-horizontal'>
 						<input type='text' id='foodName' required="required" className='form-control' placeholder='Bring This!' onChange={this._upDateFoodName}/>
 						<input type='number' id='itemQ'required="required" className='form-control' placeholder='quantity' onChange={this._upDateItemQuantity}/>
@@ -682,7 +689,9 @@ var FoodList = React.createClass({
 		var foodBringerName
 		var event_id = this.props.eventID
 		var userModel = this.props.userModel
-				if (foodItem.get('bringer_name') === 'Click to Select') {
+
+
+		if (foodItem.get('bringer_name') === 'Click to Select') {
 			selectMyFoods(foodItem, userModel, event_id )
 		}
 		// this.state.selected = true
