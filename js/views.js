@@ -14,7 +14,7 @@ var Header = React.createClass({
 			var userName = this.props.userModel.get('firstName') +' ' + this.props.userModel.get('lastName')
 
 			return (
-				<p className='userWelcome'>welcome {userName}</p>
+				<h3 className='userWelcome'>welcome {userName}</h3>
 			)
 		} else {
 			return 'Sign in to organize all your events!'
@@ -37,9 +37,11 @@ var Header = React.createClass({
 
 		return(
 			<div className='header'>
-				<a href='#dash'> <p className='heading'>EVITER</p> </a>
-				{this._showUserProfile()}
-				{this._showWelcomeMessage()}
+				<a href='#dash'> <h1 className='heading'>EVITER</h1> </a>
+				<div>
+					{this._showUserProfile()}
+					{this._showWelcomeMessage()}
+				</div>
 			</div>
 		)
 	}
@@ -48,7 +50,9 @@ var Header = React.createClass({
 var NavBar = React.createClass({
 	_showDashButton:function(){
 		if (location.hash !=='#dash') {
-			return (<i className='fa fa-reply pure-menu-heading pure-menu-link'><p>back to dashboard</p></i>)
+			return (
+					<i className='btn btn-primary fa fa-reply fa-fw'></i>
+			)
 		} else {
 			return ''
 		}
@@ -57,10 +61,9 @@ var NavBar = React.createClass({
 
 	render: function(){
 		return(
-			<div className='pure-menu pure-menu-horizontal navBar'>
+			<div className='navBar'>
 				<a href='#dash' title='back to dashboard'>{this._showDashButton()}</a>
-				<a href='#logout' title='logout'><i className='fa fa-sign-out pure-menu-heading pure-menu-link'><p>sign out</p></i></a>
-
+				<a href='#logout' title='logout'><i className='btn btn-primary-lg fa fa-sign-out fa-fw'></i></a>
 			</div>
 		)
 	}
@@ -116,21 +119,27 @@ var SplashPage = React.createClass({
 
 	render:function(){
 		return(
-			<div className='splashPageView'>
+			<div className='container splashPageView'>
 				<Header/>
-				<form className='signUp pure-form pure-form-aligned' onSubmit={this._handleSubmit}>
-					<h3>SIGN UP HERE</h3>
-					<input required='required' type='text' placeholder='email@host.com' onChange={this._upDateEmail}/>
-					<input required='required' type='passWord' placeholder='password' onChange={this._upDatePass}/><br/>
-					<input required='required' type='text' placeholder='First name' onChange={this._firstName}/>
-					<input required='required' type='text' placeholder='Last Name' onChange={this._lastName}/><br/>
-					<button className='pure-button pure-button-primary' >SIGN UP!</button>
-				</form><br/><br/>
-				<form className='logIn pure-form pure-form-aligned' onSubmit={this._handleLogin}>
-					<h3>LOG IN HERE</h3>
-					<input required='required' type='text' placeholder='email@host.com' onChange={this._upDateEmail}/>
-					<input required='required' type='passWord' placeholder='password' onChange={this._upDatePass}/>
-					<button className='pure-button pure-button-primary'>LOG IN</button>
+				<form className='panel panel-primary row form-group form-horizontal signUp' onSubmit={this._handleSubmit}>
+					<fieldset>
+						<legend className='panel-title' ><h3>SIGN UP HERE</h3></legend>
+						<input required='required' className="form-control col-xs-12 col-sm-6 col-md-4" type='text' id="focusedInput" placeholder='email@host.com' onChange={this._upDateEmail}/>
+						<input required='required' className="form-control" type='password' placeholder='password' onChange={this._upDatePass}/><br/>
+						<input required='required' className="form-control" type='text' placeholder='First name' onChange={this._firstName}/>
+						<input required='required' className="form-control" type='text' placeholder='Last Name' onChange={this._lastName}/><br/>
+						<button className='btn btn-primary' >SIGN UP!</button>
+					</fieldset>
+				</form>
+				<br/>
+				<br/>
+				<form className='panel panel-primary row form-group form-horizontal logIn' onSubmit={this._handleLogin}>
+					<fieldset>
+						<legend className='panel-title'><h3>LOG IN HERE</h3></legend>
+						<input required='required' type='text' className="form-control" placeholder='email@host.com' onChange={this._upDateEmail}/>
+						<input required='required' className="form-control" type='passWord' placeholder='password' onChange={this._upDatePass}/>
+						<button className='btn btn-primary'>LOG IN</button>
+					</fieldset>
 				</form>
 				<Footer/>	
 			</div>
@@ -166,7 +175,7 @@ var DashPage = React.createClass({
 				<Header userModel={this.state.userModel}/>
 				<NavBar/>
 				<div className='container  invites'>
-					<a className='pure-button pure-button-primary' href="#createevent">Create New Event!</a>
+					<a className='btn btn-primary' href="#createevent">Create New Event!</a>
 					<MyEvents />
 				</div>
 				<Footer/>
@@ -224,21 +233,20 @@ var CreateEvent = React.createClass({
 	
 	render:function(){
 		return(
-			<div className='createEventView'>
+			<div className='container createEventView'>
 				<Header userModel={this.state.userModel}/>
 				<NavBar/>
-				<form className='pure-form' onSubmit={this._submitEvent}>
-					<div className='row createEvent'>
+				<form className='row' onSubmit={this._submitEvent}>
+					<div className=' jumbotron createEvent'>
+						<legend className='col-lg-2 control-label'>Enter Event Details Below</legend>
+						<input type='text' className='form-control' required="required" placeholder='Event Title ...' onChange={this._upDateEventTitle}/>
+						
+						<input type='date' className='form-control' required="required" placeholder='Event Date ...' onChange={this._upDateEventDate}/>
 
-							<input type='text' required="required" placeholder='Event Title...' onChange={this._upDateEventTitle}/>
-							
-							<input type='date' required="required" placeholder='Event Date...' onChange={this._upDateEventDate}/>
+						<input type='text' className='form-control' required="required" placeholder='Event Location...' onChange={this._upDateEventLocation}/>
 
-							<input type='text' required="required" placeholder='Event Location...' onChange={this._upDateEventLocation}/>
-
+			            <button className="btn btn-default btn-lg btn-block">Submit! </button>
 					</div>
-					<br/>
-		            <button className='pure-button pure-button-primary'>Submit!</button>
 				</form>
 				<Footer/>
 			</div>
@@ -335,7 +343,7 @@ var EventItem = React.createClass({
 		// console.log('attendanceMod>>>>',attendanceMod)
 		return(
 			<div className='col-xs-12 col-sm-6 col-md-4'>
-				<div className='attendance'>
+				<div className='attendance btn-default'>
 					<button data-id={attendanceMod.id} onClick={this.removeAttendance} className='btn btn-danger btn-xs removeButton'>
 						<i className="fa fa-times"></i>
 					</button>
@@ -520,7 +528,7 @@ var GuestList = React.createClass({
 			if(guest.id) {
 				console.log('guest',guest)
 				return (
-					<div key={i} className='guestItem '>
+					<div key={i} className='guestItem btn-default' data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
 						<img src={guest.get('gravatarUrl')}/>
 						<h3>{guest.get('userName')}</h3>
 						<h5>{guest.get('email')}</h5>
@@ -549,7 +557,7 @@ var Food = React.createClass({
 		food_name:'',
 		food_quantity:'',
 		bringer_uid:'0000',
-		bringer_name:'unassigned',
+		bringer_name:'Click to Select',
 		event_id:''
 	},
 
@@ -619,7 +627,7 @@ var FoodList = React.createClass({
 		var foodBringerName
 		var event_id = this.props.eventID
 		var userModel = this.props.userModel
-				if (foodItem.get('bringer_name') === 'unassigned') {
+				if (foodItem.get('bringer_name') === 'Click to Select') {
 			selectMyFoods(foodItem, userModel, event_id )
 		}
 		this.state.selected = true
@@ -669,8 +677,11 @@ var FoodList = React.createClass({
 
 							<div style={divStyle} data-fooditem_id={foodItem.id} className='foodItemWrapper '>
 
-								<span onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName'>
-									{foodItem.get('bringer_name')} is Bringing
+								<span onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName '>
+								<button type="button" className="btn btn-default" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
+									{foodItem.get('bringer_name')}
+								</button>
+									 is Bringing
 								</span>
 
 
@@ -708,13 +719,6 @@ var FoodList = React.createClass({
 		)
 	}
 })
-
-
-
-
-
-
-
 
 
 export {DashPage,SplashPage,CreateEvent,EventPage}

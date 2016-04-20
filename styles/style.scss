@@ -136,10 +136,10 @@ html {
         rgba(255, 0, 0, 0.45), 
         rgba(255, 0, 0, 0.45)
     );
-    background: url('./img/3.jpg');
+    // background: url('./img/3.jpg');
     
-    background-size: cover;
-    background-repeat: no-repeat;
+    // background-size: cover;
+    // background-repeat: no-repeat;
 }
 
 input{
@@ -172,11 +172,15 @@ input{
  }
 
  .header{
-    background-color: rgba(44, 62, 80,0.4);
+    background-color: rgba(44, 62, 80,1.0);
     text-shadow: 1px 1px 1px #A1A1A1;
     text-align: center;
     color:rgba(189, 195, 199,1.0);
     text-decoration:none;
+
+    img{
+
+    }
         
     .heading{
         font-size: 80px;
@@ -238,7 +242,8 @@ input{
     border-radius: 10px;
     box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
     margin:5px 0;
-    background-color: rgba(243, 156, 18,0.8);
+    // background-color: rgba(243, 156, 18,0.8);
+    background: rgba(22,97,120,1);
     padding:10px;
     z-index: 1;
 
@@ -311,7 +316,6 @@ input{
 
 
     .guestItem   {
-        background: tomato;
         padding: 20px;
         margin: 5px 5px;
         display:inline-block;
