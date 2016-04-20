@@ -608,9 +608,9 @@ var Food = React.createClass({
 
 var FoodList = React.createClass({
 
-	// getInitialState: function () {
-	//     return {selected: false};
-	// },
+	getInitialState: function () {
+	    return {selected: false};
+	},
 	
 
 	_handleFoodBringer:function(foodItem, evt){
@@ -619,7 +619,12 @@ var FoodList = React.createClass({
 		var foodBringerName
 		var event_id = this.props.eventID
 		var userModel = this.props.userModel
-		selectMyFoods(foodItem, userModel, event_id )
+				if (foodItem.get('bringer_name') === 'unassigned') {
+			selectMyFoods(foodItem, userModel, event_id )
+		}
+		this.state.selected = true
+
+		
 	},
 
 	_removeFood: function(foodItem, evt){
@@ -635,19 +640,20 @@ var FoodList = React.createClass({
 	},
 
 
-	_showFoodItems:function(){
-		// var divStyle = {}
 
-		// if (!this.state.selected){
-		// 	divStyle = {
-		// 		color:'rgba(255,175,75,1)'
-		// 	}
-		// } else if (this.state.selected) {
-		// 	divStyle = {
-		// 		color:'rgba(22, 160, 133,1)'
-		// 	}
-		// }
-		// style={divStyle}
+	_showFoodItems:function(){
+		var divStyle = {}
+
+		if (!this.state.selected){
+			divStyle = {
+				color:'rgba(255,175,75,1)'
+			}
+		} else if (this.state.selected) {
+			divStyle = {
+				color:'rgba(22, 160, 133,1)'
+			}
+		}
+		
 
 		var component = this
 		var foodListArr = this.props.foodListColl
@@ -655,26 +661,32 @@ var FoodList = React.createClass({
 			if (foodItem.id) {
 				return(
 					<div className='foodItemWrapper '>
-						<div   className='foodItem' key={i} >
+						<div className='foodItem' key={i} >
 							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='btn btn-danger btn-xs removeButton'>
 								<i className="fa fa-times"></i>
 							</button>
 
 
-							<div data-fooditem_id={foodItem.id} className='foodItemWrapper '>
-								<span onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName'>{foodItem.get('bringer_name')}  is Bringing</span>
+							<div style={divStyle} data-fooditem_id={foodItem.id} className='foodItemWrapper '>
+
+								<span onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName'>
+									{foodItem.get('bringer_name')} is Bringing
+								</span>
+
 
 								<div className='lowerHalfFoodItem' >
 									<div className='foodQuantityWrapper'>
 										<i data-foodquant_id='minus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
-										<span className='foodItemName'>{foodItem.get('food_quantity')}</span>
+										<span className='foodItemName'>
+											{foodItem.get('food_quantity')}
+										</span>
 										
 										<i data-foodquant_id='plus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
 
-										<span className='foodName'>{foodItem.get('food_name')}
+										<span className='foodName'>
+											{foodItem.get('food_name')}
 										</span>
 									</div>
-
 								</div>
 
 							</div>
@@ -696,6 +708,13 @@ var FoodList = React.createClass({
 		)
 	}
 })
+
+
+
+
+
+
+
 
 
 export {DashPage,SplashPage,CreateEvent,EventPage}
