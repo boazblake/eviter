@@ -35,12 +35,17 @@ export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
 	console.log('foodBringerMdl', foodBringerMdl)
 	console.log('foodItmModel', foodItmModel)
 	console.log('eventID', eventID)
+	var grav = ''
+	if (foodBringerMdl.get('gravatarUrl')){
+		grav = foodBringerMdl.get('gravatarUrl')
+	}
 
- 
 	foodItmModel.set({
+		bringer_grav:{grav},
 		bringer_uid: foodBringerMdl.id,
 		bringer_name:foodBringerMdl.get('firstName') + ' ' + foodBringerMdl.get('lastName')
 	})
+
 	pollForNewData()
 }
 

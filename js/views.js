@@ -662,7 +662,7 @@ var FoodList = React.createClass({
 			}
 		}
 		
-
+		var grav = ''
 		var component = this
 		var foodListArr = this.props.foodListColl
 		return foodListArr.map(function(foodItem, i){
@@ -676,7 +676,7 @@ var FoodList = React.createClass({
 
 
 							<div style={divStyle} data-fooditem_id={foodItem.id} className='foodItemWrapper '>
-
+								<img src={foodItem.get('bringer_grav').grav}/>
 								<span onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName '>
 								<button type="button" className="btn btn-default" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
 									{foodItem.get('bringer_name')}
