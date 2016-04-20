@@ -35,16 +35,14 @@ export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
 	console.log('foodBringerMdl', foodBringerMdl)
 	console.log('foodItmModel', foodItmModel)
 	console.log('eventID', eventID)
-	var grav = ''
-	if (foodBringerMdl.get('gravatarUrl')){
-		grav = foodBringerMdl.get('gravatarUrl')
-	}
 
 	foodItmModel.set({
-		bringer_grav:{grav},
+		bringer_grav:foodBringerMdl.get('gravatarURL'),
 		bringer_uid: foodBringerMdl.id,
 		bringer_name:foodBringerMdl.get('firstName') + ' ' + foodBringerMdl.get('lastName')
 	})
+	console.log('foodItmModel', foodItmModel)
+
 
 	pollForNewData()
 }
@@ -60,6 +58,7 @@ export function createEvent(eventObj, hostModel) {
 	var eventModel = events.create(data)
 
 	console.log('eventModel', eventModel)
+	console.log('data', data)
 
 	eventModel.once('sync', function() {
 	
@@ -71,7 +70,8 @@ export function createEvent(eventObj, hostModel) {
 			user_uid:hostModel.get('id'),
 			userName:hostModel.get('firstName') + ' ' + hostModel.get('lastName'),
 			email: hostModel.get('email'),
-			hostName:eventModel.get('hostName')
+			hostName:eventModel.get('hostName'),
+			gravatarURL:data.gravatarURL
 		}
 		
 		console.log('attendanceObj', attendanceObj)
@@ -117,7 +117,7 @@ export function createUser(userObj) {
         	        firstName: pData.userObj.firstName,
         	        lastName: pData.userObj.lastName,
         	        email: pData.userObj.email,
-        	        gravatarUrl :  pData.authData.password.profileImageURL
+        	        gravatarURL :  pData.authData.password.profileImageURL
         	   	})
          
             	//add gravatr to user object???
@@ -149,13 +149,16 @@ export function addGuestToEvent(recipientEmail, evtModel){
 				userName:recipientUserModel.get('firstName') + ' ' + recipientUserModel.get('lastName'),
 				email: recipientUserModel.get('email'),
 				hostName:evtModel.get('hostName'),
-				gravatarUrl:recipientUserModel.get('gravatarUrl')
+				gravatarURL:recipientUserModel.get('gravatarURL')
 			}
 
 			createAttendanceForEvt(attDataObj)
 		} else{
 			alert('no match for ', recipientEmail)
 		}
+
+			console.log('attDataObj ', attDataObj)
+		
 		pollForNewData()
 
 	})	
@@ -175,14 +178,16 @@ export function createAttendanceForEvt(evtPlusUsrObj){
 	console.log('evtPlusUsrObj', evtPlusUsrObj)
 
 
-	if (!evtPlusUsrObj.event_id)  {console.log("obj missing event_id"); return}
-	if (!evtPlusUsrObj.sender_id)  {console.log("obj missing sender_id"); return}
-	if (!evtPlusUsrObj.date)  {console.log("obj missing date"); return}
-	if (!evtPlusUsrObj.title)  {console.log("obj missing title"); return}
-	if (!evtPlusUsrObj.user_uid)  {console.log("obj missing user_uid"); return}
-	if (!evtPlusUsrObj.userName)  {console.log("obj missing userName"); return}
-	if (!evtPlusUsrObj.email)  {console.log("obj missing email"); return}
-	if (!evtPlusUsrObj.hostName)  {console.log("obj missing hostName"); return}
+	if (!evtPlusUsrObj.event_id)  {alert("obj missing event_id"); return}
+	if (!evtPlusUsrObj.sender_id)  {alert("obj missing sender_id"); return}
+	if (!evtPlusUsrObj.date)  {alert("obj missing date"); return}
+	if (!evtPlusUsrObj.title)  {alert("obj missing title"); return}
+	if (!evtPlusUsrObj.user_uid)  {alert("obj missing user_uid"); return}
+	if (!evtPlusUsrObj.userName)  {alert("obj missing userName"); return}
+	if (!evtPlusUsrObj.email)  {alert("obj missing email"); return}
+	if (!evtPlusUsrObj.hostName)  {alert("obj missing hostName"); return}
+	if (!evtPlusUsrObj.gravatarURL)  {alert("obj missing gravatarURL"); return}
+
 
 	var attendList = new Attendances()
 	attendList.once('sync', function(){

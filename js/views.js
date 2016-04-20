@@ -201,7 +201,8 @@ var CreateEvent = React.createClass({
 		'title':'',
 		'date':'',
 		'location':'',
-		'hostName':''
+		'hostName':'',
+		'gravatarURL':''
 	},
 
 	_upDateEventTitle:function(evt){
@@ -222,6 +223,7 @@ var CreateEvent = React.createClass({
 
 	_submitEvent:function(evt){
 		evt.preventDefault()
+		this.eventObj.gravatarURL = fbRef.getAuth().password.profileImageURL
 		var component = this
 		var hostModel = new User(fbRef.getAuth().uid)
 		hostModel.fetch()
@@ -365,6 +367,7 @@ var EventItem = React.createClass({
 								Host:
 							</span>
 							{attendanceMod.get('hostName')}
+							<img src={attendanceMod.get('gravatarURL')}/>
 						</p>
 					</div>
 				</div>
@@ -528,8 +531,8 @@ var GuestList = React.createClass({
 			if(guest.id) {
 				console.log('guest',guest)
 				return (
-					<div key={i} className='guestItem btn-default' data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-						<img src={guest.get('gravatarUrl')}/>
+					<div key={i} className='guestItem btn-default'>
+						<img src={guest.get('gravatarURL')}/>
 						<h3>{guest.get('userName')}</h3>
 						<h5>{guest.get('email')}</h5>
 					</div>
@@ -616,9 +619,9 @@ var Food = React.createClass({
 
 var FoodList = React.createClass({
 
-	getInitialState: function () {
-	    return {selected: false};
-	},
+	// getInitialState: function () {
+	//     return {selected: false};
+	// },
 	
 
 	_handleFoodBringer:function(foodItem, evt){
@@ -630,7 +633,7 @@ var FoodList = React.createClass({
 				if (foodItem.get('bringer_name') === 'Click to Select') {
 			selectMyFoods(foodItem, userModel, event_id )
 		}
-		this.state.selected = true
+		// this.state.selected = true
 
 		
 	},
@@ -652,15 +655,15 @@ var FoodList = React.createClass({
 	_showFoodItems:function(){
 		var divStyle = {}
 
-		if (!this.state.selected){
-			divStyle = {
-				color:'rgba(255,175,75,1)'
-			}
-		} else if (this.state.selected) {
-			divStyle = {
-				color:'rgba(22, 160, 133,1)'
-			}
-		}
+		// if (!this.state.selected){
+		// 	divStyle = {
+		// 		color:'rgba(255,175,75,1)'
+		// 	}
+		// } else if (this.state.selected) {
+		// 	divStyle = {
+		// 		color:'rgba(22, 160, 133,1)'
+		// 	}
+		// }
 		
 		var grav = ''
 		var component = this
@@ -676,9 +679,9 @@ var FoodList = React.createClass({
 
 
 							<div style={divStyle} data-fooditem_id={foodItem.id} className='foodItemWrapper '>
-								<img src={foodItem.get('bringer_grav').grav}/>
 								<span onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName '>
-								<button type="button" className="btn btn-default" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
+								<img src={foodItem.get('bringer_grav')}/>
+								<button type="button" className="btn btn-default">
 									{foodItem.get('bringer_name')}
 								</button>
 									 is Bringing
