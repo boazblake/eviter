@@ -268,7 +268,7 @@ input{
 
 
 .eventDeets{
-    background-color: rgba(44, 62, 80,0.8);
+    background-color: rgba(44, 62, 80,0.2);
     align-content:center;
     display: flex;
     color: aliceblue;
@@ -294,6 +294,7 @@ input{
     
 .guests{
     display: inline-block;
+
 
     label{ 
     font-weight: bolder;
@@ -329,6 +330,8 @@ input{
         flex-wrap:wrap;
         flex-flow:row wrap;
         align-content:flex-end;
+        box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
+
     }
 
 }
@@ -372,6 +375,8 @@ input{
         flex-flow:row wrap;
         align-content:flex-end;
         color: aliceblue;
+        box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
+
 
         text-align: center;
 
@@ -386,8 +391,13 @@ input{
         opacity:1;
     }
 
+    .foodName{
+        margin-left: 1px;
+    }
+
     .lowerHalfFoodItem *{
         display: inline-block;
+        padding: 2%;
     }
 
 

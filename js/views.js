@@ -51,11 +51,26 @@ var NavBar = React.createClass({
 	_showDashButton:function(){
 		if (location.hash !=='#dash') {
 			return (
-					<i className='btn btn-primary fa fa-reply fa-fw'></i>
+					<i className='btn btn-lg btn-primary fa fa-reply fa-fw'></i>
 			)
 		} else {
 			return ''
 		}
+	},
+
+	_showEventTitle:function(){
+		if (this.props.eventDeets) {
+			return (
+				<h2>
+					{this.props.eventDeets.get('title')}
+				</h2>
+			)
+
+		} else return (
+			<h2>
+				DASHBOARD
+			</h2>
+		)
 	},
 
 
@@ -63,7 +78,8 @@ var NavBar = React.createClass({
 		return(
 			<div className='navBar'>
 				<a href='#dash' title='back to dashboard'>{this._showDashButton()}</a>
-				<a href='#logout' title='logout'><i className='btn btn-primary-lg fa fa-sign-out fa-fw'></i></a>
+				{this._showEventTitle()}
+				<a href='#logout' title='logout'><i className='btn btn-lg btn-primary fa fa-sign-out fa-fw'></i></a>
 			</div>
 		)
 	}
@@ -352,21 +368,21 @@ var EventItem = React.createClass({
 					</button>
 					<div className='eventInfo' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
 						<p>
-							<span>
+							<strong>
 								Event:
-							</span>
+							</strong>
 							{attendanceMod.get('title')}
 						</p>
 						<p>
-							<span>
+							<strong>
 								Date:
-							</span>
+							</strong>
 							{attendanceMod.get('date')}
 						</p>
 						<p>
-							<span>
+							<strong>
 								Host:
-							</span>
+							</strong>
 							{attendanceMod.get('hostName')}
 							<img src={attendanceMod.get('hostGravatarURL')}/>
 						</p>
@@ -415,7 +431,7 @@ var EventPage = React.createClass({
 		return(
 			<div className=''>
 				<Header userModel={this.state.userModel}/>
-				<NavBar/>
+				<NavBar eventDeets={this.state.event}/>
 				<br/>
 				<div className= 'container'>
 					<EventDeets eventDeets={this.state.event}/>
@@ -438,21 +454,16 @@ var EventDeets = React.createClass({
 
 
 		return (
-			<div className='row eventDeets'>
-				<div className='col-xs-4'>
-					<span>DATE:</span>
+			<div className='col-lg-12 alert alert-info eventDeets'>
+				<div className='col-xs-12 col-sm-8  text-primary col-md-6 '>
+					<strong>DATE OF EVENT</strong>
 					<br/>
 					{event.get('date')}
 				</div>
-				<div className='col-xs-4'>
-					<span>LOCATION:</span>
+				<div className='col-xs-12 col-sm-8  text-primary col-md-6'>
+					<strong>LOCATION</strong>
 					<br/>
 					{event.get('location')}
-				</div>
-				<div className='col-xs-4'>
-					<span>Event:</span>
-					<br/>
-					{event.get('title')}
 				</div>
 			</div>
 		)
@@ -499,11 +510,10 @@ var Guests = React.createClass({
 		return(
 			<div className='col-xs-12 col-sm-8 guests'>
 
-				<form className='' data-id='newUserEmail'>
-					<div className='inviteWrapper'>
-						<label>Invite Guests Here</label>
-						<br/>
-						<input type='text' placeholder='email@host.com' 
+				<form className='form-horizontal' data-id='newUserEmail'>
+					<div className='form-group inviteWrapper'>
+						<label className='control-label'>Invite Guests Here</label>
+						<input className='form-control' id="inputEmail" type='text' placeholder='email@host.com' 
 						onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
 						<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton btn btn-primary btn-sm'>
 							<i className="fa fa-user-plus" aria-hidden="true"></i>
@@ -600,12 +610,12 @@ var Food = React.createClass({
 		return(
 			<div className='col-xs-12 col-sm-4 bringThis'>
 		
-				<div className='foodAddWrapper'>
+				<div className='form-group foodAddWrapper'>
 					<label>Add Item</label>
-					<form className=''>
-						<input type='text' id='foodName' required="required" placeholder='Bring This!' onChange={this._upDateFoodName}/>
-						<input type='number' id='itemQ'required="required" placeholder='quantity' onChange={this._upDateItemQuantity}/>
-						<i onClick={this._handleFoodItem} className="btn btn-primary btn-xs fa fa-shopping-cart"></i>
+					<form className='form-horizontal'>
+						<input type='text' id='foodName' required="required" className='form-control' placeholder='Bring This!' onChange={this._upDateFoodName}/>
+						<input type='number' id='itemQ'required="required" className='form-control' placeholder='quantity' onChange={this._upDateItemQuantity}/>
+						<i onClick={this._handleFoodItem} className="btn btn-primary btn-xs fa fa-plus-square fa-lg"></i>
 					</form>
 				</div>
 
@@ -674,7 +684,7 @@ var FoodList = React.createClass({
 			if (foodItem.id) {
 				return(
 					<div className='foodItemWrapper '>
-						<div className='foodItem' key={i} >
+						<div className='foodItem' draggable="true" key={i} >
 							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='btn btn-danger btn-xs removeButton'>
 								<i className="fa fa-times"></i>
 							</button>
@@ -685,22 +695,22 @@ var FoodList = React.createClass({
 								<img src={foodItem.get('bringer_grav')}/>
 								<button type="button" className="btn btn-default">
 									{foodItem.get('bringer_name')}
-								</button>
+								</button><br/>
 									 is Bringing
 								</span>
 
 
 								<div className='lowerHalfFoodItem' >
 									<div className='foodQuantityWrapper'>
-										<i data-foodquant_id='minus' className="fa fa-minus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
-										<span className='foodItemName'>
+										<i data-foodquant_id='minus' className="fa fa-arrow-down" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+										<span className='badge foodItemName'>
 											{foodItem.get('food_quantity')}
 										</span>
 										
-										<i data-foodquant_id='plus' className="fa fa-plus-circle" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+										<i data-foodquant_id='plus' className="fa fa-arrow-up" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
 
 										<span className='foodName'>
-											{foodItem.get('food_name')}
+											<h4>{foodItem.get('food_name')}</h4>
 										</span>
 									</div>
 								</div>
