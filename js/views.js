@@ -50,8 +50,10 @@ var Header = React.createClass({
 var NavBar = React.createClass({
 	_showDashButton:function(){
 		if (location.hash !=='#dash') {
-			return ( 
-				<i className='btn btn-lg btn-primary fa fa-reply fa-fw'></i>
+			return (<a href='#dash' title='back to dashboard'>
+						<i className='btn btn-lg btn-primary fa fa-reply fa-fw'></i>
+					</a>
+
 			)
 		} else {
 			return ''
@@ -84,9 +86,14 @@ var NavBar = React.createClass({
 	render: function(){
 		return(
 			<div className='navBar'>
-				<a href='#dash' title='back to dashboard'>{this._showDashButton()}</a>
+				{this._showDashButton()}
+				<span className='badge dasher'>BACK TO DASHBOARD</span>
 				{this._showEventTitle()}
-				<a href='#logout' title='logout'><i className='btn btn-lg btn-primary fa fa-sign-out fa-fw'></i></a>
+				<a className='signouterShower'></a>
+				<span className='badge signouter'>SIGNOUT</span>
+				<a href='#logout' title='logout'>
+					<i className='btn btn-lg btn-primary fa fa-sign-out fa-fw'></i>
+				</a>
 			</div>
 		)
 	}
@@ -96,9 +103,17 @@ var Footer = React.createClass({
 	render: function(){
 		return (
 			<div className='row footer'>
-			<img className='logo' src='http://landing.theironyard.com/images/home/tiy-logo.png'/>
-					<h4 className='col'>&copy; Boaz Blake, {new Date().getFullYear()}</h4>
-					<div className='col'>
+					<h4 className='col-xs-12 col-sm-6 col-md-4'>&copy; Boaz Blake, {new Date().getFullYear()}</h4>
+					<h6 className="col-xs-12 col-sm-6 col-md-4">
+						Made at
+						<img className='logo' src='http://landing.theironyard.com/images/home/tiy-logo.png'/>
+						Made With
+						<img className='logo' src='http://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2014/10/1414676226react-logo.png'/>
+						<img className='logo' src='http://file.mrbool.com/mrbool/articles/MuhammadAzamuddin/BackBoneEvents/BackBoneEvents01.png'/>
+						<img className='logo' src='https://www.theironyard.com/content/dam/theironyard/icons/icon-FrontEnd-update.png'/>
+						<img className='logo' src='https://upload.wikimedia.org/wikipedia/en/4/4c/Sublime_Text_Logo.png'/>
+					</h6>
+					<div className='col-xs-12 col-sm-6 col-md-4'>
 						<div className='deets'>
 							<a href="mailto:boazblake@gmail.com"><i className="fa fa-envelope"></i></a>
 							<p>eMail me!</p>
@@ -381,8 +396,19 @@ var MyEvents = React.createClass({
 	 render:function(){
 
 	 	console.log('this.state.attendanceMods', this.state.attendanceMods)
+
+	 	var altImage = ''
+	 	if (this.state.attendanceMods) {
+	 		altImage = (
+	 			<h1>CREATE NEW EVENT TO BEGIN</h1>
+	 			)
+	 	}
+
+
+
 	 	return(
 	 		<div className='row myEvents'>
+	 			{}
 	 			{
 	 				this.state.attendanceMods.map( function(attendanceMod, i ){
 	 					return (
@@ -505,8 +531,8 @@ var EventDeets = React.createClass({
 		 var foodCount = countUnselectedFood(foodListColl)
 
 		return (
-			<div className='alert alert-info eventDeets'>
-				<div className='col-xs-12 col-sm-12 col-md-4 text-primary panel-info'>
+			<div className='row alert alert-info eventDeets'>
+				<div className='col-xs-12 col-sm-4 col-md-4 col-lg-12 text-primary panel-info'>
 					<div className='panel-heading'>
 						<h3 className='panel-title'>DATE OF EVENT</h3>
 					</div>
@@ -514,7 +540,7 @@ var EventDeets = React.createClass({
 						{event.get('date')}
 					</div>
 				</div>
-				<div className='col-xs-12 col-sm-12 col-md-4 text-primary panel-info'>
+				<div className='col-xs-12 col-sm-4 col-md-4 col-lg-12 text-primary panel-info'>
 					<div className='panel-heading'>
 						<h3 className='panel-title'>LOCATION</h3>
 					</div>
@@ -522,7 +548,7 @@ var EventDeets = React.createClass({
 						{event.get('location')}
 					</div>
 				</div>
-				<div className='col-xs-12 col-sm-12 col-md-4 text-primary'>
+				<div className='col-xs-12 col-sm-4 col-md-4 col-lg-12 text-primary'>
 					<strong>TOTAL # GUESTS</strong><span className='badge alert-success'>{guestListArray.length}</span>
 					<br/>
 					<br/>

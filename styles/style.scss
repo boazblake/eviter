@@ -210,16 +210,29 @@ body .splashPageView{
     position: relative;
     
 
-    p{
-        position: absolute;
-        display: none;
-        color:black;
+    span{
+        opacity: 0;
     }
-
-    a:hover > p {
-        display: block;
+    .badge.dasher{
+        padding-right: -175px;
+    }
+    .badge.signouter {
+        padding-left: -250px;
     }
 }
+
+a:hover ~ .signouter {
+    opacity: 1;
+    padding-left: -175px;
+}
+
+
+a:hover~.badge.dasher{
+        opacity: 1;
+        padding-right: -200px;
+}
+
+
 
 
 .signUp, .logIn{
@@ -361,10 +374,9 @@ body .splashPageView{
     
     .foodListView{
         display: flex;
-        flex-direction:row;
+        flex-direction:column-reverse;
         flex-wrap:wrap;
-        justify-content: space-around;
-        align-items:baseline;
+        align-items:center;
 
 
     .foodItemWrapper {
@@ -442,7 +454,11 @@ body .splashPageView{
     align-items:baseline;
     color: rgba(149, 165, 166,1.0);
     text-align: center;
-
+    
+    .logo {
+        width: 45px;
+    }
+    
     .deets i{
         font-size: 1.25em;       
     }

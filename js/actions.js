@@ -24,7 +24,7 @@ export function pollForNewData(){
 	console.log('polling for new data')
 	setTimeout(function(){
 		BackboneFire.Events.trigger('pollForNewData')
-	}, 500)
+	}, 1000)
 }
 
 export function changeFoodAmount(foodItemMdl, evt){
