@@ -144,6 +144,9 @@ html {
 
 input{
     color:rgba(44, 62, 80,1.0);
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #2C3E50;
 }
 
 
@@ -445,6 +448,9 @@ a:hover~.badge.dasher{
 }
 
 }
+
+
+
  .footer{
     background-color: rgba(44, 62, 80,1.0);
     margin-bottom: 0;
@@ -458,15 +464,23 @@ a:hover~.badge.dasher{
     .logo {
         width: 45px;
     }
-    
-    .deets i{
-        font-size: 1.25em;       
-    }
-    p {
+      
+    h6 {
         opacity: 0;
     }
-    .deets:hover > p {
-        opacity: 1;
+
+    .deetsWrapper{
+        height: 40px;
+        margin: auto;
+        .deets {
+            display: inline-block;
+            font-size: 1.25em;       
+        }
+
+        .deets:hover > h6 {
+            opacity: 1;
+        }        
     }
+
 
  }

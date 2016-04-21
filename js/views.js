@@ -103,30 +103,31 @@ var Footer = React.createClass({
 	render: function(){
 		return (
 			<div className='row footer'>
-					<h4 className='col-xs-12 col-sm-6 col-md-4'>&copy; Boaz Blake, {new Date().getFullYear()}</h4>
-					<h6 className="col-xs-12 col-sm-6 col-md-4">
-						Made at
-						<img className='logo' src='http://landing.theironyard.com/images/home/tiy-logo.png'/>
-						With
-						<img className='logo' src='http://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2014/10/1414676226react-logo.png'/>
-						<img className='logo' src='http://file.mrbool.com/mrbool/articles/MuhammadAzamuddin/BackBoneEvents/BackBoneEvents01.png'/>
-						<img className='logo' src='https://www.theironyard.com/content/dam/theironyard/icons/icon-FrontEnd-update.png'/>
-						<img className='logo' src='https://upload.wikimedia.org/wikipedia/en/4/4c/Sublime_Text_Logo.png'/>
-					</h6>
-					<div className='col-xs-12 col-sm-6 col-md-4'>
-						<div className='deets'>
-							<a href="mailto:boazblake@gmail.com"><i className="fa fa-envelope"></i></a>
-							<p>eMail me!</p>
-						</div>
-						<div className='deets'>
-							<a target="_blank"  href='https://github.com/boazblake?tab=repositories'><i className="fa fa-github-square"></i></a>
-							<p>gitHub me!</p>
-						</div>
-						<div className='deets'>
-							<a target="_blank"  href='https://boazblake.github.io/portfolio'><i className="fa fa-book"></i></a>
-							<p>See My Work</p>
-						</div>
+				<h4 className='col-xs-12 col-sm-6 col-md-4'>&copy; Boaz Blake, {new Date().getFullYear()}</h4>
+				<h5 className="col-xs-12 col-sm-6 col-md-4">
+					Made at
+					<img className='logo' src='http://landing.theironyard.com/images/home/tiy-logo.png'/>
+					With
+					<img className='logo' src='http://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2014/10/1414676226react-logo.png'/>
+					<img className='logo' src='http://file.mrbool.com/mrbool/articles/MuhammadAzamuddin/BackBoneEvents/BackBoneEvents01.png'/>
+					<img className='logo' src='https://www.theironyard.com/content/dam/theironyard/icons/icon-FrontEnd-update.png'/>
+					Using
+					<img className='logo' src='https://upload.wikimedia.org/wikipedia/en/4/4c/Sublime_Text_Logo.png'/>
+				</h5>
+				<div className='col-xs-12 col-sm-6 col-md-4 deetsWrapper'>
+					<div className='deets'>
+						<a href="mailto:boazblake@gmail.com"><i className="fa fa-envelope"></i></a>
+						<h6>eMail me!</h6>
 					</div>
+					<div className='deets'>
+						<a target="_blank"  href='https://github.com/boazblake?tab=repositories'><i className="fa fa-github-square"></i></a>
+						<h6>gitHub me!</h6>
+					</div>
+					<div className='deets'>
+						<a target="_blank"  href='https://boazblake.github.io/portfolio'><i className="fa fa-book"></i></a>
+						<h6>See My Work</h6>
+					</div>
+				</div>
 			</div>
 		)
 	}
@@ -253,6 +254,7 @@ var CreateEvent = React.createClass({
 
 	componentWillMount:function(){
 		var component = this
+		console.log('authed user??', fbRef.getAuth().uid)
 		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
 
 	},
@@ -300,14 +302,18 @@ var CreateEvent = React.createClass({
 
 	_submitEvent:function(evt){
 		evt.preventDefault()
+		console.log('submit evetn firred')
 		this.eventObj.gravatarURL = fbRef.getAuth().password.profileImageURL
 		var component = this
-		var hostModel = new User(fbRef.getAuth().uid)
+		var hostModel = new User(fbRef.getAuth().uid )
 		hostModel.fetch()
-		hostModel.once('sync', function(){
+		if (hostModel.id) {
 			createEvent(component.eventObj, hostModel)
-		})
-
+		} else {
+			hostModel.on('sync', function(){
+				createEvent(component.eventObj, hostModel)
+			})
+		}
 	},
 
 	
@@ -325,7 +331,7 @@ var CreateEvent = React.createClass({
 
 						<input type='text' className='form-control' required="required" placeholder='Event Location...' onChange={this._upDateEventLocation}/>
 
-			            <button className="btn btn-default btn-lg btn-block">Create My Event! </button>
+			            <button className="btn btn-default btn-lg btn-block" onClick={this._submitEvent}>Create My Event! </button>
 					</div>
 				</form>
 				<Footer/>
