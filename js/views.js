@@ -107,7 +107,7 @@ var Footer = React.createClass({
 					<h6 className="col-xs-12 col-sm-6 col-md-4">
 						Made at
 						<img className='logo' src='http://landing.theironyard.com/images/home/tiy-logo.png'/>
-						Made With
+						With
 						<img className='logo' src='http://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2014/10/1414676226react-logo.png'/>
 						<img className='logo' src='http://file.mrbool.com/mrbool/articles/MuhammadAzamuddin/BackBoneEvents/BackBoneEvents01.png'/>
 						<img className='logo' src='https://www.theironyard.com/content/dam/theironyard/icons/icon-FrontEnd-update.png'/>
@@ -737,7 +737,20 @@ var FoodList = React.createClass({
 		var userModel = this.props.userModel
 
 
-		if (foodItem.get('bringer_name') === 'Click to Select') {
+		if ( foodItem.get('bringer_uid') === fbRef.getAuth().uid ) {
+			console.log('yes')
+			
+			 foodItem.set({
+				bringer_name:'Click to Select',
+				bringer_uid:'000',
+				bringer_grav:''
+			})
+
+		pollForNewData()
+		} 
+			  
+
+		else if (foodItem.get('bringer_name') === 'Click to Select') {
 			selectMyFoods(foodItem, userModel, event_id )
 		}
 		// this.state.selected = true
