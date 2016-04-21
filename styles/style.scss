@@ -265,6 +265,12 @@ body .splashPageView{
 }
 
 
+.eventPageView .row{
+    margin-top: 10px;
+    border:1px solid white;
+}
+
+
 .eventDeets{
     background-color: rgba(44, 62, 80,0.2);
     align-content:center;
@@ -292,14 +298,15 @@ body .splashPageView{
     
 .guests{
     display: inline-block;
+    background-color: rgba(44, 62, 80,1.0);
 
     .addGuests {
         text-align: center;
     }
 
     label{ 
-    font-weight: bolder;
-    text-shadow: 0 0 9px rgba(255,255,255,1) ;
+    color: rgb(215, 218, 222);
+
     }
 
     .inviteWrapper {
@@ -332,7 +339,6 @@ body .splashPageView{
         flex-flow:row wrap;
         align-content:flex-end;
         box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
-
     }
 
 }

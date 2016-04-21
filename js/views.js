@@ -472,12 +472,12 @@ var EventPage = React.createClass({
 	render:function(){
 
 		return(
-			<div className=''>
+			<div className='eventPageView'>
 				<Header userModel={this.state.userModel}/>
 				<NavBar eventDeets={this.state.event}/>
 				<br/>
 				<div className= 'container'>
-					<EventDeets eventDeets={this.state.event}/>
+					<EventDeets eventDeets={this.state.event} guestList={this.state.guestList}/>
 					<div className='row'>
 						<Guests guestList={this.state.guestList} eventID={this.state.event}/>
 						<Food userModel={this.state.userModel} eventID={this.state.event.id} foodListColl={this.state.foodListColl}/>
@@ -494,19 +494,25 @@ var EventDeets = React.createClass({
 
 		var component = this
 		var event = component.props.eventDeets
-
+		var guestListArray = this.props.guestList.models
+		console.log('guestListArray',guestListArray)
 
 		return (
 			<div className='col-lg-12 alert alert-info eventDeets'>
-				<div className='col-xs-12 col-sm-8  text-primary col-md-6 '>
+				<div className='col-xs-12 col-sm-8  text-primary col-md-4 '>
 					<strong>DATE OF EVENT</strong>
 					<br/>
 					{event.get('date')}
 				</div>
-				<div className='col-xs-12 col-sm-8  text-primary col-md-6'>
+				<div className='col-xs-12 col-sm-8  text-primary col-md-4'>
 					<strong>LOCATION</strong>
 					<br/>
 					{event.get('location')}
+				</div>
+				<div className='col-xs-12 col-sm-8  text-primary col-md-4'>
+					<strong>TOTAL # GUESTS</strong>
+					<br/>
+						{guestListArray.length}
 				</div>
 			</div>
 		)
@@ -559,7 +565,7 @@ var Guests = React.createClass({
 
 				<form className='form-inline col' data-id='newUserEmail'>
 					<div className='form-group inviteWrapper'>
-						<label className='control-label'>Invite Guests Here</label><br/>
+						<label>Invite Guests Here</label><br/>
 						<input className='form-control' id="inputEmail" type='text' placeholder='Enter email here' 
 						onChange={_upDateGuestEmail} data-id='event.id' ref={'userEmail'}/>
 						<button data-id='newUserEmail' onClick={this._handleAddGuest} className='adduserbutton btn btn-primary btn-sm'>
