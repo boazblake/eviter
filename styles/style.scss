@@ -446,5 +446,11 @@ body .splashPageView{
     .deets i{
         font-size: 1.25em;       
     }
+    p {
+        opacity: 0;
+    }
+    .deets:hover > p {
+        opacity: 1;
+    }
 
  }

@@ -101,12 +101,15 @@ var Footer = React.createClass({
 					<div className='col'>
 						<div className='deets'>
 							<a href="mailto:boazblake@gmail.com"><i className="fa fa-envelope"></i></a>
+							<p>eMail me!</p>
 						</div>
 						<div className='deets'>
 							<a target="_blank"  href='https://github.com/boazblake?tab=repositories'><i className="fa fa-github-square"></i></a>
+							<p>gitHub me!</p>
 						</div>
 						<div className='deets'>
 							<a target="_blank"  href='boazblake.github.io/portfolio'><i className="fa fa-book"></i></a>
+							<p>See My Work</p>
 						</div>
 					</div>
 			</div>
@@ -477,7 +480,7 @@ var EventPage = React.createClass({
 				<NavBar eventDeets={this.state.event}/>
 				<br/>
 				<div className= 'container'>
-					<EventDeets eventDeets={this.state.event} guestList={this.state.guestList}/>
+					<EventDeets eventDeets={this.state.event} guestList={this.state.guestList} foodListColl={this.state.foodListColl}/>
 					<div className='row'>
 						<Guests guestList={this.state.guestList} eventID={this.state.event}/>
 						<Food userModel={this.state.userModel} eventID={this.state.event.id} foodListColl={this.state.foodListColl}/>
@@ -495,24 +498,47 @@ var EventDeets = React.createClass({
 		var component = this
 		var event = component.props.eventDeets
 		var guestListArray = this.props.guestList.models
-		console.log('guestListArray',guestListArray)
+		
+		var foodListColl = this.props.foodListColl
+		
+		var noGhostList = foodListColl.filter(function(model, i){
+			 return model.id
+		})
+
+		var foodCount = noGhostList.filter(function(foodMdl){
+				return (foodMdl.get('bringer_name') === "Click to Select")
+		})
+		console.log('foodCount',foodCount)
+
+
+
+
+
+
 
 		return (
 			<div className='col-lg-12 alert alert-info eventDeets'>
-				<div className='col-xs-12 col-sm-8  text-primary col-md-4 '>
-					<strong>DATE OF EVENT</strong>
-					<br/>
-					{event.get('date')}
+				<div className='col-xs-12 col-sm-8  text-primary col-md-4 panel panel-info'>
+					<div className='panel-heading'>
+						<h3 className='panel-title'>DATE OF EVENT</h3>
+					</div>
+					<div className='panel-body'>
+						{event.get('date')}
+					</div>
+				</div>
+				<div className='col-xs-12 col-sm-8  text-primary col-md-4 panel panel-info'>
+					<div className='panel-heading'>
+						<h3 className='panel-title'>LOCATION</h3>
+					</div>
+					<div className='panel-body'>
+						{event.get('location')}
+					</div>
 				</div>
 				<div className='col-xs-12 col-sm-8  text-primary col-md-4'>
-					<strong>LOCATION</strong>
+					<strong>TOTAL # GUESTS</strong><span className='badge alert-success'>{guestListArray.length}</span>
 					<br/>
-					{event.get('location')}
-				</div>
-				<div className='col-xs-12 col-sm-8  text-primary col-md-4'>
-					<strong>TOTAL # GUESTS</strong>
 					<br/>
-						{guestListArray.length}
+					<strong>UNSELECTED ITEMS</strong><span className='badge alert-danger'>{foodCount.length}</span>
 				</div>
 			</div>
 		)
