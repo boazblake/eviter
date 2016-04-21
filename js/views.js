@@ -537,29 +537,38 @@ var EventDeets = React.createClass({
 		 var foodCount = countUnselectedFood(foodListColl)
 
 		return (
-			<div className='row alert alert-info eventDeets'>
-				<div className='col-xs-12 col-sm-4 col-md-4 col-lg-12 text-primary panel-info'>
+			<div className={'row alert alert-info eventDeets' /**/}>
+				<div className='col-xs-12 col-sm-4 text-primary panel-info'>
+
 					<div className='panel-heading'>
 						<h3 className='panel-title'>DATE OF EVENT</h3>
 					</div>
+
 					<div className='panel-body'>
 						{event.get('date')}
 					</div>
+
 				</div>
-				<div className='col-xs-12 col-sm-4 col-md-4 col-lg-12 text-primary panel-info'>
+
+				<div className='col-xs-12 col-sm-4 text-primary panel-info'>
+
 					<div className='panel-heading'>
 						<h3 className='panel-title'>LOCATION</h3>
 					</div>
+				
 					<div className='panel-body'>
 						{event.get('location')}
 					</div>
+
 				</div>
-				<div className='col-xs-12 col-sm-4 col-md-4 col-lg-12 text-primary'>
+
+				<div className='col-xs-12 col-sm-4 text-primary'>
 					<strong>TOTAL # GUESTS</strong><span className='badge alert-success'>{guestListArray.length}</span>
 					<br/>
 					<br/>
 					<strong>UNSELECTED ITEMS</strong><span className='badge alert-danger'>{foodCount.length}</span>
 				</div>
+
 			</div>
 		)
 	}
