@@ -2,7 +2,7 @@ import DOM from 'react-dom'
 import fbRef from './fbref'
 import BackboneFire from 'bbfire'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData, numToMonth} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData, numToMonth, countUnselectedFood} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, AddFood, FoodsToBring} from './data'
 
 
@@ -108,7 +108,7 @@ var Footer = React.createClass({
 							<p>gitHub me!</p>
 						</div>
 						<div className='deets'>
-							<a target="_blank"  href='boazblake.github.io/portfolio'><i className="fa fa-book"></i></a>
+							<a target="_blank"  href='https://boazblake.github.io/portfolio'><i className="fa fa-book"></i></a>
 							<p>See My Work</p>
 						</div>
 					</div>
@@ -497,28 +497,16 @@ var EventDeets = React.createClass({
 
 		var component = this
 		var event = component.props.eventDeets
+
 		var guestListArray = this.props.guestList.models
 		
 		var foodListColl = this.props.foodListColl
 		
-		var noGhostList = foodListColl.filter(function(model, i){
-			 return model.id
-		})
-
-		var foodCount = noGhostList.filter(function(foodMdl){
-				return (foodMdl.get('bringer_name') === "Click to Select")
-		})
-		console.log('foodCount',foodCount)
-
-
-
-
-
-
+		 var foodCount = countUnselectedFood(foodListColl)
 
 		return (
-			<div className='col-lg-12 alert alert-info eventDeets'>
-				<div className='col-xs-12 col-sm-8  text-primary col-md-4 panel panel-info'>
+			<div className='alert alert-info eventDeets'>
+				<div className='col-xs-12 col-sm-12 col-md-4 text-primary panel-info'>
 					<div className='panel-heading'>
 						<h3 className='panel-title'>DATE OF EVENT</h3>
 					</div>
@@ -526,7 +514,7 @@ var EventDeets = React.createClass({
 						{event.get('date')}
 					</div>
 				</div>
-				<div className='col-xs-12 col-sm-8  text-primary col-md-4 panel panel-info'>
+				<div className='col-xs-12 col-sm-12 col-md-4 text-primary panel-info'>
 					<div className='panel-heading'>
 						<h3 className='panel-title'>LOCATION</h3>
 					</div>
@@ -534,7 +522,7 @@ var EventDeets = React.createClass({
 						{event.get('location')}
 					</div>
 				</div>
-				<div className='col-xs-12 col-sm-8  text-primary col-md-4'>
+				<div className='col-xs-12 col-sm-12 col-md-4 text-primary'>
 					<strong>TOTAL # GUESTS</strong><span className='badge alert-success'>{guestListArray.length}</span>
 					<br/>
 					<br/>

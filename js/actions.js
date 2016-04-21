@@ -4,11 +4,21 @@ import BackboneFire from 'bbfire'
 
 import {_currentUserData} from './app.js'
 
+export function countUnselectedFood(foodListColl){
+	var noGhostList = foodListColl.filter(function(model, i){
+		 return model.id
+	})
+
+	var foodCount = noGhostList.filter(function(foodMdl){
+			return (foodMdl.get('bringer_name') === "Click to Select")
+	})
+	return foodCount
+}
+
 export function numToMonth(month) {
 	var monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	return monthArray[month - 1]
 }
-
 
 export function pollForNewData(){
 	console.log('polling for new data')
@@ -35,7 +45,6 @@ export function changeFoodAmount(foodItemMdl, evt){
 	// BackboneFire.Events.trigger('updateComponent')
 	pollForNewData()
 }
-
 
 export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
 	console.log('foodBringerMdl', foodBringerMdl)
