@@ -562,8 +562,8 @@ var EventDeets = React.createClass({
 
 				</div>
 
-				<div className='col-xs-12 col-sm-4 text-primary'>
-					<strong>TOTAL # GUESTS</strong><span className='badge alert-success'>{guestListArray.length}</span>
+				<div className='col-xs-12 col-sm-4 text-primary nav nav-pills'>
+					<strong>TOTAL GUESTS ATTENDING</strong><span className='badge alert-success'>{guestListArray.length}</span>
 					<br/>
 					<br/>
 					<strong>UNSELECTED ITEMS</strong><span className='badge alert-danger'>{foodCount.length}</span>
@@ -591,11 +591,11 @@ var Guests = React.createClass({
 		var searchForAttendance = new QueriedAttendance('email', userEmail)
 		console.log('searchForAttendance', searchForAttendance)
 		
-		if (!searchForAttendance.models.id) {
+		if (searchForAttendance.models.id) {
 			addGuestToEvent(userEmail, this.props.eventID)
 		}
 		else {
-			swal( userEmail + 'has already been invited!')
+			alert( userEmail + ' has already been invited!')
 		}
 
 	},
@@ -643,7 +643,16 @@ var Guests = React.createClass({
 
 var GuestList = React.createClass({
 
-
+						// <button className='btn btn-success btn-xs revolve'>
+						// 	   <i className="fa fa-repeat" aria-hidden="true"></i>
+						// </button>
+						// 
+						// 
+						// <button className='btn btn-danger btn-xs removeButton'>
+						// 	   <i className="fa fa-times"></i>
+						// </button>
+						// 
+						// 
 	_removeAttendance: function(evt) {
 		this.props.attendanceMod.destroy()
 		console.log('this.props.attendanceMod', this.props.attendanceMod)
@@ -657,15 +666,11 @@ var GuestList = React.createClass({
 				console.log('guest',guest)
 				return (
 					<div key={i} className='guestItem btn-default'>
-					<button className='btn btn-danger btn-xs removeButton'>
-						<i className="fa fa-times"></i>
-					</button>
+
 						<img src={guest.get('gravatarURL')}/>
 						<h3>{guest.get('userName')}</h3>
 						<h5>{guest.get('email')}</h5>
-						<button className='btn btn-success btn-xs revolve'>
-							<i className="fa fa-repeat" aria-hidden="true"></i>
-						</button>
+
 					</div>
 				)
 			}
@@ -711,6 +716,9 @@ var Food = React.createClass({
 	},
 
 	_handleFoodItem: function(evt){
+		evt.currentTarget.dataset.foodname_id = ''
+		evt.currentTarget.dataset.foodq_id = '' 
+
 		evt.preventDefault()
 		var component = this
 
@@ -732,9 +740,9 @@ var Food = React.createClass({
 		
 				<div className='form-group foodAddWrapper'>
 					<label>Add Items Here</label>
-					<form className='form-horizontal'>
-						<input type='text' id='foodName' required="required" className='form-control' placeholder='Bring This!' onChange={this._upDateFoodName}/>
-						<input type='number' id='itemQ'required="required" className='form-control' placeholder='quantity' onChange={this._upDateItemQuantity}/>
+					<form className='form-horizontal' onSubmit={this._handleFoodItem}>
+						<input type='text' data-foodname_id='foodName' required="required" className='form-control' placeholder='Bring This!' onChange={this._upDateFoodName}/>
+						<input type='number' data-foodq_id='itemQ'required="required" className='form-control' placeholder='quantity' onChange={this._upDateItemQuantity}/>
 						<h3 onClick={this._handleFoodItem} className="btn btn-primary btn-xs">PRESS TO ADD ITEMS</h3>
 					</form>
 				</div>
