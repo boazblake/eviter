@@ -106,12 +106,12 @@ var Footer = React.createClass({
 				<h4 className='col-xs-12 col-sm-6 col-md-4'>&copy; Boaz Blake, {new Date().getFullYear()}</h4>
 				<h5 className="col-xs-12 col-sm-6 col-md-4">
 					Made at
-					<img className='logo' src='http://landing.theironyard.com/images/home/tiy-logo.png'/>
-					With
+					<a href='http://www.theironyard.com' target="_blank"><img className='logoY' src='http://landing.theironyard.com/images/home/tiy-logo.png'/></a>
+					With <br/>
 					<img className='logo' src='http://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2014/10/1414676226react-logo.png'/>
 					<img className='logo' src='http://file.mrbool.com/mrbool/articles/MuhammadAzamuddin/BackBoneEvents/BackBoneEvents01.png'/>
 					<img className='logo' src='https://www.theironyard.com/content/dam/theironyard/icons/icon-FrontEnd-update.png'/>
-					Using
+					<img className='logo' src='http://www.raywenderlich.com/wp-content/uploads/2015/07/firebase-discs.png'/>
 					<img className='logo' src='https://upload.wikimedia.org/wikipedia/en/4/4c/Sublime_Text_Logo.png'/>
 				</h5>
 				<div className='col-xs-12 col-sm-6 col-md-4 deetsWrapper'>
@@ -430,7 +430,7 @@ var MyEvents = React.createClass({
 var EventItem = React.createClass({
 	
 
-	removeAttendance: function(evt) {
+	_removeAttendance: function(evt) {
 		this.props.attendanceMod.destroy()
 		console.log('this.props.attendanceMod', this.props.attendanceMod)
 	},
@@ -441,7 +441,7 @@ var EventItem = React.createClass({
 		return(
 			<div className='col-xs-12 col-sm-6 col-md-4'>
 				<div className='attendance btn-default'>
-					<button data-id={attendanceMod.id} onClick={this.removeAttendance} className='btn btn-danger btn-xs removeButton'>
+					<button data-id={attendanceMod.id} onClick={this._removeAttendance} className='btn btn-danger btn-xs removeButton'>
 						<i className="fa fa-times"></i>
 					</button>
 					<div className='eventInfo' onClick={handleEvent} data-event-id={attendanceMod.get('event_id')}>
@@ -643,6 +643,12 @@ var Guests = React.createClass({
 
 var GuestList = React.createClass({
 
+
+	_removeAttendance: function(evt) {
+		this.props.attendanceMod.destroy()
+		console.log('this.props.attendanceMod', this.props.attendanceMod)
+	},
+
 	_showGuests:function(){
 		var component = this
 		var guestsArr = this.props.guests
@@ -651,9 +657,15 @@ var GuestList = React.createClass({
 				console.log('guest',guest)
 				return (
 					<div key={i} className='guestItem btn-default'>
+					<button className='btn btn-danger btn-xs removeButton'>
+						<i className="fa fa-times"></i>
+					</button>
 						<img src={guest.get('gravatarURL')}/>
 						<h3>{guest.get('userName')}</h3>
 						<h5>{guest.get('email')}</h5>
+						<button className='btn btn-success btn-xs revolve'>
+							<i className="fa fa-repeat" aria-hidden="true"></i>
+						</button>
 					</div>
 				)
 			}

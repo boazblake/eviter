@@ -341,6 +341,7 @@ a:hover~.badge.dasher{
 
 
     .guestItem   {
+        position: relative;
         padding: 20px;
         margin: 5px 5px;
         display:inline-block;
@@ -355,6 +356,22 @@ a:hover~.badge.dasher{
         flex-flow:row wrap;
         align-content:flex-end;
         box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
+
+        .revolve {
+            position: absolute;
+            opacity: 0;
+            right: -5px;
+            bottom: -5px;
+        }
+
+    }
+
+    .guestItem:hover > .revolve {
+        opacity: 1;
+    }
+
+    .guestItem:hover > .removeButton {
+        opacity: 1;
     }
 
 }
@@ -462,7 +479,11 @@ a:hover~.badge.dasher{
     text-align: center;
     
     .logo {
-        width: 45px;
+        width: 30px;
+    }
+
+    .logoY{
+        width:50px;
     }
       
     h6 {
@@ -470,7 +491,7 @@ a:hover~.badge.dasher{
     }
 
     .deetsWrapper{
-        height: 40px;
+        // height: 40px;
         margin: auto;
         .deets {
             display: inline-block;
