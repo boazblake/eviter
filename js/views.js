@@ -37,7 +37,7 @@ var Header = React.createClass({
 
 		return(
 			<div className='row header'>
-				<a href='#dash'> <h1 className='heading'>EVITER</h1> </a>
+				<a href='#dash'> <h1 className='heading'>ShinDig.It</h1> </a>
 				<div>
 					{this._showUserProfile()}
 					{this._showWelcomeMessage()}
@@ -652,11 +652,11 @@ var GuestList = React.createClass({
 						// 	   <i className="fa fa-times"></i>
 						// </button>
 						// 
-						// 
-	_removeAttendance: function(evt) {
-		this.props.attendanceMod.destroy()
-		console.log('this.props.attendanceMod', this.props.attendanceMod)
-	},
+	// 					// 
+	// _removeAttendance: function(evt) {
+	// 	this.props.attendanceMod.destroy()
+	// 	console.log('this.props.attendanceMod', this.props.attendanceMod)
+	// },
 
 	_showGuests:function(){
 		var component = this
