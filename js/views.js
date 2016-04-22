@@ -119,7 +119,7 @@ var Footer = React.createClass({
 						<a href="mailto:boazblake@gmail.com"><i className="fa fa-envelope"></i></a>
 						<h6>eMail me!</h6>
 					</div>
-					<div className='deets'>
+					<div onclick="" className='deets'>
 						<a target="_blank"  href='https://github.com/boazblake?tab=repositories'><i className="fa fa-github-square"></i></a>
 						<h6>gitHub me!</h6>
 					</div>
@@ -175,7 +175,7 @@ var SplashPage = React.createClass({
 		return(
 			<div className='container splashPageView'>
 				<Header/>
-				<form className=' row form-group signUp' onSubmit={this._handleSubmit}>
+				<form className='row form-group signUp' onSubmit={this._handleSubmit}>
 					<fieldset>
 						<legend className='panel-heading' ><h2>SIGN UP HERE</h2></legend>
 						<div className='form-group form-inline'>
@@ -440,7 +440,7 @@ var EventItem = React.createClass({
 		// console.log('attendanceMod>>>>',attendanceMod)
 		return(
 			<div className='col-xs-12 col-sm-6 col-md-4'>
-				<div className='attendance btn-default'>
+				<div onclick="" className='attendance btn-default'>
 					<button data-id={attendanceMod.id} onClick={this._removeAttendance} className='btn btn-danger btn-xs removeButton'>
 						<i className="fa fa-times"></i>
 					</button>
@@ -591,7 +591,7 @@ var Guests = React.createClass({
 		var searchForAttendance = new QueriedAttendance('email', userEmail)
 		console.log('searchForAttendance', searchForAttendance)
 		
-		if (searchForAttendance.models.id) {
+		if (!searchForAttendance.models.id) {
 			addGuestToEvent(userEmail, this.props.eventID)
 		}
 		else {
@@ -665,7 +665,7 @@ var GuestList = React.createClass({
 			if(guest.id) {
 				console.log('guest',guest)
 				return (
-					<div key={i} className='guestItem btn-default'>
+					<div onclick="" key={i} className='guestItem btn-default'>
 
 						<img src={guest.get('gravatarURL')}/>
 						<h3>{guest.get('userName')}</h3>
@@ -827,7 +827,7 @@ var FoodList = React.createClass({
 			if (foodItem.id) {
 				return(
 					<div className='foodItemWrapper '>
-						<div className='foodItem' draggable="true" key={i} >
+						<div onclick="" className='foodItem' draggable="true" key={i} >
 							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='btn btn-danger btn-xs removeButton'>
 								<i className="fa fa-times"></i>
 							</button>
