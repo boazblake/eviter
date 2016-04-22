@@ -439,8 +439,8 @@ var EventItem = React.createClass({
 		var attendanceMod = this.props.attendanceMod
 		// console.log('attendanceMod>>>>',attendanceMod)
 		return(
-			<div className='col-xs-12 col-sm-6 col-md-4'>
-				<div onclick="" className='attendance btn-default'>
+			<div onclick=' ' className='col-xs-12 col-sm-6 col-md-4'>
+				<div className='attendance btn-default'>
 					<button data-id={attendanceMod.id} onClick={this._removeAttendance} className='btn btn-danger btn-xs removeButton'>
 						<i className="fa fa-times"></i>
 					</button>
