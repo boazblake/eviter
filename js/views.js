@@ -37,7 +37,7 @@ var Header = React.createClass({
 
 		return(
 			<div className='row header'>
-				<a href='#dash'> <h1 className='heading'>ShinDig.It</h1> </a>
+				<a href='#dash'> <h1 className='heading'>Shin-Dig.It</h1> </a>
 				<div>
 					{this._showUserProfile()}
 					{this._showWelcomeMessage()}

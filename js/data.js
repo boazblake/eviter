@@ -46,7 +46,7 @@ var Users = BackboneFire.Firebase.Collection.extend({
  * EVENTS
  */
 var Event = BackboneFire.Firebase.Model.extend({
-	autoSync: false,
+	// autoSync: false,
 
 	url: "" ,
 
