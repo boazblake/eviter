@@ -251,7 +251,7 @@ export function handleEvent(evt){
 }
 
 export function removeAttendance(evt){
-	// console.log(evt.currentTarget)
+	console.log(evt.currentTarget)
 	// console.log('eventID>>>>', evt.currentTarget.getAttribute('data-id'))
 	// console.log('userID>>>>', fbRef.getAuth().uid)
 

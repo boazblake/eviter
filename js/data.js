@@ -46,7 +46,7 @@ var Users = BackboneFire.Firebase.Collection.extend({
  * EVENTS
  */
 var Event = BackboneFire.Firebase.Model.extend({
-	// autoSync: false,
+	autoSync: false,
 
 	url: "" ,
 
@@ -58,7 +58,7 @@ var Event = BackboneFire.Firebase.Model.extend({
 })
 
 var Events = BackboneFire.Firebase.Collection.extend({
-	// autoSync: false,
+	autoSync: false,
 	url: fbUrl('/events/'),
 	// model: Event
 })
@@ -75,7 +75,7 @@ var Attendances = BackboneFire.Firebase.Collection.extend({
 })
 
 var QueriedAttendance = BackboneFire.Firebase.Collection.extend({
-	// autoSync: false,
+	autoSync: false,
 	initialize: function(childKey,id) {
 		this.url = fbRef.child('attendance').orderByChild(childKey).equalTo(id)
 	}
