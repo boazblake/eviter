@@ -725,12 +725,21 @@ var GuestItem = React.createClass({
 					<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolveButton'>
 						   <i className="fa fa-repeat" aria-hidden="true"></i>
 					</button>
-						<img src={guest.get('gravatarURL')}/>
-						<h3>{guest.get('userName')}</h3>
-						<h5>{guest.get('email')}</h5>
+
+					<div className='frontOfGuest'>
+							<img src={guest.get('gravatarURL')}/>
+							<h3>{guest.get('userName')}</h3>
+							<h5>{guest.get('email')}</h5>
+					</div>
+
+					<div style={divStyle} className='backOfGuest'>
+							<img src={guest.get('gravatarURL')}/>
+					</div>
+
 					<button className='btn btn-danger btn-xs removeButton'>
 						   <i className="fa fa-times"></i>
 					</button>
+
 				</div>
 			)
 	}
