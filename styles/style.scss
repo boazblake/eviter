@@ -334,7 +334,9 @@ a:hover~.badge.dasher{
        flex-direction:row;
        flex-wrap:wrap;
        justify-content: space-around;
-       align-items:baseline; 
+       align-items:baseline;
+       perspective: 800px;
+       -webkit-perspective: 800px;
     }
 
 
@@ -357,16 +359,22 @@ a:hover~.badge.dasher{
         align-content:flex-end;
         box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
 
-        .revolve {
+        transform-style: preserve-3d;
+        backface-visibility: visible;
+
+        .revolveButton {
             position: absolute;
             opacity: 0;
             right: -5px;
             bottom: -5px;
         }
 
+        .guestObject {
+
+        }
     }
 
-    .guestItem:hover > .revolve {
+    .guestItem:hover > .revolveButton {
         opacity: 1;
     }
 

@@ -710,23 +710,24 @@ var GuestItem = React.createClass({
 		var component = this
 
 		var guest = component.props.guestModel
+
 		var divStyle = {
 			border:'none'
 		}
-
 		if (this.state.rotated) {
 			var divStyle = {
+				transform:'rotateY(180deg)',
 				border:'2px solid red'
 			}
 		}
 			return (
 				<div style={divStyle} className='guestItem '>
-					<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolve'>
+					<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolveButton'>
 						   <i className="fa fa-repeat" aria-hidden="true"></i>
 					</button>
-					<img src={guest.get('gravatarURL')}/>
-					<h3>{guest.get('userName')}</h3>
-					<h5>{guest.get('email')}</h5>
+						<img src={guest.get('gravatarURL')}/>
+						<h3>{guest.get('userName')}</h3>
+						<h5>{guest.get('email')}</h5>
 					<button className='btn btn-danger btn-xs removeButton'>
 						   <i className="fa fa-times"></i>
 					</button>
