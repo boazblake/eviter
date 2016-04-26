@@ -439,7 +439,7 @@ var EventItem = React.createClass({
 		var attendanceMod = this.props.attendanceMod
 		// console.log('attendanceMod>>>>',attendanceMod)
 		return(
-			<div onclick=' ' className='col-xs-12 col-sm-6 col-md-4'>
+			<div onclick='' className='col-xs-12 col-sm-6 col-md-4'>
 				<div className='attendance btn-default'>
 					<button data-id={attendanceMod.id} onClick={this._removeAttendance} className='btn btn-danger btn-xs removeButton'>
 						<i className="fa fa-times"></i>
@@ -643,20 +643,35 @@ var Guests = React.createClass({
 
 var GuestList = React.createClass({
 
-						// <button className='btn btn-success btn-xs revolve'>
-						// 	   <i className="fa fa-repeat" aria-hidden="true"></i>
-						// </button>
-						// 
-						// 
-						// <button className='btn btn-danger btn-xs removeButton'>
-						// 	   <i className="fa fa-times"></i>
-						// </button>
-						// 
-	// 					// 
+	getInitialState:function(){
+		return {
+			rotated:false
+		}
+	},
+						
 	// _removeAttendance: function(evt) {
 	// 	this.props.attendanceMod.destroy()
 	// 	console.log('this.props.attendanceMod', this.props.attendanceMod)
 	// },
+	
+	_handleRotate:function(guest, evt){
+		console.log('guest.id',guest.id)
+		var guestId = guest.id
+
+		if (this.state.rotated){
+			return (
+				this.setState({
+					rotated:false
+				})		
+			)	
+		} else {
+			return (
+				this.setState({
+				rotated:true
+				})
+			)	
+		}
+	},
 
 	_showGuests:function(){
 		var component = this
@@ -665,12 +680,16 @@ var GuestList = React.createClass({
 			if(guest.id) {
 				console.log('guest',guest)
 				return (
-					<div onclick="" key={i} className='guestItem btn-default'>
-
+					<div key={i} className='guestItem '>
+						<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolve'>
+							   <i className="fa fa-repeat" aria-hidden="true"></i>
+						</button>
 						<img src={guest.get('gravatarURL')}/>
 						<h3>{guest.get('userName')}</h3>
 						<h5>{guest.get('email')}</h5>
-
+						<button className='btn btn-danger btn-xs removeButton'>
+							   <i className="fa fa-times"></i>
+						</button>
 					</div>
 				)
 			}
