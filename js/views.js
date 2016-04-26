@@ -792,7 +792,7 @@ var Food = React.createClass({
 
 
 	render: function(){
-
+		var eventID = this.props.eventID
 		return(
 			<div className='col-xs-12 col-sm-4 bringThis'>
 		
@@ -806,7 +806,7 @@ var Food = React.createClass({
 				</div>
 
 				<div>
-				<FoodList userModel={this.props.userModel} foodListColl={this.props.foodListColl} eventID={this.props.eventID}/>
+				<FoodList userModel={this.props.userModel} foodListColl={this.props.foodListColl} eventID={eventID}/>
 				</div>
 				
 
@@ -816,18 +816,40 @@ var Food = React.createClass({
 })
 
 var FoodList = React.createClass({
-
-	// getInitialState: function () {
-	//     return {selected: false};
-	// },
 	
+	_showFoodItems:function(){
+		
+		var grav = ''
+		var component = this
+		var eventID = component.props.eventID
+		var foodListArr = this.props.foodListColl
+		return foodListArr.map(function(foodItem, i){
+			if (foodItem.id) {
+				return(
+					<FoodItem key={i} foodModel={foodItem} userModel={component.props.userModel} eventID={component.props.eventID}/>
+				)				
+			}
+		}) 
+	},
 
+	render:function(){
+
+		return(
+			<div className='foodListView'>
+					{this._showFoodItems()}
+			</div>
+		)
+	}
+})
+
+var FoodItem = React.createClass({
+	
 	_handleFoodBringer:function(foodItem, evt){
 		console.log('clicked targets model-foodItem',foodItem)
 		// var foodItem = evt.currentTarget.dataset.fooditem_id
 		var foodBringerName
-		var event_id = this.props.eventID
-		var userModel = this.props.userModel
+		var event_id = component.props.eventID
+		var userModel = component.props.userModel
 
 
 		if ( foodItem.get('bringer_uid') === fbRef.getAuth().uid ) {
@@ -846,13 +868,10 @@ var FoodList = React.createClass({
 		else if (foodItem.get('bringer_name') === 'Click to Select') {
 			selectMyFoods(foodItem, userModel, event_id )
 		}
-		// this.state.selected = true
-
-		
 	},
 
 	_removeFood: function(foodItem, evt){
-		var listArr = this.props.foodListColl
+		var listArr = component.props.foodListColl
 		listArr.remove(foodItem)
 		this.forceUpdate()
 	},
@@ -865,72 +884,50 @@ var FoodList = React.createClass({
 
 
 
-	_showFoodItems:function(){
-		var divStyle = {}
-
-		// if (!this.state.selected){
-		// 	divStyle = {
-		// 		color:'rgba(255,175,75,1)'
-		// 	}
-		// } else if (this.state.selected) {
-		// 	divStyle = {
-		// 		color:'rgba(22, 160, 133,1)'
-		// 	}
-		// }
-		
-		var grav = ''
+	render:function(){
 		var component = this
-		var foodListArr = this.props.foodListColl
-		return foodListArr.map(function(foodItem, i){
-			if (foodItem.id) {
-				return(
-					<div className='foodItemWrapper '>
-						<div onclick="" className='foodItem' draggable="true" key={i} >
-							<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='btn btn-danger btn-xs removeButton'>
-								<i className="fa fa-times"></i>
-							</button>
+		var foodItem = component.props.foodModel
+		var userModel = component.props.userModel
+		var eventID = component.props.eventID
+
+		return (
+			<div className='foodItemWrapper '>
+				<div onclick="" className='foodItem' draggable="true" >
+					<button  data-fooditem_id={foodItem.id}onClick={component._removeFood.bind(component, foodItem)} className='btn btn-danger btn-xs removeButton'>
+						<i className="fa fa-times"></i>
+					</button>
 
 
-							<div style={divStyle} data-fooditem_id={foodItem.id} className='foodItemWrapper '>
-								<span onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName '>
-								<img src={foodItem.get('bringer_grav')}/>
-								<button type="button" className="btn btn-default">
-									{foodItem.get('bringer_name')}
-								</button><br/>
-									 is Bringing
+					<div data-fooditem_id={foodItem.id} className='foodItemWrapper '>
+						<span onClick={component._handleFoodBringer.bind(component, foodItem)} className='foodBringerName '>
+						<img src={foodItem.get('bringer_grav')}/>
+						<button type="button" className="btn btn-default">
+							{foodItem.get('bringer_name')}
+						</button><br/>
+							 is Bringing
+						</span>
+
+
+						<div className='lowerHalfFoodItem' >
+							<div className='foodQuantityWrapper'>
+								<i data-foodquant_id='minus' className="fa fa-arrow-down" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+								<span className='badge foodItemName'>
+									{foodItem.get('food_quantity')}
+								</span>
+								
+								<i data-foodquant_id='plus' className="fa fa-arrow-up" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
+
+								<span className='foodName'>
+									<h4>{foodItem.get('food_name')}</h4>
 								</span>
 
-
-								<div className='lowerHalfFoodItem' >
-									<div className='foodQuantityWrapper'>
-										<i data-foodquant_id='minus' className="fa fa-arrow-down" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
-										<span className='badge foodItemName'>
-											{foodItem.get('food_quantity')}
-										</span>
-										
-										<i data-foodquant_id='plus' className="fa fa-arrow-up" onClick={component._handleChangeFoodQuant.bind(component, foodItem)} aria-hidden="true"></i>
-
-										<span className='foodName'>
-											<h4>{foodItem.get('food_name')}</h4>
-										</span>
-									</div>
-								</div>
-
 							</div>
-
 						</div>
-						<br/>
+
 					</div>
-				)				
-			}
-		}) 
-	},
 
-	render:function(){
-
-		return(
-			<div className='foodListView'>
-					{this._showFoodItems()}
+				</div>
+				<br/>
 			</div>
 		)
 	}
