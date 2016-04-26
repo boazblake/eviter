@@ -642,21 +642,54 @@ var Guests = React.createClass({
 })
 
 var GuestList = React.createClass({
-
-	getInitialState:function(){
-		return {
-			rotated:false
-		}
-	},
 						
 	// _removeAttendance: function(evt) {
 	// 	this.props.attendanceMod.destroy()
 	// 	console.log('this.props.attendanceMod', this.props.attendanceMod)
 	// },
 	
+	_showGuests:function(){
+		var component = this
+		var guestsArr = this.props.guests
+		return guestsArr.map(function(guest, i){
+			if(guest.id) {
+				console.log('guest',guest)
+				component = guest
+
+				return (
+					<GuestItem key={i} guestModel={component} />
+				)
+			}
+		})
+
+	},
+
+	render:function(){
+		var component = this
+		var guestsArr = this.props.guestList
+		return(
+			<div className='guestList '>
+				{component._showGuests()}
+			</div>
+		)
+	}
+})
+
+var GuestItem = React.createClass({
+	
+	getInitialState:function(){
+		return {
+			rotated:false
+		}
+	},
+
+	componentWillMount:function(){
+		// var component = this
+	},
+
 	_handleRotate:function(guest, evt){
-		console.log('guest.id',guest.id)
 		var guestId = guest.id
+		console.log('guestId',guestId)
 
 		if (this.state.rotated){
 			return (
@@ -673,40 +706,36 @@ var GuestList = React.createClass({
 		}
 	},
 
-	_showGuests:function(){
-		var component = this
-		var guestsArr = this.props.guests
-		return guestsArr.map(function(guest, i){
-			if(guest.id) {
-				console.log('guest',guest)
-				return (
-					<div key={i} className='guestItem '>
-						<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolve'>
-							   <i className="fa fa-repeat" aria-hidden="true"></i>
-						</button>
-						<img src={guest.get('gravatarURL')}/>
-						<h3>{guest.get('userName')}</h3>
-						<h5>{guest.get('email')}</h5>
-						<button className='btn btn-danger btn-xs removeButton'>
-							   <i className="fa fa-times"></i>
-						</button>
-					</div>
-				)
-			}
-		})
-
-	},
-
 	render:function(){
 		var component = this
-		var guestsArr = this.props.guestList
-		return(
-			<div className='guestList '>
-				{this._showGuests()}
-			</div>
-		)
+
+		var guest = component.props.guestModel
+		var divStyle = {
+			border:'none'
+		}
+
+		if (this.state.rotated) {
+			var divStyle = {
+				border:'2px solid red'
+			}
+		}
+			return (
+				<div style={divStyle} className='guestItem '>
+					<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolve'>
+						   <i className="fa fa-repeat" aria-hidden="true"></i>
+					</button>
+					<img src={guest.get('gravatarURL')}/>
+					<h3>{guest.get('userName')}</h3>
+					<h5>{guest.get('email')}</h5>
+					<button className='btn btn-danger btn-xs removeButton'>
+						   <i className="fa fa-times"></i>
+					</button>
+				</div>
+			)
 	}
 })
+
+
 
 //Foods
 var Food = React.createClass({
