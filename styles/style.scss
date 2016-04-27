@@ -360,6 +360,7 @@ a:hover~.badge.dasher{
 
         perspective: 800px;
         -webkit-perspective: 800px;
+        transition:0.8s;
 
         .frontOfGuest, .backOfGuest {
             -webkit-transform-style: preserve-3d;
@@ -368,6 +369,7 @@ a:hover~.badge.dasher{
         }
 
         .backOfGuest {
+            background: #334C54;
             -webkit-transform:rotateY(180deg);
         }
 
@@ -406,10 +408,19 @@ a:hover~.badge.dasher{
         }
     }
     
+    .foodListWrapper{
+        height: 50vh;
+        overflow: scroll;
+    }
+
+
     .foodListView{
+        height: 50vh;
+        overflow: scroll;
+        background:rgba(96,125,139,0.23);
         display: flex;
         flex-direction:column-reverse;
-        flex-wrap:wrap;
+        flex-wrap:nowrap;
         align-items:center;
 
 

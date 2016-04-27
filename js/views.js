@@ -341,7 +341,7 @@ var CreateEvent = React.createClass({
 })
 
 
-//Events
+//All Events
 var MyEvents = React.createClass({
 	getInitialState:function(){
 		return{
@@ -473,7 +473,7 @@ var EventItem = React.createClass({
 
 
 
-// Detail of Event
+// Event Page
 var EventPage = React.createClass({
 
 	getInitialState:function() {
@@ -575,7 +575,7 @@ var EventDeets = React.createClass({
 })
 
 
-//Guests
+//Guests Section
 var Guests = React.createClass({
 
 	_handleAddGuest: function(evt){
@@ -653,7 +653,6 @@ var GuestList = React.createClass({
 		var guestsArr = this.props.guests
 		return guestsArr.map(function(guest, i){
 			if(guest.id) {
-				console.log('guest',guest)
 				component = guest
 
 				return (
@@ -685,6 +684,7 @@ var GuestItem = React.createClass({
 
 	componentWillMount:function(){
 		// var component = this
+		// 
 	},
 
 	_handleRotate:function(guest, evt){
@@ -706,7 +706,10 @@ var GuestItem = React.createClass({
 		}
 	},
 
+
 	render:function(){
+
+
 		var component = this
 
 		var guest = component.props.guestModel
@@ -717,7 +720,6 @@ var GuestItem = React.createClass({
 		if (this.state.rotated) {
 			var divStyle = {
 				transform:'rotateY(180deg)',
-				border:'2px solid red'
 			}
 		}
 			return (
@@ -725,21 +727,14 @@ var GuestItem = React.createClass({
 					<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolveButton'>
 						   <i className="fa fa-repeat" aria-hidden="true"></i>
 					</button>
-
 					<div className='frontOfGuest'>
 							<img src={guest.get('gravatarURL')}/>
 							<h3>{guest.get('userName')}</h3>
 							<h5>{guest.get('email')}</h5>
 					</div>
-
-					<div style={divStyle} className='backOfGuest'>
-							<img src={guest.get('gravatarURL')}/>
-					</div>
-
 					<button className='btn btn-danger btn-xs removeButton'>
 						   <i className="fa fa-times"></i>
 					</button>
-
 				</div>
 			)
 	}
@@ -747,7 +742,7 @@ var GuestItem = React.createClass({
 
 
 
-//Foods
+//Foods Section
 var Food = React.createClass({
 	
 	foodItem:{
@@ -805,7 +800,7 @@ var Food = React.createClass({
 					</form>
 				</div>
 
-				<div>
+				<div classname='foodListWrapper'>
 				<FoodList userModel={this.props.userModel} foodListColl={this.props.foodListColl} eventID={eventID}/>
 				</div>
 				
@@ -845,6 +840,7 @@ var FoodList = React.createClass({
 var FoodItem = React.createClass({
 	
 	_handleFoodBringer:function(foodItem, evt){
+		var component = this
 		console.log('clicked targets model-foodItem',foodItem)
 		// var foodItem = evt.currentTarget.dataset.fooditem_id
 		var foodBringerName
@@ -871,6 +867,7 @@ var FoodItem = React.createClass({
 	},
 
 	_removeFood: function(foodItem, evt){
+		var component = this
 		var listArr = component.props.foodListColl
 		listArr.remove(foodItem)
 		this.forceUpdate()
