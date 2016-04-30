@@ -48,10 +48,21 @@ var Header = React.createClass({
 })
 
 var NavBar = React.createClass({
+
+	getInitialState:function(){
+		return {
+			display:'none'
+		}
+	},
+
 	_showDashButton:function(){
+		var divStyle = {
+			display:this.state.display
+		}
 		if (location.hash !=='#dash') {
 			return (<a href='#dash' title='back to dashboard'>
 						<i className='btn btn-lg btn-primary fa fa-reply fa-fw'></i>
+						<p style={divStyle}>Back To Dashboard</p>
 					</a>
 
 			)
@@ -84,15 +95,30 @@ var NavBar = React.createClass({
 
 
 	render: function(){
+
+		function _showVerbage(){
+			console.log('divStyle.display', divStyle.display)
+			if (divStyle.display === 'none') {
+				console.log('divStyle.display', divStyle.display)
+				return divStyle.display = 'block'
+
+			} else if (divStyle.display === 'block') {
+				console.log('divStyle.display', divStyle.display)
+				return divStyle.display = 'none'
+			}
+		}
+
+		var divStyle = {
+			display:this.state.display
+		}
+
 		return(
 			<div className='navBar'>
 				{this._showDashButton()}
-				<span className='badge dasher'>BACK TO DASHBOARD</span>
 				{this._showEventTitle()}
-				<a className='signouterShower'></a>
-				<span className='badge signouter'>SIGNOUT</span>
-				<a href='#logout' title='logout'>
+				<a href='#logout' title='logout' onMouseEnter={_showVerbage()} onMouseLeave={_showVerbage()}>
 					<i className='btn btn-lg btn-primary fa fa-sign-out fa-fw'></i>
+					<p style={divStyle}>LogOut</p>
 				</a>
 			</div>
 		)
@@ -714,9 +740,6 @@ var GuestItem = React.createClass({
 
 		var guest = component.props.guestModel
 
-		var divStyle = {
-			border:'none'
-		}
 		if (this.state.rotated) {
 			var divStyle = {
 				transform:'rotateY(180deg)',
@@ -724,17 +747,23 @@ var GuestItem = React.createClass({
 		}
 			return (
 				<div style={divStyle} className='guestItem '>
-					<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolveButton'>
-						   <i className="fa fa-repeat" aria-hidden="true"></i>
+
+					<button className='btn btn-danger btn-xs removeButton'>
+						   <i className="fa fa-times"></i>
 					</button>
-					<div className='frontOfGuest'>
+
+					<div className='guestSide frontOfGuest'>
 							<img src={guest.get('gravatarURL')}/>
 							<h3>{guest.get('userName')}</h3>
 							<h5>{guest.get('email')}</h5>
 					</div>
-					<button className='btn btn-danger btn-xs removeButton'>
-						   <i className="fa fa-times"></i>
+					<div className='guestSide BackOfGuest'></div>
+
+					<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolveButton'>
+						   <i className="fa fa-repeat" aria-hidden="true"></i>
 					</button>
+
+
 				</div>
 			)
 	}
@@ -800,7 +829,7 @@ var Food = React.createClass({
 					</form>
 				</div>
 
-				<div classname='foodListWrapper'>
+				<div className='foodListWrapper'>
 				<FoodList userModel={this.props.userModel} foodListColl={this.props.foodListColl} eventID={eventID}/>
 				</div>
 				

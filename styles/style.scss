@@ -212,31 +212,7 @@ body .splashPageView{
     background-color:rgba(236, 240, 241,0.5);
     position: relative;
     
-
-    span{
-        opacity: 0;
-    }
-    .badge.dasher{
-        padding-right: -175px;
-    }
-    .badge.signouter {
-        padding-left: -250px;
-    }
 }
-
-a:hover ~ .signouter {
-    opacity: 1;
-    padding-left: -175px;
-}
-
-
-a:hover~.badge.dasher{
-        opacity: 1;
-        padding-right: -200px;
-}
-
-
-
 
 .signUp, .logIn{
     background-color: rgba(44, 62, 80,0.2);
@@ -358,19 +334,33 @@ a:hover~.badge.dasher{
         align-content:flex-end;
         box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
 
+
         perspective: 800px;
-        -webkit-perspective: 800px;
         transition:0.8s;
 
-        .frontOfGuest, .backOfGuest {
-            -webkit-transform-style: preserve-3d;
-            -webkit-backface-visibility: hidden; 
-            z-index: 1;   
+        
+        .guestSide{
+            // position: absolute;
+            // width: 100%;
+            // height: 100%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden; 
+
+            &.frontOfGuest {
+                transform: rotateY(0deg);
+                z-index: 1;
+            }
+
+            &.backOfGuest {
+                transform: rotateY(180deg);
+                z-index: 2;
+                background: #334C54;
+            }
         }
 
+
         .backOfGuest {
-            background: #334C54;
-            -webkit-transform:rotateY(180deg);
+            transform:rotateY(180deg);
         }
 
         .revolveButton {
