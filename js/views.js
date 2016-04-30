@@ -125,6 +125,7 @@ var NavBar = React.createClass({
 	}
 })
 
+
 var Footer = React.createClass({
 	render: function(){
 		return (
