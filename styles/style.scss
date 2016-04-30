@@ -318,12 +318,13 @@ body .splashPageView{
 
 
     .guestItem   {
+        height: 300px;
+        width:250px;
         position: relative;
         padding: 20px;
         margin: 5px 5px;
         display:inline-block;
         color: aliceblue;
-        background: rgba(22,97,120,1);
         display: inline-flex;
         display: inline-block;
         flex-direction:row;
@@ -333,22 +334,22 @@ body .splashPageView{
         flex-flow:row wrap;
         align-content:flex-end;
         box-shadow: 6px 10px 37px -6px rgba(0,0,0,0.75);
-
-
         perspective: 800px;
         transition:0.8s;
 
         
         .guestSide{
-            // position: absolute;
-            // width: 100%;
-            // height: 100%;
+            position: absolute;
+            width: 100%;
+            height: 100%;
             transform-style: preserve-3d;
-            backface-visibility: hidden; 
+            backface-visibility: hidden;
 
             &.frontOfGuest {
                 transform: rotateY(0deg);
                 z-index: 1;
+                background: rgba(22,97,120,1);
+
             }
 
             &.backOfGuest {
@@ -356,11 +357,6 @@ body .splashPageView{
                 z-index: 2;
                 background: #334C54;
             }
-        }
-
-
-        .backOfGuest {
-            transform:rotateY(180deg);
         }
 
         .revolveButton {
