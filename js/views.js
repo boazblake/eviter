@@ -744,6 +744,9 @@ var GuestItem = React.createClass({
 			var divStyle = {
 				transform:'rotateY(180deg)',
 			}
+			var divStyleBack = {
+				transform:'rotateY(0deg)',
+			}
 		}
 			return (
 				<div style={divStyle} className='guestItem '>
@@ -757,7 +760,8 @@ var GuestItem = React.createClass({
 							<h3>{guest.get('userName')}</h3>
 							<h5>{guest.get('email')}</h5>
 					</div>
-					<div className='guestSide BackOfGuest'></div>
+					<div style={divStyleBack} className='guestSide backOfGuest'>
+					</div>
 
 					<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolveButton'>
 						   <i className="fa fa-repeat" aria-hidden="true"></i>
