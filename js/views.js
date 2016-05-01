@@ -24,7 +24,6 @@ var Header = React.createClass({
 	_showUserProfile: function(){
 		if (fbRef.getAuth()) {
 			var gravatar = fbRef.getAuth().password.profileImageURL
-			// console.log('gravatar', gravatar)
 			return (
 				<img src={gravatar}/>
 				)
@@ -99,13 +98,10 @@ var NavBar = React.createClass({
 
 		function _handleShowVerbage(){
 			function _showVerbage(){
-				console.log('divStyle.display', divStyle.display)
 				if (divStyle.display === 'none') {
-					console.log('divStyle.display', divStyle.display)
 					return divStyle.display = 'block'
 
 				} else if (divStyle.display === 'block') {
-					console.log('divStyle.display', divStyle.display)
 					return divStyle.display = 'none'
 				}
 			}
@@ -177,7 +173,7 @@ var SplashPage = React.createClass({
 
 	_handleShowSignIn:function(){
 		var component = this
-		 console.log('component.state.signInShowing',component.state.signInShowing)
+		
 		if (this.state.signInShowing) {
 			return (
 				this.setState({
@@ -232,20 +228,9 @@ var SplashPage = React.createClass({
 	render:function(){
 
 		if (this.state.signInShowing) {
-			var divStyle = {
-				// display:'block',
-				opacity:'1',
-				height:'100%',
-				transition:'0.5s ease all'
-			}
+			var divStyle = 'signInShowing'
 		} else {
-			var divStyle = {
-				// display:'none',
-				opacity:'0',
-				overflow:'hidden',
-				height:'0',
-				transition:'0.5s ease all'
-			}
+			var divStyle = 'signInNotShowing'
 		}
 
 
@@ -254,7 +239,7 @@ var SplashPage = React.createClass({
 				<Header/>
 				<form className='row form-group signUp' onSubmit={this._handleSubmit}>
 					<legend className='panel-heading' onClick={this._handleShowSignIn}><h2>SIGN UP HERE</h2></legend>
-					<fieldset style={divStyle}>
+					<fieldset className={divStyle}>
 						<div className='form-group form-inline'>
 							<input required='required' className="form-control" type='text' id="focusedInput" placeholder='Enter email here' onChange={this._upDateEmail}/>
 							<input required='required' className="form-control" type='password' placeholder='password' onChange={this._upDatePass}/><br/>
@@ -299,7 +284,6 @@ var DashPage = React.createClass({
 
 		BackboneFire.Events.on('pollForNewData',
 			function(){
-				console.log('poll heard, component updating...')
 				component.state.userModel.fetchWithPromise().then(() => component.forceUpdate())
 				})
 
@@ -331,7 +315,6 @@ var CreateEvent = React.createClass({
 
 	componentWillMount:function(){
 		var component = this
-		console.log('authed user??', fbRef.getAuth().uid)
 		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
 
 	},
@@ -379,7 +362,6 @@ var CreateEvent = React.createClass({
 
 	_submitEvent:function(evt){
 		evt.preventDefault()
-		console.log('submit evetn firred')
 		this.eventObj.gravatarURL = fbRef.getAuth().password.profileImageURL
 		var component = this
 		var hostModel = new User(fbRef.getAuth().uid )
@@ -428,7 +410,6 @@ var MyEvents = React.createClass({
 
 
 	_eventInvite:function(model, i){
-		// console.log('model:>>>>',model)
 		if (model.id)
 		return <EventItem eventInfo={model} key={i} viewEvent={this.props.viewEvent} />
 	},
@@ -438,20 +419,17 @@ var MyEvents = React.createClass({
 		var component = this
 
 		function setAttendanceState(comp, fbAttCollection) {
-			console.log('myAttendances', fbAttCollection)
 
 			var modsArr = fbAttCollection.models
 			var noGhostList = modsArr.filter(function(model, i){
 				 return model.id
 			})
 
-			console.log('noooo ghosts', noGhostList)
 			comp.setState({
 				attendanceMods: noGhostList
 			})
 		}
 
-		console.log('user uid',fbRef.getAuth().uid)
 		this.myAttendances = new QueriedAttendance('user_uid', fbRef.getAuth().uid )
 
 		if (typeof this.myAttendances.models[0].id === 'undefined'){
@@ -464,9 +442,7 @@ var MyEvents = React.createClass({
 			setAttendanceState(component, component.myAttendances) 
 		})
 
-		// console.log('about to poll')
 		BackboneFire.Events.on('pollForNewData', function(){
-			console.log("data getting poolled forr")
 			component.myAttendances.fetch()
 		})
 	},
@@ -478,7 +454,6 @@ var MyEvents = React.createClass({
 	 
 	 render:function(){
 
-	 	console.log('this.state.attendanceMods', this.state.attendanceMods)
 
 	 	var altImage = ''
 	 	if (this.state.attendanceMods) {
@@ -509,12 +484,10 @@ var EventItem = React.createClass({
 
 	_removeAttendance: function(evt) {
 		this.props.attendanceMod.destroy()
-		console.log('this.props.attendanceMod', this.props.attendanceMod)
 	},
 
 	render:function(){
 		var attendanceMod = this.props.attendanceMod
-		// console.log('attendanceMod>>>>',attendanceMod)
 		return(
 			<div onclick='' className='col-xs-12 col-sm-6 col-md-4'>
 				<div className='attendance btn-default'>
@@ -571,7 +544,6 @@ var EventPage = React.createClass({
 
 		BackboneFire.Events.on('pollForNewData',
 			function(){
-				console.log('poll heard, component updating...')
 				component.state.event.fetchWithPromise().then(() => component.forceUpdate())
 				component.state.guestList.fetchWithPromise().then(() => component.forceUpdate())
 				component.state.foodListColl.fetchWithPromise().then(function(){
@@ -619,8 +591,6 @@ var EventDeets = React.createClass({
 		 	var allGuests = guestListArray
 		 	var allPlusOnes = parseInt(displayPartySize(allGuests))
 		 	var totalGuests = parseInt(guestListModels.length, 10) + allPlusOnes
-		 	console.log('allPlusOnes', allPlusOnes)
-		 	console.log('totalGuests', totalGuests)
 		 	return totalGuests
 
 		 }
@@ -672,13 +642,11 @@ var Guests = React.createClass({
 
 		var usersEmail = this.refs.userEmail.value
 		var userEmail = usersEmail.toLowerCase()
-		console.log('userEmail', userEmail)
 
 		var eventID = this.props.eventID
 		this.refs.userEmail.value = ''
 
 		var searchForAttendance = new QueriedAttendance('email', userEmail)
-		console.log('searchForAttendance', searchForAttendance)
 		
 		if (!searchForAttendance.models.id) {
 			addGuestToEvent(userEmail, this.props.eventID)
@@ -734,7 +702,6 @@ var GuestList = React.createClass({
 						
 	// _removeAttendance: function(evt) {
 	// 	this.props.attendanceMod.destroy()
-	// 	console.log('this.props.attendanceMod', this.props.attendanceMod)
 	// },
 	
 	_showGuests:function(){
@@ -778,7 +745,6 @@ var GuestItem = React.createClass({
 
 	_handleRotate:function(guest, evt){
 		var guestId = guest.id
-		console.log('guestId',guestId)
 
 		if (this.state.rotated){
 			return (
@@ -796,14 +762,11 @@ var GuestItem = React.createClass({
 	},
 
 	_handlePartySize:function(attendanceModel, evt){
-		console.log('attendanceModel', attendanceModel)
-		console.log('evt', evt)
 		changePartySize(attendanceModel, evt)
 	},
 
 	_removeAttendance: function(evt) {
 		this.props.guestModel.destroy()
-		// console.log('this.props.guestModel', this.props.guestModel)
 		pollForNewData()
 	},
 
@@ -905,7 +868,6 @@ var Food = React.createClass({
 		
 		var newFoodAdded = new BackboneFire.Model(component.foodItem)
 		foodListCollection.create(newFoodAdded.attributes)
-		console.log('foodListCollection', foodListCollection)
 
 	},
 
@@ -965,7 +927,6 @@ var FoodItem = React.createClass({
 	
 	_handleFoodBringer:function(foodItem, evt){
 		var component = this
-		console.log('clicked targets model-foodItem',foodItem)
 		// var foodItem = evt.currentTarget.dataset.fooditem_id
 		var foodBringerName
 		var event_id = component.props.eventID
@@ -973,7 +934,6 @@ var FoodItem = React.createClass({
 
 
 		if ( foodItem.get('bringer_uid') === fbRef.getAuth().uid ) {
-			console.log('yes')
 			
 			 foodItem.set({
 				bringer_name:'Click to Select',
@@ -998,8 +958,6 @@ var FoodItem = React.createClass({
 	},
 
 	_handleChangeFoodQuant: function(foodItemMdl, evt){
-		console.log('evt.currentTarget.dataset.foodquant_id', evt.currentTarget.dataset.foodquant_id)
-		console.log('foodItemMdl', foodItemMdl)
 		changeFoodAmount(foodItemMdl, evt)
 	},
 

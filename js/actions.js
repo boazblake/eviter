@@ -21,15 +21,12 @@ export function numToMonth(month) {
 }
 
 export function pollForNewData(){
-	console.log('polling for new data')
 	setTimeout(function(){
 		BackboneFire.Events.trigger('pollForNewData')
 	}, 1000)
 }
 
 export function changeFoodAmount(foodItemMdl, evt){
-	console.log('evt.currentTarget.dataset.foodquant_id', evt.currentTarget.dataset.foodquant_id)
-	console.log('foodItemMdl', foodItemMdl)
 	var buttonPressed = evt.currentTarget.dataset.foodquant_id
 
 	if (buttonPressed === 'plus') {
@@ -49,9 +46,6 @@ export function changeFoodAmount(foodItemMdl, evt){
 }
 
 export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
-	console.log('foodBringerMdl', foodBringerMdl)
-	console.log('foodItmModel', foodItmModel)
-	console.log('eventID', eventID)
 
 	
 
@@ -60,7 +54,6 @@ export function selectMyFoods(foodItmModel, foodBringerMdl, eventID){
 		bringer_uid: foodBringerMdl.id,
 		bringer_name:foodBringerMdl.get('firstName') + ' ' + foodBringerMdl.get('lastName')
 	})
-	console.log('foodItmModel', foodItmModel)
 
 
 	pollForNewData()
@@ -76,8 +69,6 @@ export function createEvent(eventObj, hostModel) {
 	var events = new Events()
 	var eventModel = events.create(data)
 
-	console.log('eventModel', eventModel)
-	console.log('data', data)
 
 	eventModel.once('sync', function() {
 	
@@ -95,7 +86,6 @@ export function createEvent(eventObj, hostModel) {
 			party_size:'0'
 		}
 		
-		console.log('attendanceObj', attendanceObj)
 
 
 
@@ -114,13 +104,10 @@ export function createUser(userObj) {
     },
     function(err, authData) {
         if (err) {
-        	console.log(err)
         	return
         } else {
         	
         	// var gravatar = fbRef.getAuth().password.profileImageURL
-        	// console.log('fbRef',fbRef.getAuth().password.profileImageURL)
-        	// console.log('gravatar',gravatar)
         	
 			BackboneFire.Events.trigger('updateComponent')
 			pollForNewData()
@@ -130,7 +117,6 @@ export function createUser(userObj) {
             })
             
             p.then(function(pData) {
-            	console.log('userMod + auth data on signup...', pData)
 
         		let users = new Users()
         		users.create({
@@ -149,17 +135,14 @@ export function createUser(userObj) {
 
 export function addGuestToEvent(recipientEmail, evtModel){
 
-	console.log('evtModel', evtModel)
 
 	var queriedUsers = new QueryByEmail(recipientEmail)
 	var user = queriedUsers
 
-	console.log('user', user)
 
 	queriedUsers.on('sync', function( ){
 		if( user.models[0].id ){
 			var recipientUserModel = user.models[0]
-			console.log('queried email result:  : ', recipientUserModel)
 
 			var evtPlusUsrObj = {
 				event_id: evtModel.id,
@@ -180,7 +163,6 @@ export function addGuestToEvent(recipientEmail, evtModel){
 			alert('no match for ', recipientEmail)
 		}
 
-			console.log('evtPlusUsrObj ', evtPlusUsrObj)
 
 		pollForNewData()
 
@@ -188,8 +170,6 @@ export function addGuestToEvent(recipientEmail, evtModel){
 }
 
 export function changePartySize(attendanceModel, evt){
-	console.log('evt.currentTarget.dataset.partyquant_id', evt.currentTarget.dataset.partyquant_id)
-	console.log('attendanceModel', attendanceModel)
 	var buttonPressed = evt.currentTarget.dataset.partyquant_id
 
 	if (buttonPressed === 'plus') {
@@ -209,11 +189,9 @@ export function changePartySize(attendanceModel, evt){
 }
 
 export function displayPartySize(allGuestsColl){
-	console.log('allGuestsColl',allGuestsColl)
 	var totalGuests = new Number()
 		var allPlusOnes = allGuestsColl.map(function(guest){
 			if (guest.id) {
-				console.log("guest.get('party_size')", guest.get('party_size'))
 				totalGuests += parseInt(guest.get('party_size'))
 				return  totalGuests
 			}
@@ -237,7 +215,6 @@ export function createAttendanceForEvt(evtPlusUsrObj){
 		// userName:
 		// email: 
 		// hostName:
-	console.log('evtPlusUsrObj', evtPlusUsrObj)
 
 
 	if (!evtPlusUsrObj.event_id)  {alert("obj missing event_id"); return}
@@ -290,14 +267,10 @@ export function getMyEvents(){
 
 export function handleEvent(evt){
 		var event_id = evt.currentTarget.getAttribute('data-event-id')
-		// console.log('event_id',event_id)
 		location.hash = 'event/' + event_id
 }
 
 export function removeAttendance(evt){
-	console.log(evt.currentTarget)
-	// console.log('eventID>>>>', evt.currentTarget.getAttribute('data-id'))
-	// console.log('userID>>>>', fbRef.getAuth().uid)
 
 	var eventID = evt.currentTarget.getAttribute('data-id')
 	var userId = fbRef.getAuth().uid
@@ -305,14 +278,11 @@ export function removeAttendance(evt){
 
 	var removeUrl = `https://eviter.firebaseio.com/attendance/${eventID}/`
 
-	// console.log(removeUrl)
 	var removeEvent = new Firebase(removeUrl)
 
 	var onComplete = function(error) {
 	  if (error) {
-	    // console.log('Synchronization failed');
 	  } else {
-	    // console.log('Synchronization succeeded');
 	  }
 		// BackboneFire.Events.trigger('updateComponent')
 		pollForNewData()
