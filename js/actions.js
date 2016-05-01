@@ -89,7 +89,8 @@ export function createEvent(eventObj, hostModel) {
 			email: hostModel.get('email'),
 			hostName:eventModel.get('hostName'),
 			hostGravatarURL:data.gravatarURL,
-			gravatarURL:data.gravatarURL
+			gravatarURL:data.gravatarURL,
+			party_size:0
 		}
 		
 		console.log('attendanceObj', attendanceObj)
@@ -182,6 +183,26 @@ export function addGuestToEvent(recipientEmail, evtModel){
 
 	})	
 }
+
+export function changePartySize(attendanceModel, evt){
+	console.log('evt.currentTarget.dataset.partyquant_id', evt.currentTarget.dataset.partyquant_id)
+	console.log('attendanceModel', attendanceModel)
+	var buttonPressed = evt.currentTarget.dataset.partyquant_id
+
+	if (buttonPressed === 'plus') {
+		attendanceModel.set({
+			party_size:parseInt(attendanceModel.get('party_size')) + 1
+		})
+	} else if (buttonPressed === 'minus') {
+		attendanceModel.set({
+			party_size:parseInt(attendanceModel.get('party_size')) - 1
+		})
+	}
+	attendanceModel.save()
+	// BackboneFire.Events.trigger('updateComponent')
+	pollForNewData()
+}
+
 
 export function createAttendanceForEvt(evtPlusUsrObj){
 	// REQUIRES

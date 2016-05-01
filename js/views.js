@@ -2,7 +2,7 @@ import DOM from 'react-dom'
 import fbRef from './fbref'
 import BackboneFire from 'bbfire'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData, numToMonth, countUnselectedFood} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData, numToMonth, countUnselectedFood, changePartySize} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, AddFood, FoodsToBring} from './data'
 
 
@@ -96,17 +96,22 @@ var NavBar = React.createClass({
 
 	render: function(){
 
-		function _showVerbage(){
-			console.log('divStyle.display', divStyle.display)
-			if (divStyle.display === 'none') {
+		function _handleShowVerbage(){
+			function _showVerbage(){
 				console.log('divStyle.display', divStyle.display)
-				return divStyle.display = 'block'
+				if (divStyle.display === 'none') {
+					console.log('divStyle.display', divStyle.display)
+					return divStyle.display = 'block'
 
-			} else if (divStyle.display === 'block') {
-				console.log('divStyle.display', divStyle.display)
-				return divStyle.display = 'none'
+				} else if (divStyle.display === 'block') {
+					console.log('divStyle.display', divStyle.display)
+					return divStyle.display = 'none'
+				}
 			}
+
 		}
+
+
 
 		var divStyle = {
 			display:this.state.display
@@ -116,7 +121,7 @@ var NavBar = React.createClass({
 			<div className='navBar'>
 				{this._showDashButton()}
 				{this._showEventTitle()}
-				<a href='#logout' title='logout' onMouseEnter={_showVerbage()} onMouseLeave={_showVerbage()}>
+				<a href='#logout' title='logout' onMouseEnter={_handleShowVerbage()} onMouseLeave={_handleShowVerbage()}>
 					<i className='btn btn-lg btn-primary fa fa-sign-out fa-fw'></i>
 					<p style={divStyle}>LogOut</p>
 				</a>
@@ -563,6 +568,8 @@ var EventDeets = React.createClass({
 		
 		 var foodCount = countUnselectedFood(foodListColl)
 
+		 function guestListNumber(){}
+
 		return (
 			<div className={'row alert alert-info eventDeets' /**/}>
 				<div className='col-xs-12 col-sm-4 text-primary panel-info'>
@@ -736,6 +743,7 @@ var GuestItem = React.createClass({
 	_handlePartySize:function(attendanceModel, evt){
 		console.log('attendanceModel', attendanceModel)
 		console.log('evt', evt)
+		changePartySize(attendanceModel, evt)
 	},
 
 
@@ -773,23 +781,15 @@ var GuestItem = React.createClass({
 							<h3 className='panel-heading'>RSVP</h3>
 							<h4>I am bringing</h4>
 							<div className='partySize'>
+								<div className='partSizeWarpper'>
+									<i data-partyquant_id='minus' className="fa fa-arrow-down" onClick={component._handlePartySize.bind(component, guest)} aria-hidden="true"></i>
+									<span className='badge guestName'>
+										{guest.get('party_size')}
+									</span>
+									
+									<i data-partyquant_id='plus' className="fa fa-arrow-up" onClick={component._handlePartySize.bind(component, guest)} aria-hidden="true"></i>
+								</div>
 
-
-							<div className='partSizeWarpper'>
-								<i data-foodquant_id='minus' className="fa fa-arrow-down" onClick={component._handlePartySize.bind(component, guest)} aria-hidden="true"></i>
-								<span className='badge guestName'>
-									{guest.get('party_size')}
-								</span>
-								
-								<i data-foodquant_id='plus' className="fa fa-arrow-up" onClick={component._handlePartySize.bind(component, guest)} aria-hidden="true"></i>
-							</div>
-
-
-								<h4 className='badge'>
-									0
-									<i class="fa fa-arrow-up"></i>
-									<i class="fa fa-arrow-down"></i>
-								</h4>
 							</div>
 							<h4>guests</h4>
 						</div>
