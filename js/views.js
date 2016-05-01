@@ -233,11 +233,12 @@ var SplashPage = React.createClass({
 			var divStyle = 'signInNotShowing'
 		}
 
-
+		var classNameSign=`row form-group signUp ${divStyle}`
+		
 		return(
 			<div className='container splashPageView'>
 				<Header/>
-				<form className='row form-group signUp' onSubmit={this._handleSubmit}>
+				<form className={classNameSign} onSubmit={this._handleSubmit}>
 					<legend className='panel-heading' onClick={this._handleShowSignIn}><h2>SIGN UP HERE</h2></legend>
 					<fieldset className={divStyle}>
 						<div className='form-group form-inline'>
