@@ -235,6 +235,7 @@ var SplashPage = React.createClass({
 
 		var classNameSign=`row form-group signUp ${divStyle}`
 		
+		
 		return(
 			<div className='container splashPageView'>
 				<Header/>
