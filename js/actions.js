@@ -203,6 +203,21 @@ export function changePartySize(attendanceModel, evt){
 	pollForNewData()
 }
 
+export function displayPartySize(allGuestsColl){
+	console.log('allGuestsColl',allGuestsColl)
+	var totalPartySize = 0
+		var allPlusOnes = allGuestsColl.map(function(guest){
+			if (guest.id) {
+				return  guest.get('party_size')
+			}
+		})
+			return allPlusOnes
+	
+
+	//>>> 3
+	//[0]
+}
+
 
 export function createAttendanceForEvt(evtPlusUsrObj){
 	// REQUIRES

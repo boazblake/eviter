@@ -2,7 +2,7 @@ import DOM from 'react-dom'
 import fbRef from './fbref'
 import BackboneFire from 'bbfire'
 import React, {Component} from 'react'
-import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData, numToMonth, countUnselectedFood, changePartySize} from './actions'
+import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData, numToMonth, countUnselectedFood, changePartySize, displayPartySize} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, AddFood, FoodsToBring} from './data'
 
 
@@ -562,15 +562,18 @@ var EventDeets = React.createClass({
 		var component = this
 		var event = component.props.eventDeets
 
-		var guestListArray = this.props.guestList.models
+		var guestListArray = component.props.guestList
+		var guestListModels = component.props.guestList.models
 		
-		var foodListColl = this.props.foodListColl
+		var foodListColl = component.props.foodListColl
 		
 		 var foodCount = countUnselectedFood(foodListColl)
 
 		 function _allPlusOnes(){
-		 	var allGuests = guestListArray[0].get('party_size')
-		 	return allGuests
+		 	component = this
+		 	var allGuests = guestListArray
+		 	 return (displayPartySize(allGuests))
+
 		 }
 
 		return (
@@ -600,7 +603,7 @@ var EventDeets = React.createClass({
 				</div>
 
 				<div className='col-xs-12 col-sm-4 text-primary nav nav-pills'>
-					<strong>TOTAL GUESTS ATTENDING</strong><span className='badge alert-success'>{guestListArray.length + _allPlusOnes()}</span>
+					<strong>TOTAL GUESTS ATTENDING</strong><span className='badge alert-success'>{guestListModels.length + _allPlusOnes()}</span>
 					<br/>
 					<br/>
 					<strong>UNSELECTED ITEMS</strong><span className='badge alert-danger'>{foodCount.length}</span>
