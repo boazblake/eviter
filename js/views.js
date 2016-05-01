@@ -568,7 +568,10 @@ var EventDeets = React.createClass({
 		
 		 var foodCount = countUnselectedFood(foodListColl)
 
-		 function guestListNumber(){}
+		 function _allPlusOnes(){
+		 	var allGuests = guestListArray[0].get('party_size')
+		 	return allGuests
+		 }
 
 		return (
 			<div className={'row alert alert-info eventDeets' /**/}>
@@ -597,7 +600,7 @@ var EventDeets = React.createClass({
 				</div>
 
 				<div className='col-xs-12 col-sm-4 text-primary nav nav-pills'>
-					<strong>TOTAL GUESTS ATTENDING</strong><span className='badge alert-success'>{guestListArray.length}</span>
+					<strong>TOTAL GUESTS ATTENDING</strong><span className='badge alert-success'>{guestListArray.length + _allPlusOnes()}</span>
 					<br/>
 					<br/>
 					<strong>UNSELECTED ITEMS</strong><span className='badge alert-danger'>{foodCount.length}</span>
