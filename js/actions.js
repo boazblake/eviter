@@ -37,9 +37,11 @@ export function changeFoodAmount(foodItemMdl, evt){
 			food_quantity:parseInt(foodItemMdl.get('food_quantity')) + 1
 		})
 	} else if (buttonPressed === 'minus') {
-		foodItemMdl.set({
-			food_quantity:parseInt(foodItemMdl.get('food_quantity')) - 1
-		})
+		if (foodItemMdl.get('food_quantity') > 0) {
+			foodItemMdl.set({
+				food_quantity:parseInt(foodItemMdl.get('food_quantity')) - 1
+			})
+		}
 	}
 	foodItemMdl.save()
 	// BackboneFire.Events.trigger('updateComponent')
@@ -195,9 +197,11 @@ export function changePartySize(attendanceModel, evt){
 			party_size:parseInt(attendanceModel.get('party_size')) + 1
 		})
 	} else if (buttonPressed === 'minus') {
-		attendanceModel.set({
-			party_size:parseInt(attendanceModel.get('party_size')) - 1
-		})
+		if (attendanceModel.get('party_size') > 0) {
+			attendanceModel.set({
+				party_size:parseInt(attendanceModel.get('party_size')) - 1
+			})
+		}
 	}
 	attendanceModel.save()
 	// BackboneFire.Events.trigger('updateComponent')
@@ -206,11 +210,11 @@ export function changePartySize(attendanceModel, evt){
 
 export function displayPartySize(allGuestsColl){
 	console.log('allGuestsColl',allGuestsColl)
-	var totalGuests = 0
+	var totalGuests = new Number()
 		var allPlusOnes = allGuestsColl.map(function(guest){
 			if (guest.id) {
 				console.log("guest.get('party_size')", guest.get('party_size'))
-				totalGuests += guest.get('party_size')
+				totalGuests += parseInt(guest.get('party_size'))
 				return  totalGuests
 			}
 		})

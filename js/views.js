@@ -572,7 +572,11 @@ var EventDeets = React.createClass({
 		 function _allPlusOnes(){
 		 	component = this
 		 	var allGuests = guestListArray
-		 	 return (displayPartySize(allGuests))
+		 	var allPlusOnes = parseInt(displayPartySize(allGuests))
+		 	var totalGuests = parseInt(guestListModels.length, 10) + allPlusOnes
+		 	console.log('allPlusOnes', allPlusOnes)
+		 	console.log('totalGuests', totalGuests)
+		 	return totalGuests
 
 		 }
 
@@ -603,7 +607,7 @@ var EventDeets = React.createClass({
 				</div>
 
 				<div className='col-xs-12 col-sm-4 text-primary nav nav-pills'>
-					<strong>TOTAL GUESTS ATTENDING</strong><span className='badge alert-success'>{guestListModels.length + parseInt(_allPlusOnes())}</span>
+					<strong>TOTAL GUESTS ATTENDING</strong><span className='badge alert-success'>{_allPlusOnes()}</span>
 					<br/>
 					<br/>
 					<strong>UNSELECTED ITEMS</strong><span className='badge alert-danger'>{foodCount.length}</span>
