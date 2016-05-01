@@ -90,7 +90,7 @@ export function createEvent(eventObj, hostModel) {
 			hostName:eventModel.get('hostName'),
 			hostGravatarURL:data.gravatarURL,
 			gravatarURL:data.gravatarURL,
-			party_size:0
+			party_size:'0'
 		}
 		
 		console.log('attendanceObj', attendanceObj)
@@ -169,7 +169,8 @@ export function addGuestToEvent(recipientEmail, evtModel){
 				email: recipientUserModel.get('email'),
 				hostName:evtModel.get('hostName'),
 				hostGravatarURL:evtModel.get('gravatarURL'),
-				gravatarURL:recipientUserModel.get('gravatarURL')
+				gravatarURL:recipientUserModel.get('gravatarURL'),
+				party_size:'0',
 			}
 
 			createAttendanceForEvt(evtPlusUsrObj)
@@ -205,13 +206,16 @@ export function changePartySize(attendanceModel, evt){
 
 export function displayPartySize(allGuestsColl){
 	console.log('allGuestsColl',allGuestsColl)
-	var totalPartySize = 0
+	var totalGuests = 0
 		var allPlusOnes = allGuestsColl.map(function(guest){
 			if (guest.id) {
-				return  guest.get('party_size')
+				console.log("guest.get('party_size')", guest.get('party_size'))
+				totalGuests += guest.get('party_size')
+				return  totalGuests
 			}
 		})
-			return allPlusOnes
+			return totalGuests
+			pollForNewData()
 	
 
 	//>>> 3
@@ -243,6 +247,7 @@ export function createAttendanceForEvt(evtPlusUsrObj){
 	if (!evtPlusUsrObj.hostName)  {alert("obj missing hostName"); return}
 	if (!evtPlusUsrObj.gravatarURL)  {alert("obj missing gravatarURL"); return}
 	if (!evtPlusUsrObj.hostGravatarURL)  {alert("obj missing hostGravatarURL"); return}
+	if (!evtPlusUsrObj.party_size)  {alert("obj missing party_size"); return}
 
 	var attendList = new Attendances()
 	attendList.once('sync', function(){

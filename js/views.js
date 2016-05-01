@@ -603,7 +603,7 @@ var EventDeets = React.createClass({
 				</div>
 
 				<div className='col-xs-12 col-sm-4 text-primary nav nav-pills'>
-					<strong>TOTAL GUESTS ATTENDING</strong><span className='badge alert-success'>{guestListModels.length + _allPlusOnes()}</span>
+					<strong>TOTAL GUESTS ATTENDING</strong><span className='badge alert-success'>{guestListModels.length + parseInt(_allPlusOnes())}</span>
 					<br/>
 					<br/>
 					<strong>UNSELECTED ITEMS</strong><span className='badge alert-danger'>{foodCount.length}</span>
