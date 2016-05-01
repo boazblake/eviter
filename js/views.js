@@ -757,7 +757,11 @@ var GuestItem = React.createClass({
 		changePartySize(attendanceModel, evt)
 	},
 
-
+	_removeAttendance: function(evt) {
+		this.props.guestModel.destroy()
+		// console.log('this.props.guestModel', this.props.guestModel)
+		pollForNewData()
+	},
 
 	render:function(){
 
@@ -777,7 +781,7 @@ var GuestItem = React.createClass({
 			return (
 				<div onClick='' className='guestItem '>
 
-					<button className='btn btn-danger btn-xs removeButton'>
+					<button data-id={guest.id} onClick={this._removeAttendance} className='btn btn-danger btn-xs removeButton'>
 						   <i className="fa fa-times"></i>
 					</button>
 

@@ -226,7 +226,6 @@ export function displayPartySize(allGuestsColl){
 	//[0]
 }
 
-
 export function createAttendanceForEvt(evtPlusUsrObj){
 	// REQUIRES
 	//-----------
