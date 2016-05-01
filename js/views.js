@@ -71,6 +71,7 @@ var NavBar = React.createClass({
 		}
 	},
 
+
 	_showEventTitle:function(){
 		if (this.props.eventDeets) {
 			return (
