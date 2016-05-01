@@ -733,6 +733,12 @@ var GuestItem = React.createClass({
 		}
 	},
 
+	_handlePartySize:function(attendanceModel, evt){
+		console.log('attendanceModel', attendanceModel)
+		console.log('evt', evt)
+	},
+
+
 
 	render:function(){
 
@@ -750,18 +756,43 @@ var GuestItem = React.createClass({
 			}
 		}
 			return (
-				<div style={divStyle} className='guestItem '>
+				<div onClick='' className='guestItem '>
 
 					<button className='btn btn-danger btn-xs removeButton'>
 						   <i className="fa fa-times"></i>
 					</button>
 
-					<div className='guestSide frontOfGuest'>
+					<div style={divStyle} className='guestSide frontOfGuest'>
 							<img src={guest.get('gravatarURL')}/>
 							<h3>{guest.get('userName')}</h3>
 							<h5>{guest.get('email')}</h5>
 					</div>
+
 					<div style={divStyleBack} className='guestSide backOfGuest'>
+						<div className='rsvpWrapper list-group'>
+							<h3 className='panel-heading'>RSVP</h3>
+							<h4>I am bringing</h4>
+							<div className='partySize'>
+
+
+							<div className='partSizeWarpper'>
+								<i data-foodquant_id='minus' className="fa fa-arrow-down" onClick={component._handlePartySize.bind(component, guest)} aria-hidden="true"></i>
+								<span className='badge guestName'>
+									{guest.get('party_size')}
+								</span>
+								
+								<i data-foodquant_id='plus' className="fa fa-arrow-up" onClick={component._handlePartySize.bind(component, guest)} aria-hidden="true"></i>
+							</div>
+
+
+								<h4 className='badge'>
+									0
+									<i class="fa fa-arrow-up"></i>
+									<i class="fa fa-arrow-down"></i>
+								</h4>
+							</div>
+							<h4>guests</h4>
+						</div>
 					</div>
 
 					<button onClick={component._handleRotate.bind(component, guest)}className='btn btn-success btn-xs revolveButton'>
