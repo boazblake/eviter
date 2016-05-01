@@ -169,6 +169,31 @@ var Footer = React.createClass({
 //Views
 var SplashPage = React.createClass({
 
+	getInitialState:function(){
+		return {
+			signInShowing:false
+		}
+	},
+
+	_handleShowSignIn:function(){
+		var component = this
+		 console.log('component.state.signInShowing',component.state.signInShowing)
+		if (this.state.signInShowing) {
+			return (
+				this.setState({
+					signInShowing:false
+				})
+			)
+		} else {
+			return (
+				this.setState({
+					signInShowing:true
+				})
+			)
+		}
+	},
+
+
 	userObj:{
 		email:'',
 		firstName:'',
@@ -205,12 +230,31 @@ var SplashPage = React.createClass({
 	},
 
 	render:function(){
+
+		if (this.state.signInShowing) {
+			var divStyle = {
+				// display:'block',
+				opacity:'1',
+				height:'100%',
+				transition:'0.5s ease all'
+			}
+		} else {
+			var divStyle = {
+				// display:'none',
+				opacity:'0',
+				overflow:'hidden',
+				height:'0',
+				transition:'0.5s ease all'
+			}
+		}
+
+
 		return(
 			<div className='container splashPageView'>
 				<Header/>
 				<form className='row form-group signUp' onSubmit={this._handleSubmit}>
-					<fieldset>
-						<legend className='panel-heading' ><h2>SIGN UP HERE</h2></legend>
+					<legend className='panel-heading' onClick={this._handleShowSignIn}><h2>SIGN UP HERE</h2></legend>
+					<fieldset style={divStyle}>
 						<div className='form-group form-inline'>
 							<input required='required' className="form-control" type='text' id="focusedInput" placeholder='Enter email here' onChange={this._upDateEmail}/>
 							<input required='required' className="form-control" type='password' placeholder='password' onChange={this._upDatePass}/><br/>
@@ -796,7 +840,7 @@ var GuestItem = React.createClass({
 							<h3 className='panel-heading'>RSVP</h3>
 							<h4>I am bringing</h4>
 							<div className='partySize'>
-								<div className='partSizeWarpper'>
+								<div className='partSizeWrapper text-success'>
 									<i data-partyquant_id='minus' className="fa fa-arrow-down" onClick={component._handlePartySize.bind(component, guest)} aria-hidden="true"></i>
 									<span className='badge guestName'>
 										{guest.get('party_size')}
@@ -806,7 +850,7 @@ var GuestItem = React.createClass({
 								</div>
 
 							</div>
-							<h4>guests</h4>
+							<h4 className='text-success'>guests</h4>
 						</div>
 					</div>
 

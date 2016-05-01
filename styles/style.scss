@@ -257,6 +257,11 @@ body .splashPageView{
 }
 
 
+.row.myEvents {
+    min-height: 40vh;
+}
+
+
 .eventPageView .row{
     margin-top: 10px;
     border:1px solid white;
@@ -357,6 +362,10 @@ body .splashPageView{
                 transform: rotateY(180deg);
                 z-index: 2;
                 background: #334C54;
+
+                .partSizeWrapper {
+
+                }
             }
         }
 
