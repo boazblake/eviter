@@ -77,6 +77,7 @@ export function createEvent(eventObj, hostModel) {
 			sender_id: eventModel.get('host_id'),
 			date: eventModel.get('date'),
 			title:eventModel.get('title'),
+			description:eventModel.get('description'),
 			user_uid:hostModel.get('id'),
 			userName:hostModel.get('firstName') + ' ' + hostModel.get('lastName'),
 			email: hostModel.get('email'),
@@ -149,6 +150,7 @@ export function addGuestToEvent(recipientEmail, evtModel){
 				sender_id: evtModel.get('host_id'),
 				date: evtModel.get('date'),
 				title:evtModel.get('title'),
+				description:evtModel.get('description'),
 				user_uid:recipientUserModel.get('id'),
 				userName:recipientUserModel.get('firstName') + ' ' + recipientUserModel.get('lastName'),
 				email: recipientUserModel.get('email'),
@@ -211,6 +213,7 @@ export function createAttendanceForEvt(evtPlusUsrObj){
 		// sender_id: 
 		// date: 
 		// title:	
+		// description:	
 		// user_uid:
 		// userName:
 		// email: 
@@ -221,6 +224,7 @@ export function createAttendanceForEvt(evtPlusUsrObj){
 	if (!evtPlusUsrObj.sender_id)  {alert("obj missing sender_id"); return}
 	if (!evtPlusUsrObj.date)  {alert("obj missing date"); return}
 	if (!evtPlusUsrObj.title)  {alert("obj missing title"); return}
+	if (!evtPlusUsrObj.description)  {alert("obj missing description"); return}
 	if (!evtPlusUsrObj.user_uid)  {alert("obj missing user_uid"); return}
 	if (!evtPlusUsrObj.userName)  {alert("obj missing userName"); return}
 	if (!evtPlusUsrObj.email)  {alert("obj missing email"); return}

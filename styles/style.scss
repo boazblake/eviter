@@ -219,26 +219,19 @@ body .splashPageView{
     
     .signInNotShowing {
         display:none;
-        opacity:0;
-        overflow:hidden;
-        height:0;
         transition:0.5s ease all;
     }
 
 
     .signInShowing {
         display:block;
-        opacity:1;
-        height:100%;
         transition:0.5s ease all;
     }
 
     .signUp.signInNotShowing{
         background-color: rgba(44, 62, 80,0.8);
         display:block;
-        opacity:1;
         height:100%;
-        transition:0.5s ease all;
 
         h2 {
             line-height: 3;
@@ -257,9 +250,6 @@ body .splashPageView{
         h2:hover {
             cursor: pointer;
         }
-    }
-
-    .signUp.signInShowing{
     }
 
 

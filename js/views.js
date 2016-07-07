@@ -281,11 +281,12 @@ var DashPage = React.createClass({
 	},
 
 	componentWillMount:function(){
+		console.log('dashpage is mounting')
 		var component = this
 		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
-
 		BackboneFire.Events.on('pollForNewData',
 			function(){
+				console.log('polling for new data....')
 				component.state.userModel.fetchWithPromise().then(() => component.forceUpdate())
 				})
 
@@ -317,21 +318,29 @@ var CreateEvent = React.createClass({
 
 	componentWillMount:function(){
 		var component = this
+		pollForNewData()
+
 		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
 
 	},
 
 	eventObj:{
 		'title':'',
+		'description':'',
 		'date':'',
 		'location':'',
 		'hostName':'',
-		gravatarURL:'',
+		gravatarURL:''
 	},
 
 	_upDateEventTitle:function(evt){
 		this.eventObj.title = evt.target.value
 	},
+
+	_upDateEventDescription:function(evt){
+		this.eventObj.description = evt.target.value
+	},
+
 
 	_upDateEventDate:function(evt){
 		var fullDate = evt.target.value
@@ -387,12 +396,10 @@ var CreateEvent = React.createClass({
 					<div className=' jumbotron createEvent'>
 						<legend className='col-lg-2 control-label'>Enter Event Details Below</legend>
 						<input type='text' className='form-control' required="required" placeholder='Event Title ...' onChange={this._upDateEventTitle}/>
-						
+						<textArea row='5' col='50' className='form-control' placeholder='Event Description ...' onChange={this._upDateEventDescription}/>
 						<input type='datetime-local' className='form-control' required="required" placeholder='Event Date ...' onChange={this._upDateEventDate}/>
-
 						<input type='text' className='form-control' required="required" placeholder='Event Location...' onChange={this._upDateEventLocation}/>
-
-			            <button className="btn btn-default btn-lg btn-block" onClick={this._submitEvent}>Create My Event! </button>
+			      <button className="btn btn-default btn-lg btn-block" onClick={this._submitEvent}>Create My Event! </button>
 					</div>
 				</form>
 				<Footer/>
@@ -565,6 +572,9 @@ var EventPage = React.createClass({
 				<div className= 'container'>
 					<EventDeets eventDeets={this.state.event} guestList={this.state.guestList} foodListColl={this.state.foodListColl}/>
 					<div className='row'>
+					<Description eventDescription={this.state.event}/>
+					</div>
+					<div className='row'>
 						<Guests guestList={this.state.guestList} eventID={this.state.event}/>
 						<Food userModel={this.state.userModel} eventID={this.state.event.id} foodListColl={this.state.foodListColl}/>
 					</div>
@@ -635,6 +645,24 @@ var EventDeets = React.createClass({
 	}
 })
 
+var Description = React.createClass({
+	render:function(){
+		var component = this
+		var event = component.props.eventDescription
+		return (
+			<div className={'row alert alert-info eventDeets'}>
+				<div className='col-xs-12 col-sm-4 text-primary panel-info'>
+					<div className='panel-heading'>
+						<h3 className='panel-title'>Description</h3>
+						<div className='panel-body'>
+							{event.get('description')}
+						</div>
+					</div>
+				</div>
+			</div>
+		)
+	}
+})
 
 //Guests Section
 var Guests = React.createClass({
@@ -702,10 +730,6 @@ var Guests = React.createClass({
 
 var GuestList = React.createClass({
 						
-	// _removeAttendance: function(evt) {
-	// 	this.props.attendanceMod.destroy()
-	// },
-	
 	_showGuests:function(){
 		var component = this
 		var guestsArr = this.props.guests
@@ -740,10 +764,6 @@ var GuestItem = React.createClass({
 		}
 	},
 
-	componentWillMount:function(){
-		// var component = this
-		// 
-	},
 
 	_handleRotate:function(guest, evt){
 		var guestId = guest.id
@@ -790,7 +810,7 @@ var GuestItem = React.createClass({
 			return (
 				<div onClick='' className='guestItem '>
 
-					<button data-id={guest.id} onClick={this._removeAttendance} className='btn btn-danger btn-xs removeButton'>
+					<button data-id={guest.id} onClick={component.props.remove.bind(null, key)} className='btn btn-danger btn-xs removeButton'>
 						   <i className="fa fa-times"></i>
 					</button>
 
@@ -862,7 +882,7 @@ var Food = React.createClass({
 		evt.currentTarget.dataset.foodq_id = '' 
 
 		evt.preventDefault()
-		var component = this
+		var dat = this
 
 		var foodListCollection = component.props.foodListColl
 		var event_id = component.props.eventID
@@ -929,10 +949,10 @@ var FoodItem = React.createClass({
 	
 	_handleFoodBringer:function(foodItem, evt){
 		var component = this
-		// var foodItem = evt.currentTarget.dataset.fooditem_id
 		var foodBringerName
 		var event_id = component.props.eventID
 		var userModel = component.props.userModel
+		//  evt.currentTarget.dataset.fooditem_id
 
 
 		if ( foodItem.get('bringer_uid') === fbRef.getAuth().uid ) {
