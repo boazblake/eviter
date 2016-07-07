@@ -150,7 +150,7 @@ export function addGuestToEvent(recipientEmail, evtModel){
 				sender_id: evtModel.get('host_id'),
 				date: evtModel.get('date'),
 				title:evtModel.get('title'),
-				description:evtModel.get('description'),
+				description:eventModel.get('description'),
 				user_uid:recipientUserModel.get('id'),
 				userName:recipientUserModel.get('firstName') + ' ' + recipientUserModel.get('lastName'),
 				email: recipientUserModel.get('email'),
@@ -213,7 +213,6 @@ export function createAttendanceForEvt(evtPlusUsrObj){
 		// sender_id: 
 		// date: 
 		// title:	
-		// description:	
 		// user_uid:
 		// userName:
 		// email: 
