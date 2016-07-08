@@ -1,10 +1,11 @@
+import React from 'react';
 import DOM from 'react-dom'
 import fbRef from './fbref'
 import BackboneFire from 'bbfire'
 import React, {Component} from 'react'
 import {createEvent, createUser, logUserIn, handleEvent, addInput, removeEventAttendance, addGuestToEvent, createFoodItemForEvent, selectMyFoods, changeFoodAmount, pollForNewData, numToMonth, countUnselectedFood, changePartySize, displayPartySize} from './actions'
 import {User, Users, Event, Events, Attendances, EventFinder, QueriedAttendance, AddFood, FoodsToBring} from './data'
-
+import AlertContainer from 'react-alert';
 
 //Modules
 var Header = React.createClass({
@@ -309,6 +310,26 @@ var DashPage = React.createClass({
 })
 
 var CreateEvent = React.createClass({
+	constructor(props) {
+		super(props);
+		this.alertOptions = {
+      offset: 14,
+      position: 'bottom left',
+      theme: 'dark',
+      time: 5000,
+      transition: 'scale'
+    };
+
+    	showAlert(alertType){
+    		console.log('alertType', alertType)
+        this.msg.show(alertType, {
+          time: 2000,
+          type: 'success',
+          icon: <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        });
+      }
+	}
+
 	getInitialState:function() {
 		return {
 			userModel: new User(fbRef.getAuth().uid),
@@ -316,17 +337,15 @@ var CreateEvent = React.createClass({
 	},
 
 	componentWillMount:function(){
-		var component = this
-		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
-
-
 		function initialize() {
 			var input = document.getElementById('inputLocation');
 			var autocomplete = new google.maps.places.Autocomplete(input);
 		}
 
 		google.maps.event.addDomListener(window, 'load', initialize);
-
+		
+		var component = this
+		this.state.userModel.fetchWithPromise().then(() => this.forceUpdate())
 	},
 
 	eventObj:{
@@ -369,16 +388,26 @@ var CreateEvent = React.createClass({
 
 	_upDateEventLocation:function(evt){
 		this.eventObj.location = evt.target.value
+		console.log(evt.target.value)
 	},
 
 	_upDateEventName:function(evt){
 		this.eventObj.name = evt.target.value
 	},
 
+
+
 	_submitEvent:function(evt){
 		evt.preventDefault()
 		this.eventObj.gravatarURL = fbRef.getAuth().password.profileImageURL
 		var component = this
+				//CHECK FOR REQUIRED ITEMS
+		if (!component.eventObj.title) return this.showAlert('missing: title')
+		if (!component.eventObj.description) return this.showAlert('missing: description')
+		if (!component.eventObj.date) return this.showAlert('missing: date')
+		if (!component.eventObj.location) return this.showAlert('missing: location')
+		if (!component.eventObj.gravatarURL) return this.showAlert('missing: gravatarURL')
+
 		var hostModel = new User(fbRef.getAuth().uid )
 		hostModel.fetch()
 		if (hostModel.id) {
@@ -399,23 +428,38 @@ var CreateEvent = React.createClass({
 				<form className='row' onSubmit={this._submitEvent}>
 					<div className=' jumbotron createEvent'>
 						<legend className='col-lg-8 control-label'>Enter Event Details Below</legend>
-						<input type='text' className='form-control' required="required" placeholder='Event Title ...' onChange={this._upDateEventTitle}/>
-						<textArea className='form-control' placeholder='Event Description ...' onChange={this._upDateEventDescription}/>
-						
-						<input type='datetime-local' className='form-control' required="required" placeholder='Event Date ...' onChange={this._upDateEventDate}/>
 
-													
+						<input  type='text'
+										className='form-control' 
+										required 
+										placeholder='Event Title ...' 
+										onChange={this._upDateEventTitle}/>
+
+						<textArea className='form-control' 
+											placeholder='Event Description ...' 
+											onChange={this._upDateEventDescription}/>
 						
+						<input  type='datetime-local'
+										className='form-control' 
+										required 
+										placeholder='Event Date ...' 
+										onChange={this._upDateEventDate}/>
 			    	
-			    	<div className="form-group">
-			    	  <label className="control-label">Location</label>
 			    	  <div className="input-group">
-			    	    <input type='text' id="inputLocation" className='form-control col-lg-8' required="required" placeholder='Event Location...' onChange={this._upDateEventLocation}/>
-			    	    <span className="input-group-addon"><i className="fa fa-location-arrow col-lg-2" aria-hidden="true"></i></span>
-			    	  </div>
+			    	    <input  type='text' id="inputLocation" 
+			    	    				className='form-control col-lg-8'
+			    	    				autoComplete="on" 
+			    	    				required 
+			    	    				placeholder='Event Location...' 
+			    	    				onBlur={this._upDateEventLocation}/>
+			    	    <span className="input-group-addon">
+			    	    	<i className="fa fa-location-arrow col-lg-2" aria-hidden="true"></i>
+			    	    </span>
+			    	
 			    	</div>
 
-			    	<button className="btn btn-default btn-lg btn-block" onClick={this._submitEvent}>Create My Event! </button>
+			    	<button className="btn btn-default btn-lg btn-block"
+			    					onClick={this._submitEvent}>Create My Event! </button>
 					</div>
 				</form>
 				<Footer/>
@@ -926,8 +970,8 @@ var Food = React.createClass({
 				<div className='form-group foodAddWrapper'>
 					<label>Add Items Here</label>
 					<form className='form-horizontal' onSubmit={this._handleFoodItem}>
-						<input type='text' data-foodname_id='foodName' required="required" className='form-control' placeholder='Bring This!' onChange={this._upDateFoodName}/>
-						<input type='number' data-foodq_id='itemQ'required="required" className='form-control' placeholder='quantity' onChange={this._upDateItemQuantity}/>
+						<input type='text' data-foodname_id='foodName' required className='form-control' placeholder='Bring This!' onChange={this._upDateFoodName}/>
+						<input type='number' data-foodq_id='itemQ'required className='form-control' placeholder='quantity' onChange={this._upDateItemQuantity}/>
 						<h3 onClick={this._handleFoodItem} className="btn btn-primary btn-xs">PRESS TO ADD ITEMS</h3>
 					</form>
 				</div>
