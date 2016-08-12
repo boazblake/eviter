@@ -338,7 +338,7 @@ var CreateEvent = React.createClass({
 
 	componentWillMount:function(){
 		function initialize() {
-			var input = document.getElementById('inputLocation');
+			var input = document.querySelector('#inputLocation');
 			var autocomplete = new google.maps.places.Autocomplete(input);
 		}
 
@@ -429,9 +429,7 @@ var CreateEvent = React.createClass({
 					<div className=' jumbotron createEvent'>
 						<legend className='col-lg-8 control-label'>Enter Event Details Below</legend>
 
-						<input  type='text'
-										className='form-control' 
-										required 
+						<input  required='required' className="form-control" type='text'
 										placeholder='Event Title ...' 
 										onChange={this._upDateEventTitle}/>
 
@@ -440,16 +438,16 @@ var CreateEvent = React.createClass({
 											onChange={this._upDateEventDescription}/>
 						
 						<input  type='datetime-local'
-										className='form-control' 
-										required 
+										className="form-control" 
+										required='required' 
 										placeholder='Event Date ...' 
 										onChange={this._upDateEventDate}/>
 			    	
 			    	  <div className="input-group">
 			    	    <input  type='text' id="inputLocation" 
-			    	    				className='form-control col-lg-8'
+			    	    				className="form-control col-lg-8"
 			    	    				autoComplete="on" 
-			    	    				required 
+			    	    				required='required' 
 			    	    				placeholder='Event Location...' 
 			    	    				onBlur={this._upDateEventLocation}/>
 			    	    <span className="input-group-addon">
